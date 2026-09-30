@@ -10,7 +10,7 @@ import type { PersonId } from '@/config/couple';
 import { createSheetsAdapter, type SheetsAdapterOptions } from './adapters/sheets';
 import { adapterErrorMessage, isAdapterError } from './adapters/types';
 import { getDevice, onDeviceChange, setDevice } from './device';
-import type { ConnectionConfig } from './types';
+import type { ConnectionConfig, Hotel, Visit } from './types';
 
 // ───────────────────────────── validation ─────────────────────────────
 
@@ -212,4 +212,18 @@ export function parseJoinParams(query: URLSearchParams): JoinParse {
   if (!check.ok) return { ok: false, message: 'This invite link is missing part of our Sheet link. Paste it by hand below.', partial: { api, key, as } };
   if (!key) return { ok: false, message: 'This invite link is missing our passphrase. Type it below.', partial: { api: check.url, key, as } };
   return { ok: true, params: { api: check.url, key, as } };
+}
+
+// ───────────────────────────── demo → live (explicit only) ─────────────────────────────
+
+/** Stays someone added by hand while in demo mode (not the sample seed). Never moved silently. */
+export async function demoOnlyStays(): Promise<{ hotels: Hotel[]; visits: Visit[] }> {
+  const [{ openDb: open }, { buildSeed }] = await Promise.all([import('./db'), import('./seed')]);
+  const seed = buildSeed(null);
+  const seedVisits = new Set(seed.visits.map((v) => v.visit_id));
+  const db = await open('demo');
+  const visits = (await db.getAll('visits')).filter((v) => !v.deleted && !seedVisits.has(v.visit_id));
+  const hotelIds = new Set(visits.map((v) => v.hotel_id));
+  const hotels = (await db.getAll('hotels')).filter((h) => hotelIds.has(h.hotel_id));
+  return { hotels, visits };
 }
