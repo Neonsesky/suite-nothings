@@ -95,6 +95,7 @@ export function opEntity(op: OutboxOp): string {
     case 'upsertWish':
       return `wish:${op.payload.wish_id}`;
     case 'markLetterRead':
+    case 'upsertLetter':
       return `letter:${op.payload.letter_id}`;
     case 'updateSettings':
       return 'settings';

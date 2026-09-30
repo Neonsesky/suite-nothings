@@ -525,6 +525,8 @@ export function createSheetsAdapter(config: ConnectionConfig, opts: SheetsAdapte
         return rowResult(await post('upsertWish', op.payload), 'wishes', parseWish);
       case 'markLetterRead':
         return rowResult(await post('markLetterRead', op.payload), 'letters', parseLetter);
+      case 'upsertLetter':
+        return rowResult(await post('upsertLetter', op.payload), 'letters', parseLetter);
       case 'updateSettings': {
         const data = (await post('updateSettings', op.payload)) as Raw;
         return { ok: true, applied: { settings: parseSettings(data.settings) }, serverTime: parseTimestamp(data.serverTime) ?? undefined };
