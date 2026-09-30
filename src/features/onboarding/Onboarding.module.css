@@ -1,28 +1,182 @@
 .root {
   min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: calc(env(safe-area-inset-top) + var(--space-4)) var(--gutter) calc(env(safe-area-inset-bottom) + var(--space-6));
+  background: var(--color-paper);
+}
+.card {
+  width: 100%;
+  max-width: 30rem;
+  display: grid;
+  gap: var(--space-6);
+}
+.top {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+}
+.back,
+.backSpacer {
+  width: var(--tap-min);
+  height: var(--tap-min);
+}
+.back {
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+.step {
+  display: grid;
   gap: var(--space-4);
-  padding: calc(var(--space-8) + env(safe-area-inset-top)) var(--gutter) calc(var(--space-8) + env(safe-area-inset-bottom));
-  max-width: 28rem;
-  margin: 0 auto;
-  background: var(--color-cream);
 }
 .eyebrow {
+  margin: 0;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
-  font-size: var(--text-sm);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
+  color: var(--color-muted);
 }
 .title {
+  margin: 0;
   font-size: var(--text-3xl);
   font-weight: var(--weight-extrabold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  outline: none;
 }
-.body { color: var(--color-muted); }
-.choices {
-  display: flex;
-  flex-direction: column;
+.body,
+.helper,
+.summary {
+  margin: 0;
+  color: var(--color-muted);
+}
+.helper {
+  font-size: var(--text-sm);
+}
+.summary {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-ink);
+}
+.people {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-3);
-  margin-top: var(--space-4);
+}
+.person {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-3);
+  border: 0.0625rem solid var(--color-line);
+  border-radius: var(--radius-lg);
+  background: var(--color-paper);
+  box-shadow: var(--shadow-card);
+  color: var(--color-ink);
+  font: inherit;
+  cursor: pointer;
+  transition: box-shadow var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+.person:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+.person:active {
+  transform: scale(0.97);
+}
+.initial {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-honey);
+  border: 0.125rem solid var(--color-ink);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-extrabold);
+}
+.personName {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+}
+.demoBox {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-cream);
+}
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-muted);
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 0.0625rem;
+  background: var(--color-line);
+}
+.map {
+  height: 11rem;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 0.125rem solid var(--color-ink);
+}
+.map > * {
+  width: 100%;
+  height: 100%;
+}
+.doneBadge {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-honey);
+  border: 0.125rem solid var(--color-ink);
+}
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-line-strong);
+  transition: width var(--dur-base) var(--ease-standard), background var(--dur-base) var(--ease-standard);
+}
+.dot[data-past] {
+  background: var(--color-ink);
+}
+.dot[data-active] {
+  width: 1.5rem;
+  background: var(--color-honey-deep);
+}
+
+@media (min-width: 64rem) {
+  .root {
+    background: var(--color-cream);
+  }
+  .card {
+    padding: var(--space-10);
+    border-radius: var(--radius-xl);
+    background: var(--color-paper);
+    box-shadow: var(--shadow-card);
+  }
 }
