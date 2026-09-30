@@ -1,0 +1,100 @@
+/*
+ * Provisional design tokens (SPEC §3.4). The w0-design agent replaces this file wholesale
+ * with values extracted from dayuse.ae. Variable NAMES are a contract: keep them.
+ */
+:root {
+  /* Colour */
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+  --color-cream: #fff7e6;
+  --color-honey: #ffc83d;
+  --color-honey-soft: #ffe9a8;
+  --color-ginger: #ff6a3d;
+  --color-ginger-soft: #ffd9cc;
+  --color-muted: #6e6e6e;
+  --color-line: #e8e8e8;
+  --color-surface: #f7f7f7;
+  --color-success: #1f8a4c;
+  --color-danger: #c62f1a;
+  --color-focus: #1a5cff;
+
+  /* Type */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: var(--font-sans);
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 3rem;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  --leading-tight: 1.15;
+  --leading-normal: 1.5;
+
+  /* Shape */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.08);
+  --shadow-card: 0 2px 12px rgb(0 0 0 / 0.08);
+  --shadow-sheet: 0 -8px 32px rgb(0 0 0 / 0.16);
+  --shadow-pop: 0 12px 32px rgb(0 0 0 / 0.18);
+
+  /* Space (4px grid, rem) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-9: 2.25rem;
+  --space-10: 2.5rem;
+  --space-11: 2.75rem;
+  --space-12: 3rem;
+  --space-13: 3.25rem;
+  --space-14: 3.5rem;
+  --space-15: 3.75rem;
+  --space-16: 4rem;
+
+  /* Layout */
+  --header-h: 4rem;
+  --tabbar-h: 4rem;
+  --content-max: 75rem;
+  --gutter: 1rem;
+
+  /* Motion */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1.2);
+  --dur-fast: 120ms;
+  --dur-base: 240ms;
+  --dur-slow: 400ms;
+
+  /* Layers */
+  --z-header: 100;
+  --z-sheet: 400;
+  --z-overlay: 500;
+  --z-toast: 900;
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --gutter: 2rem;
+  }
+}
