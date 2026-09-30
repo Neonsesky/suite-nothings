@@ -21,6 +21,36 @@
   z-index: var(--z-header);
   background: var(--color-paper);
   border-bottom: 0.0625rem solid var(--color-line);
+  transition: background-color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard);
+}
+/* Over a screen's hero (Dayuse-style): float transparent with white text until scrolled past
+   ~80% of the hero, then fade to the regular solid header. See useHeroHeader() in Shell.tsx. */
+.header[data-over-hero] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  border-bottom-color: transparent;
+}
+.header[data-over-hero][data-solid='true'] {
+  background: var(--color-paper);
+  border-bottom-color: var(--color-line);
+}
+.header[data-over-hero] .brandName,
+.header[data-over-hero] .headerLink {
+  color: var(--color-paper);
+  transition: color var(--dur-base) var(--ease-standard);
+}
+.header[data-over-hero][data-solid='true'] .brandName,
+.header[data-over-hero][data-solid='true'] .headerLink {
+  color: var(--color-ink);
+}
+.header[data-over-hero] .mark {
+  border-color: var(--color-paper);
+}
+.header[data-over-hero][data-solid='true'] .mark {
+  border-color: var(--color-ink);
 }
 .headerInner {
   display: flex;

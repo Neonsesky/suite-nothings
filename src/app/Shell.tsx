@@ -2,7 +2,7 @@
  * App shell: desktop header, mobile tab bar, offline banner, toast host, demo badge, the route
  * outlet (screens, sheets over screens, fullscreen routes) and first-launch redirect.
  */
-import { Suspense, useEffect, type ReactNode } from 'react';
+import { Suspense, useEffect, useSyncExternalStore, type ReactNode } from 'react';
 import { ClockLoader } from '@/components/ClockLoader';
 import { DemoBadge } from '@/components/DemoBadge';
 import { EmptyState } from '@/components/EmptyState';
@@ -14,6 +14,7 @@ import { COUPLE, personName, otherPerson } from '@/config/couple';
 import { onRemoteChange, useBootError, useMe, getState } from '@/data/store';
 import { useReducedMotionAttribute } from '@/lib/motion';
 import { toast } from '@/lib/toast';
+import { PwaHost } from '@/pwa/PwaHost';
 import { ErrorBoundary } from './ErrorBoundary';
 import { getLastScreen, matchRoute, navigate, useRoute, type RouteDef } from './router';
 import { useShortcuts } from './shortcuts';
@@ -27,9 +28,49 @@ const TABS: { tab: Tab; href: string; label: string; Icon: typeof IconStays }[] 
   { tab: 'us', href: '#/us', label: 'Us', Icon: IconUs },
 ];
 
+/** `<html data-hero-header="1">`, set by the Stays screen while its hero is at the top of the
+ * page (see docs/handoff/w1-shell.md for the contract). Watched with a MutationObserver. */
+function subscribeHeroAttr(cb: () => void): () => void {
+  const html = document.documentElement;
+  const mo = new MutationObserver(cb);
+  mo.observe(html, { attributes: true, attributeFilter: ['data-hero-header'] });
+  return () => mo.disconnect();
+}
+function getHeroAttr(): boolean {
+  return document.documentElement.dataset.heroHeader === '1';
+}
+
+/** True once scrolled past 80% of the `[data-hero]` element's height (falls back to 700px). */
+function subscribeScroll(cb: () => void): () => void {
+  window.addEventListener('scroll', cb, { passive: true });
+  window.addEventListener('resize', cb);
+  return () => {
+    window.removeEventListener('scroll', cb);
+    window.removeEventListener('resize', cb);
+  };
+}
+function getScrolledPastHero(): boolean {
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  const threshold = (hero?.offsetHeight || 700) * 0.8;
+  return window.scrollY > threshold;
+}
+
+const HERO_FALSE = () => false;
+
+/**
+ * Drives the desktop header's transparent-over-hero state (Dayuse pattern). When the attribute
+ * is absent the header is always "solid" (today's sticky behaviour).
+ */
+function useHeroHeader(): { overHero: boolean; solid: boolean } {
+  const overHero = useSyncExternalStore(subscribeHeroAttr, getHeroAttr, HERO_FALSE);
+  const scrolledPastHero = useSyncExternalStore(subscribeScroll, getScrolledPastHero, HERO_FALSE);
+  return { overHero, solid: !overHero || scrolledPastHero };
+}
+
 function Header({ active }: { active?: Tab }) {
+  const { overHero, solid } = useHeroHeader();
   return (
-    <header className={s.header}>
+    <header className={s.header} data-over-hero={overHero || undefined} data-solid={overHero ? solid : undefined}>
       <div className={s.headerInner}>
         <a href="#/" className={s.brand} aria-label={`${COUPLE.appName}, our stays`}>
           <span className={s.mark} aria-hidden="true">
@@ -171,6 +212,7 @@ export function Shell() {
       </main>
       {chrome ? <TabBar active={active} /> : null}
       <ToastHost />
+      <PwaHost />
     </div>
   );
 }

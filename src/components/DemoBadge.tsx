@@ -6,7 +6,12 @@ export function DemoBadge({ className }: { className?: string }) {
   const demo = useDemoMode();
   if (!demo) return null;
   return (
-    <Badge tone="honey" className={className} title="You're exploring demo stays. Connect our Sheet in Settings.">
+    <Badge
+      tone="honey"
+      className={className}
+      title="You're exploring demo stays. Connect our Sheet in Settings."
+      aria-label="Demo mode: sample stays, nothing saved to our Sheet"
+    >
       Demo
     </Badge>
   );
