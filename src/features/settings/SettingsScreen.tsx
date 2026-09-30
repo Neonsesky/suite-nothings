@@ -37,6 +37,10 @@ import s from './Settings.module.css';
 export default function SettingsScreen() {
   const ready = useStoreReady();
   const bootError = useBootError();
+  // Only the first load gets the skeleton. Switching Demo ↔ Live re-inits the store; unmounting
+  // then would drop the Connection section's "Connected" result mid-flow.
+  const [loaded, setLoaded] = useState(ready);
+  if (ready && !loaded) setLoaded(true);
 
   if (bootError) {
     return (
@@ -46,7 +50,7 @@ export default function SettingsScreen() {
     );
   }
 
-  if (!ready) {
+  if (!loaded) {
     return (
       <div className={`page ${s.screen}`}>
         <Skeleton width="6rem" height="1.5rem" />
