@@ -43,6 +43,7 @@
 .bad { color: var(--color-danger); }
 
 .card {
+  max-width: 40rem;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);

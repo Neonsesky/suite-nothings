@@ -168,8 +168,9 @@ test('settings connection screenshots at three viewports', async ({ browser }, i
   await j.goto(`./#/join?${new URLSearchParams({ api: API, key: KEY, as: 'shady' })}`);
   await expect(j.getByTestId('connection-result')).toHaveAttribute('data-outcome', 'connected');
   await shot(j, info, 'join-412');
-  await j.goto(`./#/join?api=nope`);
-  await expect(j.getByRole('alert')).toBeVisible();
-  await shot(j, info, 'join-invalid-412');
+  const bad = await a.ctx.newPage();
+  await bad.goto(`./#/join?api=nope`);
+  await expect(bad.getByRole('alert')).toBeVisible();
+  await shot(bad, info, 'join-invalid-412');
   await a.ctx.close();
 });
