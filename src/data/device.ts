@@ -17,6 +17,8 @@ export interface DevicePrefs {
   introSeen: boolean;
   /** Letter ids whose pillow reveal was shown on this device. */
   pillowShown: string[];
+  /** Letter ids whose "… read your note" receipt was already shown to the author here. */
+  readReceiptsSeen: string[];
 }
 
 export const DEVICE_DEFAULTS: DevicePrefs = {
@@ -27,6 +29,7 @@ export const DEVICE_DEFAULTS: DevicePrefs = {
   reducedMotion: null,
   introSeen: false,
   pillowShown: [],
+  readReceiptsSeen: [],
 };
 
 const PREFIX = 'sn:device:';
