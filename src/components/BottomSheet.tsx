@@ -186,6 +186,7 @@ function SheetInner({
   const onPointerDown = (e: React.PointerEvent) => {
     if (isDesktop || e.button !== 0) return;
     const target = e.target as HTMLElement;
+    if (target.closest('[data-no-drag]')) return; // footer controls too, or taps never become clicks
     const fromContent = !!contentRef.current?.contains(target);
     if (fromContent && (contentRef.current!.scrollTop > 0 || target.closest('input,textarea,select,[data-no-drag]'))) return;
     anim.current?.stop();
