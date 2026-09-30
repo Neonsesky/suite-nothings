@@ -322,7 +322,8 @@
     padding-top: var(--space-6);
     box-shadow: var(--shadow-pop);
   }
-  .screen[data-list] .hud {
+  .screen[data-list] .hud,
+  .screen[data-list] .attribution {
     left: calc(25rem + var(--gutter));
   }
 }
@@ -390,6 +391,14 @@
   flex-direction: column;
   gap: var(--space-1);
   color: var(--color-muted);
+}
+
+/* On phones the list covers the whole map, so the map's own controls step aside. */
+@media (max-width: 63.99rem) {
+  .screen[data-list] .controls,
+  .screen[data-list] .attribution {
+    display: none;
+  }
 }
 
 /* Pin card */

@@ -249,6 +249,7 @@ function lookPaint(layer: LayerSpecification, look: LightingLook): Paint {
   const night = look.phase === 'night';
   const sl = 'source-layer' in layer ? layer['source-layer'] : undefined;
   const id = layer.id;
+  if (id === 'sn-ocean') return { 'background-color': look.waterColor };
   if (layer.type === 'background') return { 'background-color': look.landColor };
   if (id === FALLBACK_LAND) return { 'fill-color': look.landColor };
   if (id === 'building-3d') return { 'fill-extrusion-color': look.buildingColor };
@@ -278,7 +279,7 @@ function fallbackStyle(): StyleSpecification {
       },
     },
     layers: [
-      { id: 'background', type: 'background', paint: { 'background-color': '#CFDFE3' } },
+      { id: 'sn-ocean', type: 'background', paint: { 'background-color': '#CFDFE3' } },
       { id: FALLBACK_LAND, type: 'fill', source: FALLBACK_LAND, paint: { 'fill-color': '#FBF6EC' } },
       { id: 'sn-land-outline', type: 'line', source: FALLBACK_LAND, paint: { 'line-color': INK, 'line-width': 0.8, 'line-opacity': 0.35 } },
     ],

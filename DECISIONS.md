@@ -36,3 +36,4 @@
 - [w1-map] Favourite pin glow = any visit whose average rating is ≥ 4.5 — matches the "♡ 5" badge spirit without needing both ratings — `FAVOURITE_MIN` in `src/map/pins.ts`.
 - [w1-map] Pin card uses the shared `BottomSheet` on mobile and a non-modal floating card bottom-left above the attribution on desktop (per the wireframe) — a centred modal would hide the map — `isDesktop` branch in `MapScreen.tsx`.
 - [w1-map] Map e2e runs in dedicated Chromium `map-*` projects with software GL flags rather than WebKit — headless WebKit WebGL is unreliable, and the flags must stay out of other projects — `playwright.config.ts`.
+- [w1-map] On phones the list view hides the map's attribution and controls, because the list covers the whole map. The attribution shows whenever any map is visible. On desktop both move right of the 400 px list panel. It stops them overlapping list content. To reverse, edit the `.screen[data-list]` rules in MapScreen.module.css.
