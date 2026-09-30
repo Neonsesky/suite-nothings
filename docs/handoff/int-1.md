@@ -58,6 +58,13 @@ Git reported no textual conflicts. The overlapping `BottomSheet.tsx` fixes from 
 - `smoke`/`settings` "11 hotels together": Stays added an `aria-live` copy, so the tests take `.first()`.
 - `stays.spec.ts` empty state: it now confirms the "Clear demo data?" sheet that Settings added.
 
+## Fixed during the whole-app pass
+- Settings no longer unmounts when Demo ↔ Live re-inits the store. The "Connected" result had
+  been lost, failing 2 of the 6 `e2e:live` tests after the merge. (`SettingsScreen.tsx`)
+- Stay detail no longer shows "Fetching hotel info…" forever for newly added hotels, which
+  add-stay saves as `enrichment_status: 'pending'`. **[to: enrichment wave]** set the status to
+  `done`, `failed` or `skipped` on the hotel row when a run ends. (`StayDetailScreen.tsx`)
+
 ## Open for wave 2 / QA
 - The map's "Locate me" control isn't built. The copy key for the arcs toggle is missing (the UI uses "Our route, stay by stay").
 - The add-stay sheet on desktop is a centred modal, not the 560 px side panel from the wireframe.
@@ -65,3 +72,9 @@ Git reported no textual conflicts. The overlapping `BottomSheet.tsx` fixes from 
 - The phone's own back button skips the card ← detail morph.
 - The maskable-icon safe-zone check and a real-time recording of the intro are both missing.
 - `design/checkpoints/cp2/map/zoom-and-chips-390.webm` is 5.4 MB, just over the ~5 MB target.
+- Add a stay, manual pin: on desktop, the "Use this hotel" / "Back to search" buttons sit
+  below the fold of the sheet's scroll area, right under the sheet's own Next button, so they read
+  as clipped (`design/checkpoints/int-1/desktop/add-manual-pin-clipped-buttons.png`). Either
+  scroll them into view when manual mode opens, or merge them with Next. (w1-add-stay, `HotelStep.tsx`)
+- In one fast scripted run, the add sheet reopened right after a save showed a ghost frame of the
+  previous sheet. It didn't reproduce at human pace.

@@ -1,5 +1,20 @@
 # Changelog
 
+## [int-1] Integration wave 1 (2026-10-01)
+- Merged w1-backend, w1-map, w1-stays, w1-add-stay and w1-shell into `main` (`--no-ff`, in that order). There were no textual conflicts, and the overlapping BottomSheet fixes from w1-stays and w1-add-stay are both kept.
+- Seams:
+  - The `upsertLetter` outbox op now goes through the Sheets adapter and `opEntity`. It was a typecheck break after the merge.
+  - Stays cards animate in from `useRecentArrivals()`, so only the other person's stays animate, not our own echoes.
+  - The stays hero sets `data-hero`, so the desktop header stays transparent over the whole hero.
+  - On iOS the install banner opens the shell's illustrated Add to Home Screen sheet.
+  - Photo uploads read WebKit's `bytes` fallback, so iOS photos are no longer uploaded empty.
+  - `VITE_ALLOW_LOCAL_API=1` is accepted everywhere.
+- Fixes found in the whole-app pass:
+  - Settings stays mounted when Demo ↔ Live re-inits the store. The "Connected" result used to vanish, which failed 2 of the 6 live-sync e2e tests.
+  - New hotels no longer show an endless "Fetching hotel info…" skeleton while enrichment is still a no-op.
+- Tests: the foundation smoke, settings and stays specs now follow the merged UI (full onboarding, the combobox search, the Clear demo data confirm, the delete confirm, tabs). Write a future note now runs on touch viewports too.
+- Phase 1 acceptance is recorded in `design/checkpoints/cp2/ACCEPTANCE.md`. The one-tap revisit takes 6.0–6.4 s. The visual pass evidence is in `design/checkpoints/int-1/`.
+
 ## [w1-map] 2026-10-01
 - The 3D map (SPEC §9): one MapLibre 6 adaptive globe with City / Country / World chapters whose breakpoints come from the home base (Dubai 9.48 / 5.49; London and Singapore are tested). Every chapter change is a zoom-interpolated crossfade (pins → city bubbles → country bubbles, 3D buildings, arcs), and a gentle settle after gestures stops as soon as you touch the map again.
 - HUD: a split-flap chapter title on a contrast plate (light or dark with the lighting), a debounced "n stays in view" count, one-line chips that scroll sideways (City, Country, World, List view), a lighting and route menu, a compass, and an always-visible OSM/OpenFreeMap attribution in the reserved bottom-left corner.
