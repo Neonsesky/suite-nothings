@@ -1,5 +1,5 @@
 import { IDBFactory } from 'fake-indexeddb';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDemoAdapter, resetDemoServer } from '@/data/adapters/demo';
 import { closeDb, openDb } from '@/data/db';
 import { resetDevice, setDevice } from '@/data/device';
@@ -137,11 +137,14 @@ describe('store', () => {
     await store.initStore({ ns: 'demo', adapter: demo(), startSync: false });
     expect(store.getState().visits.size).toBe(12);
     setDevice('connection', { apiUrl: 'https://script.google.com/macros/s/x/exec', key: 'k', connectedAt: null, lastSyncAt: null });
+    // No real network in unit tests: the Sheet is unreachable.
+    vi.stubGlobal('fetch', () => Promise.reject(new TypeError('Failed to fetch')));
     await store.initStore({ ns: 'live', startSync: false });
+    vi.unstubAllGlobals();
     const s = store.getState();
     expect(s.ns).toBe('live');
     expect(s.visits.size).toBe(0);
-    // The stub Sheets adapter reports it isn't configured; the cache still renders.
+    // The Sheet can't be reached; the cache still renders.
     expect(s.ready).toBe(true);
     expect(s.sync.error).toBe('unreachable');
   });
