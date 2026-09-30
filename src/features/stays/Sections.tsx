@@ -12,7 +12,7 @@ import { usePhotoUrl, useSettings, useWishes } from '@/data/store';
 import type { Stay } from '@/data/types';
 import { formatDate, togetherDuration } from '@/lib/dates';
 import { favouriteStay, firstStay, latestStay, summary } from '@/lib/stats';
-import { useInstallPrompt } from '@/pwa/install';
+import { openIOSInstallSheet, useInstallPrompt } from '@/pwa/install';
 import { brandsList, buildFaq } from './logic';
 import { openStay } from './transition';
 import s from './Sections.module.css';
@@ -151,6 +151,8 @@ export function InstallBanner() {
     }
   };
   const install = async () => {
+    // iOS gets the shell's illustrated Add to Home Screen sheet; ours is the fallback elsewhere.
+    if (isIOS) return openIOSInstallSheet();
     if (canInstall && (await promptInstall()) !== 'unavailable') return;
     setHelp(true);
   };

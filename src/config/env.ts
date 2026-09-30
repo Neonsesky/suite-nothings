@@ -14,7 +14,7 @@ export const PHOTON_URL = 'https://photon.komoot.io';
 export const BASE_URL: string = env.BASE_URL;
 
 /** Tests only: allow non-Google API URLs (local mock servers). */
-export const ALLOW_LOCAL_API: boolean = env.VITE_ALLOW_LOCAL_API === 'true';
+export const ALLOW_LOCAL_API: boolean = env.VITE_ALLOW_LOCAL_API === 'true' || env.VITE_ALLOW_LOCAL_API === '1';
 
 /** Demo mode is the default unless a default API URL was baked into the build. */
 export const IS_DEMO_DEFAULT: boolean = API_URL === '';

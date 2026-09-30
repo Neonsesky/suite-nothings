@@ -156,7 +156,7 @@ export function Hero({ stays }: { stays: Stay[] }) {
   const hotels = hotelCount(stays);
 
   return (
-    <section className={s.hero} aria-labelledby="hero-headline" data-time={time}>
+    <section className={s.hero} aria-labelledby="hero-headline" data-time={time} data-hero>
       <div className={s.art} aria-hidden="true">
         {url ? (
           <>

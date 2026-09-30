@@ -658,7 +658,10 @@ export function decodeBlob(base64: string, mime: string): Blob {
 
 async function defaultReadBlob(key: string): Promise<Blob | null> {
   const db = await openDb('live');
-  return (await db.get('photoBlobs', key))?.blob ?? null;
+  const row = await db.get('photoBlobs', key);
+  if (!row) return null;
+  // WebKit may store `bytes` instead of a Blob (see PhotoBlob in types.ts).
+  return row.blob instanceof Blob ? row.blob : row.bytes ? new Blob([row.bytes], { type: row.mime }) : null;
 }
 
 let cacheDb: Promise<IDBPDatabase> | null = null;

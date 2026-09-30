@@ -77,7 +77,6 @@ test("Shady's first launch shows the pillow note, and reading it sets read_at", 
 
 test('Nirsh sees the letters list, a sealed note and can write a future note', async ({ page }, info) => {
   // Known gap (docs/handoff/w1-shell.md): on touch viewports the sheet footer tap closes the sheet unsaved.
-  test.skip(info.project.name !== 'desktop-1440', 'desktop only until the BottomSheet footer tap is fixed');
   await resetApp(page, { me: 'nirsh', hash: '#/letters' });
   await page.getByRole('button', { name: 'Write a future note' }).first().click();
   await page.getByLabel('Title').fill('For our 25th hotel');

@@ -8,25 +8,22 @@ import { EmptyState } from '@/components/EmptyState';
 import { IconArrowRight, IconFilter } from '@/components/icons';
 import { personName, type PersonId } from '@/config/couple';
 import { ABROAD } from '@/data/stays';
-import { onRemoteChange, useMe, useSettings } from '@/data/store';
+import { useMe, useSettings } from '@/data/store';
+import { acknowledgeArrival, useRecentArrivals } from '@/data/sync';
 import type { Stay, VisitType } from '@/data/types';
 import { DiaryCard } from './DiaryCard';
 import { ALL_TAB, activeFilterCount, applyFilters, cityTabs, filterOptions, type StayFilters } from './logic';
 import s from './Sections.module.css';
 
-/** Visit ids that just arrived from the other phone, cleared after the entrance animation. */
+/** Visit ids the other person just added (from sync), acknowledged after the entrance animation. */
 function useArrivals(): Set<string> {
-  const [ids, setIds] = useState<Set<string>>(() => new Set());
-  useEffect(
-    () =>
-      onRemoteChange((c) => {
-        if (!c.newVisits.length) return;
-        const fresh = c.newVisits.map((v) => v.visit_id);
-        setIds((prev) => new Set([...prev, ...fresh]));
-        window.setTimeout(() => setIds((prev) => new Set([...prev].filter((id) => !fresh.includes(id)))), 2400);
-      }),
-    [],
-  );
+  const recent = useRecentArrivals();
+  const ids = useMemo(() => new Set(recent.map((a) => a.visitId)), [recent]);
+  useEffect(() => {
+    if (!recent.length) return;
+    const t = window.setTimeout(() => recent.forEach((a) => acknowledgeArrival(a.visitId)), 2400);
+    return () => window.clearTimeout(t);
+  }, [recent]);
   return ids;
 }
 
