@@ -16,7 +16,10 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "e2e:dev": "E2E_TARGET=dev playwright test",
-    "size": "node tools/size.mjs"
+    "e2e:live": "playwright test -c playwright.live.config.ts",
+    "size": "node tools/size.mjs",
+    "letter:gs": "node tools/make-letter-gs.mjs",
+    "mock:api": "node tools/mock-apps-script.mjs"
   },
   "dependencies": {
     "@turf/along": "7.4.0",
