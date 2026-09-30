@@ -25,7 +25,7 @@ initial-JS budget.
 | `maplibre-gl` (+ its CSS) | `maplibre` | map, mini map, journey |
 | `three` | `three` | intro key tag, letter reveal |
 | `gsap` | `gsap` | journey timeline (the split-flap does **not** use it) |
-| `exifr` | `exifr` | add-stay photo step |
+| `exifr` | its own async chunk (`full.esm-*.js`; no manual chunk, see DECISIONS) | add-stay photo step |
 | `qrcode` | `qrcode` | invite QR in Settings |
 | `@turf/*` | route chunks | only where needed; `@/lib/geo` covers the common maths without Turf |
 
@@ -145,7 +145,8 @@ These mirror SPEC §5. The key types:
   - `photo_ids_json` is a JSON `string[]` that sets the display order.
 - `Photo`: `thumb_file_id` and `full_file_id` hold Drive ids (sheets) or local blob keys (demo), and
   can be null until uploaded.
-- `PhotoBlob`: `{ key: `${photo_id}:${'thumb'|'full'}`, photo_id, size, blob, mime }`.
+- `PhotoBlob`: `{ key: `${photo_id}:${'thumb'|'full'}`, photo_id, size, blob, mime, bytes? }`. Some WebKit builds
+  refuse Blobs in IndexedDB; the store then saves `bytes` (ArrayBuffer) instead. Always read through `blobOf(row)` or `getPhotoBlob()`.
 - `Wish`, `Letter` (+ `updated_at`), and `UnlockRule` (`'always'|'first_abroad'|`visits>=N`|`hotels>=N`|`date>=YYYY-MM-DD``).
 - `SettingsMap`: `{ home_base: HomeBase; map_lighting: 'auto'|'day'|'golden'|'night'; units: 'km'|'mi'; updated_at }`.
 - `HomeBase`: `{ city, country, countryCode, lat, lng, bbox?: [w,s,e,n] }`.
@@ -255,7 +256,8 @@ deleteVisitWithUndo(visitId): Promise<void>     // soft delete + "Stay deleted" 
 upsertWish(input: Partial<Wish> & Pick<Wish,'name'>): Promise<Wish>
 markLetterRead(letterId): Promise<void>         // sets read_at once
 updateSettings(patch: Partial<Omit<SettingsMap,'updated_at'>>): Promise<SettingsMap>
-addPhoto(visitId, file: Blob, opts?: { caption? }): Promise<Photo>   // stores blobs, appends to photo_ids_json, queues uploadPhoto
+addPhoto(visitId, file: Blob, opts?: { caption?; processed?: ProcessedPhoto }): Promise<Photo>   // stores blobs, appends to photo_ids_json, queues uploadPhoto; `processed` skips the pipeline
+blobOf(row: PhotoBlob): Blob                    // read a photoBlobs row: `blob`, or `bytes` on engines that refuse Blobs in IDB
 setPhotoProcessor(p: (file: Blob) => Promise<{ thumb; full; width; height; taken_at }>): void  // w1-add-stay installs the real resize/EXIF pipeline
 getPhotoBlob(photoId, size?): Promise<Blob | null>
 saveDraft(id, data), loadDraft<T>(id): Promise<{ id; data: T; updated_at } | null>, deleteDraft(id)
@@ -347,7 +349,13 @@ screenshot of the letter body goes in `private/checkpoints/…`.
 | `toast.ts` | `toast.show({ message, tone?: 'neutral'|'success'|'error'|'love', action?: { label, onClick }, durationMs?, id? }): string`, `toast.dismiss(id)`, `toast.clear()`, `toast.subscribe(cb)`. Defaults are 4 s, 6 s with an action, and `0` for sticky; at most 3 show at once; the same `id` replaces. |
 | `useMediaQuery.ts` | `useMediaQuery(q)`, `useIsDesktop()` (`(min-width: 64rem)`), `DESKTOP_QUERY` |
 
-Reserved for w1-add-stay: `src/lib/image.ts` and `src/lib/exif.ts`.
+w1-add-stay:
+- `image.ts`: `processImage(file, { exif? }) → { thumb, full, width, height, taken_at }` (480 px / 1600 px, WebP 0.8 else JPEG, orientation applied, EXIF stripped), `photoProcessor` (installed with `setPhotoProcessor` when the add sheet loads), `fitWithin`, `decodeImage`, `encode`, `stripJpegMetadata`, `THUMB_PX`, `FULL_PX`, `QUALITY`.
+- `exif.ts`: `readExif(blob) → { takenAt, date, time, lat, lng, orientation }` (never throws; exifr lazy), `suggestFromExif(infos, current?)`, `parseExifDateString`.
+- `LocationProvider` in `app/router.tsx`: the shell wraps the screen behind a sheet route in it, so `useParams()`/`useLocation()` there read the background location (`#/stay/:id` survives `#/add`).
+- `BottomSheet` has `onDismissAttempt?()`: with `dismissible={false}`, scrim/Esc/drag-down/close call it so the owner can confirm first.
+- `#/add?edit=<visitId>` edits a stay with the same steps (link to it from stay detail).
+- `features/milestones/index.ts`: `checkMilestones` re-export and `showMilestoneUnlock(milestones)` (a no-op until the unlock UI lands).
 
 ---
 

@@ -13,7 +13,8 @@ export const BOOKED_VIA = ['Dayuse', 'Direct', 'Booking.com', 'Other'] as const;
 export type BookedVia = (typeof BOOKED_VIA)[number];
 
 /** Curated mood stamps (not free emoji). `label` is the display copy. */
-export const MOODS = ['blissful', 'cosy', 'romantic', 'giddy', 'lazy', 'adventurous', 'fancy', 'sleepy'] as const;
+// 'giggly' and 'fizzy' are the design deck's stamps (components/brand/MoodStamps.tsx).
+export const MOODS = ['blissful', 'cosy', 'romantic', 'giddy', 'lazy', 'adventurous', 'fancy', 'sleepy', 'giggly', 'fizzy'] as const;
 export type Mood = (typeof MOODS)[number];
 export const MOOD_LABELS: Record<Mood, string> = {
   blissful: 'Blissful',
@@ -24,6 +25,8 @@ export const MOOD_LABELS: Record<Mood, string> = {
   adventurous: 'Adventurous',
   fancy: 'Fancy',
   sleepy: 'Sleepy',
+  giggly: 'Giggly',
+  fizzy: 'Fizzy',
 };
 
 export type EnrichmentStatus = 'none' | 'pending' | 'done' | 'failed' | 'skipped';
@@ -106,6 +109,8 @@ export interface PhotoBlob {
   size: 'thumb' | 'full';
   blob: Blob;
   mime: string;
+  /** Set instead of `blob` on engines that can't store Blobs in IndexedDB; read with `blobOf()`. */
+  bytes?: ArrayBuffer;
 }
 
 export interface Wish {

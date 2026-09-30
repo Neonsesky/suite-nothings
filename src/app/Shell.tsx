@@ -15,7 +15,7 @@ import { onRemoteChange, useBootError, useMe, getState } from '@/data/store';
 import { useReducedMotionAttribute } from '@/lib/motion';
 import { toast } from '@/lib/toast';
 import { ErrorBoundary } from './ErrorBoundary';
-import { getLastScreen, matchRoute, navigate, useRoute, type RouteDef } from './router';
+import { getLastScreen, LocationProvider, matchRoute, navigate, useRoute, type RouteDef } from './router';
 import { useShortcuts } from './shortcuts';
 import s from './Shell.module.css';
 
@@ -107,7 +107,8 @@ export function Shell() {
   useShortcuts();
 
   const route = match?.route;
-  const background = route?.kind === 'sheet' ? matchRoute(getLastScreen().path) : null;
+  const backgroundLoc = route?.kind === 'sheet' ? getLastScreen() : null;
+  const background = backgroundLoc ? matchRoute(backgroundLoc.path) : null;
 
   // First launch: pick who's checking in.
   const needsWelcome = !me && route != null && !['welcome', 'join', 'gallery'].includes(route.name);
@@ -149,7 +150,13 @@ export function Shell() {
     const Bg = background && background.route.kind === 'screen' ? background.route.Component : ROUTE_HOME;
     content = (
       <>
-        <Bg />
+        {backgroundLoc && background ? (
+          <LocationProvider location={backgroundLoc}>
+            <Bg />
+          </LocationProvider>
+        ) : (
+          <Bg />
+        )}
         <route.Component />
       </>
     );

@@ -516,9 +516,10 @@ export function setPhotoProcessor(p: PhotoProcessor): void {
 }
 
 /** Process, store blobs locally, attach to the visit, and queue the upload. */
-export async function addPhoto(visitId: string, file: Blob, opts: { caption?: string } = {}): Promise<Photo> {
+export async function addPhoto(visitId: string, file: Blob, opts: { caption?: string; processed?: ProcessedPhoto } = {}): Promise<Photo> {
   const d = requireDb();
-  const processed = await photoProcessor(file);
+  // `processed` skips the pipeline when the caller already resized the image (add-stay drafts).
+  const processed = opts.processed ?? (await photoProcessor(file));
   const now = nowIso();
   const photo_id = ulid();
   const thumbKey = `${photo_id}:thumb`;
@@ -540,9 +541,7 @@ export async function addPhoto(visitId: string, file: Blob, opts: { caption?: st
     { key: thumbKey, photo_id, size: 'thumb', blob: processed.thumb, mime: processed.thumb.type || 'image/jpeg' },
     { key: fullKey, photo_id, size: 'full', blob: processed.full, mime: processed.full.type || 'image/jpeg' },
   ];
-  const tx = d.transaction('photoBlobs', 'readwrite');
-  blobs.forEach((b) => void tx.store.put(b));
-  await tx.done;
+  await putPhotoBlobs(d, blobs);
   setState({ photos: new Map(state.photos).set(photo_id, photo) });
   await write('photos', photo, 'uploadPhoto', { photo, thumb_key: thumbKey, full_key: fullKey });
   const visit = state.visits.get(visitId);
@@ -553,17 +552,37 @@ export async function addPhoto(visitId: string, file: Blob, opts: { caption?: st
   return photo;
 }
 
+/**
+ * Some WebKit builds (private tabs, test runners) refuse Blobs in IndexedDB; store the bytes then.
+ */
+async function putPhotoBlobs(d: ReturnType<typeof requireDb>, blobs: PhotoBlob[]): Promise<void> {
+  try {
+    const tx = d.transaction('photoBlobs', 'readwrite');
+    await Promise.all([...blobs.map((b) => tx.store.put(b)), tx.done]);
+  } catch {
+    const rows = await Promise.all(blobs.map(async (b) => ({ ...b, blob: undefined as unknown as Blob, bytes: await b.blob.arrayBuffer() })));
+    const tx = d.transaction('photoBlobs', 'readwrite');
+    rows.forEach((r) => void tx.store.put(r));
+    await tx.done;
+  }
+}
+
+/** The Blob of a stored photoBlobs row, whichever way it was stored. */
+export function blobOf(row: PhotoBlob): Blob {
+  return row.blob instanceof Blob ? row.blob : new Blob([row.bytes ?? new ArrayBuffer(0)], { type: row.mime });
+}
+
 /** Local blob for a photo, fetching (and caching) from the adapter when missing. */
 export async function getPhotoBlob(photoId: string, size: 'thumb' | 'full' = 'thumb'): Promise<Blob | null> {
   const d = requireDb();
   const local = (await d.get('photoBlobs', `${photoId}:${size}`)) ?? (await d.get('photoBlobs', `${photoId}:${size === 'thumb' ? 'full' : 'thumb'}`));
-  if (local) return local.blob;
+  if (local) return blobOf(local);
   const photo = state.photos.get(photoId);
   const fileId = size === 'thumb' ? photo?.thumb_file_id ?? photo?.full_file_id : photo?.full_file_id ?? photo?.thumb_file_id;
   if (!fileId || !adapter) return null;
   try {
     const blob = await adapter.getPhoto(fileId);
-    await d.put('photoBlobs', { key: `${photoId}:${size}`, photo_id: photoId, size, blob, mime: blob.type || 'image/jpeg' });
+    await putPhotoBlobs(d, [{ key: `${photoId}:${size}`, photo_id: photoId, size, blob, mime: blob.type || 'image/jpeg' }]);
     return blob;
   } catch {
     return null;

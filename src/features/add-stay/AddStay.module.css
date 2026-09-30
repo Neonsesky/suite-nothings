@@ -1,0 +1,579 @@
+/* Add a stay: sheet chrome, steps and fields (design/plan.md §7.3, prototype `.sheet-*`). */
+
+.sheetPanel {
+  max-width: 35rem;
+}
+
+.stepHead {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.stepTitle {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-extrabold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stepCount {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-muted);
+}
+.saved {
+  margin-left: auto;
+  font-size: var(--text-2xs);
+  color: var(--color-subtle);
+  transition: opacity var(--dur-base) var(--ease-standard);
+}
+
+.progress {
+  display: flex;
+  gap: var(--space-1);
+  margin: 0 0 var(--space-5);
+}
+.progressSeg {
+  flex: 1;
+  height: 0.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-line);
+  transition: background-color var(--dur-base) var(--ease-standard);
+}
+.progressSeg[data-done='true'] {
+  background: var(--color-honey);
+}
+.progressSeg:not(:disabled) {
+  cursor: pointer;
+}
+
+.body {
+  padding: 0 var(--gutter) var(--space-6);
+}
+.helper {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  margin: 0 0 var(--space-4);
+}
+.problem {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-danger);
+  margin: var(--space-3) 0 0;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+.footer > :last-child {
+  flex: 1;
+}
+@media (min-width: 64rem) {
+  .footer > :last-child {
+    flex: initial;
+    min-width: 12rem;
+    margin-left: auto;
+  }
+}
+
+/* ── fields ── */
+.label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  margin-bottom: var(--space-2);
+}
+.group {
+  margin-bottom: var(--space-5);
+}
+.row {
+  display: flex;
+  gap: var(--space-3);
+}
+.row > * {
+  flex: 1;
+  min-width: 0;
+}
+.input {
+  width: 100%;
+  height: 3rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-line-input);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  padding: 0 var(--space-4);
+  font: inherit;
+  font-size: var(--text-md);
+}
+.input:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 1px;
+}
+.input[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+textarea.input {
+  height: auto;
+  min-height: 5.5rem;
+  padding: var(--space-3) var(--space-4);
+  resize: vertical;
+  line-height: var(--leading-normal);
+}
+.mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+/* ── hotel step ── */
+.search {
+  position: relative;
+  margin-bottom: var(--space-3);
+}
+.searchIcon {
+  position: absolute;
+  left: var(--space-2);
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  pointer-events: none;
+}
+.searchInput {
+  height: 3.5rem;
+  border-radius: var(--radius-pill);
+  padding-left: 3.25rem;
+  padding-right: var(--space-11);
+}
+.searchInput::-webkit-search-cancel-button {
+  appearance: none;
+}
+.searchClear {
+  position: absolute;
+  right: var(--space-1);
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border-radius: var(--radius-pill);
+  color: var(--color-muted);
+}
+.sectionLabel {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-subtle);
+  margin: var(--space-5) 0 var(--space-2);
+}
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  color: var(--color-ink);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--dur-fast) var(--ease-standard);
+}
+.option:active {
+  transform: scale(0.99);
+}
+@media (hover: hover) {
+  .option:hover {
+    background: var(--color-surface);
+  }
+}
+.option[data-active='true'] {
+  background: var(--color-surface);
+  outline: 2px solid var(--color-focus);
+  outline-offset: -2px;
+}
+.optionIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-cream);
+}
+.optionThumb {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.optionThumb > * {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.optionText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.optionTitle {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.optionSub {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.optionMeta {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-muted);
+}
+.state {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+.skeletonRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+}
+.picked {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius-md);
+  background: var(--color-honey-soft);
+  margin-bottom: var(--space-4);
+}
+.manual {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-top: var(--space-3);
+}
+.pinMap {
+  height: 12rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: var(--space-4);
+}
+
+/* ── when step ── */
+.dateField {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: 3.5rem;
+  padding: 0 var(--space-4) 0 var(--space-2);
+  border: 1px solid var(--color-line-input);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+}
+.dateField:focus-within {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 1px;
+}
+.dateNative {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  cursor: pointer;
+}
+.preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  margin: 0 0 var(--space-5);
+}
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.stepperBtn {
+  display: grid;
+  place-items: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+.stepperBtn:disabled {
+  opacity: 0.4;
+}
+.stepperValue {
+  font-weight: var(--weight-bold);
+  font-size: var(--text-lg);
+  min-width: 2ch;
+  text-align: center;
+}
+.linkBtn {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  min-height: var(--tap-min);
+  color: var(--color-ink);
+}
+
+/* ── photos step ── */
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.photoCell {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.photoTile {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+}
+.photoTile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.photoBusy {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-surface);
+}
+.photoAdd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  aspect-ratio: 1;
+  border: 1.5px dashed var(--color-line-strong);
+  border-radius: var(--radius-md);
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+.photoAdd:focus-within {
+  outline: 2px solid var(--color-focus);
+}
+.photoTools {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-1);
+}
+.photoTool {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-sm);
+}
+.photoTool:disabled {
+  visibility: hidden;
+}
+.photoRemove {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-1);
+}
+.caption {
+  height: 2.25rem;
+  font-size: var(--text-xs);
+  padding: 0 var(--space-2);
+}
+.hiddenInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.exif {
+  margin-top: var(--space-5);
+  background: var(--color-cream);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+.exif p {
+  font-size: var(--text-sm);
+  margin: 0 0 var(--space-3);
+}
+.exifActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ── good part ── */
+.moods {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+.mood {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-1);
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-ink);
+  touch-action: manipulation;
+}
+.mood:active {
+  transform: scale(0.97);
+}
+.mood[aria-pressed='true'] {
+  border-color: var(--color-ink);
+  background: var(--color-honey-soft);
+}
+.stars {
+  display: flex;
+  gap: var(--space-1);
+}
+.star {
+  display: grid;
+  place-items: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  color: var(--color-line-strong);
+  touch-action: manipulation;
+}
+.star[data-filled='true'] {
+  color: var(--color-honey-deep);
+}
+.star[data-filled='true'] svg {
+  fill: currentColor;
+}
+.star:active {
+  transform: scale(0.9);
+}
+.hint {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  margin: var(--space-2) 0 0;
+}
+
+/* ── resume + discard ── */
+.card {
+  border-radius: var(--radius-md);
+  background: var(--color-cream);
+  padding: var(--space-5);
+}
+.cardTitle {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-extrabold);
+  margin: 0 0 var(--space-2);
+}
+.cardBody {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  margin: 0 0 var(--space-4);
+}
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.confirmLayer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: var(--color-scrim);
+  padding: var(--space-4);
+  padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 64rem) {
+  .confirmLayer {
+    align-items: center;
+  }
+}
+.confirm {
+  width: min(24rem, 100%);
+  background: var(--color-paper);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  padding: var(--space-5);
+}
+.confirm .cardActions > * {
+  flex: 1;
+}

@@ -32,6 +32,8 @@ export interface BottomSheetProps {
   headerExtra?: ReactNode;
   /** Set false to block scrim/Esc/drag dismissal (e.g. unsaved form confirms first). */
   dismissible?: boolean;
+  /** With `dismissible={false}`: called on scrim/Esc/drag-down/close so the owner can confirm first. */
+  onDismissAttempt?(): void;
   /** Desktop presentation. Default 'center'. */
   desktop?: 'center' | 'sheet';
   className?: string;
@@ -83,6 +85,7 @@ function SheetInner({
   footer,
   headerExtra,
   dismissible = true,
+  onDismissAttempt,
   desktop = 'center',
   className,
   children,
@@ -155,9 +158,10 @@ function SheetInner({
     const prevOverflow = html.style.overflow;
     html.style.overflow = 'hidden';
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && dismissible) {
+      if (e.key === 'Escape' && (dismissible || onDismissAttempt)) {
         e.stopPropagation();
-        onClose();
+        if (dismissible) onClose();
+        else onDismissAttempt?.();
       } else if (e.key === 'Tab' && panel) {
         const items = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((el) => el.offsetParent !== null);
         if (items.length === 0) {
@@ -178,7 +182,7 @@ function SheetInner({
       html.style.overflow = prevOverflow;
       previous?.focus?.({ preventScroll: true });
     };
-  }, [open, dismissible, onClose]);
+  }, [open, dismissible, onClose, onDismissAttempt]);
 
   // ── drag ──
   const drag = useRef<{ id: number; startY: number; startSheetY: number; samples: { t: number; y: number }[]; active: boolean; fromContent: boolean } | null>(null);
@@ -189,6 +193,8 @@ function SheetInner({
     if (target.closest('[data-no-drag]')) return; // footer controls too, or taps never become clicks
     const fromContent = !!contentRef.current?.contains(target);
     if (fromContent && (contentRef.current!.scrollTop > 0 || target.closest('input,textarea,select,[data-no-drag]'))) return;
+    // Footer/header controls: capturing the pointer on the panel would swallow their click.
+    if (!fromContent && target.closest('button,a,input,textarea,select')) return;
     anim.current?.stop();
     drag.current = { id: e.pointerId, startY: e.clientY, startSheetY: y.get(), samples: [{ t: e.timeStamp, y: e.clientY }], active: !fromContent, fromContent };
     if (!fromContent) (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
@@ -229,6 +235,7 @@ function SheetInner({
       closingByUser.current = true;
       springTo(closedY, velocity, () => onClose());
     } else {
+      if (idx < 0) onDismissAttempt?.();
       const i = idx < 0 ? 0 : idx;
       if (i !== snapRef.current) {
         snapRef.current = i;
@@ -244,8 +251,8 @@ function SheetInner({
         {title}
       </h2>
       {headerExtra}
-      {dismissible ? (
-        <button type="button" className={s.close} aria-label="Close" onClick={onClose} data-no-drag>
+      {dismissible || onDismissAttempt ? (
+        <button type="button" className={s.close} aria-label="Close" onClick={dismissible ? onClose : onDismissAttempt} data-no-drag>
           <IconClose size={20} />
         </button>
       ) : null}
@@ -260,7 +267,7 @@ function SheetInner({
           initial={{ opacity: 0 }}
           animate={{ opacity: open ? 1 : 0 }}
           transition={reduced ? INSTANT : SPRING_UI}
-          onClick={dismissible ? onClose : undefined}
+          onClick={dismissible ? onClose : onDismissAttempt}
           aria-hidden="true"
         />
         <motion.div
@@ -286,7 +293,7 @@ function SheetInner({
 
   return (
     <div className={s.layer} data-sheet-state={open ? 'open' : 'closing'}>
-      <motion.div className={s.scrim} style={{ opacity: scrimOpacity }} onClick={dismissible ? onClose : undefined} aria-hidden="true" />
+      <motion.div className={s.scrim} style={{ opacity: scrimOpacity }} onClick={dismissible ? onClose : onDismissAttempt} aria-hidden="true" />
       <motion.div
         ref={panelRef}
         role="dialog"
