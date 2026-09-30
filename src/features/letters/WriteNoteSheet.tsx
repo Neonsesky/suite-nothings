@@ -50,8 +50,8 @@ export function WriteNoteSheet({ open, onClose }: { open: boolean; onClose(): vo
   useMarkBusy(open, 'write-note');
 
   const rule = buildRule(kind, n, date);
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
+  const submit = async (e?: FormEvent) => {
+    e?.preventDefault();
     if (!title.trim() || !body.trim()) return setError('A note needs a title and a few words inside.');
     if ((kind === 'visits' || kind === 'hotels') && (!Number.isInteger(n) || n < 1)) return setError('Pick a number of 1 or more.');
     if (kind === 'date' && !/^\d{4}-\d{2}-\d{2}$/.test(date)) return setError('Pick the day it should open.');
@@ -79,7 +79,7 @@ export function WriteNoteSheet({ open, onClose }: { open: boolean; onClose(): vo
       title="Write a future note"
       desktop="center"
       footer={
-        <Button type="submit" form="write-note" block busy={saving}>
+        <Button block busy={saving} data-no-drag onClick={() => void submit()}>
           Seal the note
         </Button>
       }

@@ -12,8 +12,8 @@ import { writtenMonth } from './access';
 import s from './Letters.module.css';
 
 /** ms per visual line of the reveal. */
-const LINE_MS = 520;
-const GAP_MS = 260;
+const LINE_MS = 380;
+const GAP_MS = 180;
 
 export interface LetterPaperProps {
   letter: Letter;

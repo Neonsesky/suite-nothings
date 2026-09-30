@@ -52,6 +52,7 @@ export function PillowNote({ letter, onClose }: { letter: Letter; onClose(): voi
   const open = () => {
     if (phase !== 'arrive') return;
     markPillowShown(letter.letter_id);
+    void markLetterRead(letter.letter_id);
     play('whoosh');
     if (reduced) return setPhase('open');
     setPhase('lift');
@@ -156,7 +157,6 @@ export function PillowNote({ letter, onClose }: { letter: Letter; onClose(): voi
                   reveal
                   instant={reduced}
                   titleId={titleId}
-                  onRevealed={() => void markLetterRead(letter.letter_id)}
                 />
                 <div className={s.paperActions}>
                   <Button variant="secondary" onClick={close}>

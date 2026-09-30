@@ -27,3 +27,10 @@
 - [w0-design] Mood stamps: Blissful, Lazy, Fancy, Giggly, Romantic, Adventurous, Cosy, Fizzy (ids lowercase) — 8 covers the day-use moods without a picker scroll on 390 px — `MOODS` in MoodStamps.tsx.
 - [w0-design] Map pins ship as SVG strings with literal hex colours (a rasterised image can't read CSS vars) — `PIN_COLORS` in pins.ts must track tokens.css.
 - [w0-design] iOS splash screens cover 12 portrait sizes (iPhone SE 2 → 17 Pro Max/Air); no landscape — the PWA is portrait-first — add sizes to `SPLASHES` in export-icons.mjs.
+- [w1-shell] The letter flip is CSS 3D (Motion), not Three.js — real DOM text stays crisp, selectable and screen-reader friendly through the flip — swap `PillowNote`'s card for a three.js plane if wanted.
+- [w1-shell] The letter is marked read when the pillow card is opened (or the page opens), not after the reveal ends — a long letter takes ~20 s to reveal and closing early still means she's read it — move `markLetterRead` to `LetterPaper`'s `onRevealed`.
+- [w1-shell] The intro waits at most 450 ms for the three.js chunk, then draws the 2D version — keeps the whole intro at or under 2.5 s on slow first loads — change `LOAD_BUDGET_MS` in Intro.tsx.
+- [w1-shell] The intro skips 3D when `hardwareConcurrency <= 4`, when there's no WebGL2, or when the frame probe averages over 30 ms — per SPEC §14; note that iOS Safari may report 4 cores and get the 2D door — change `canRun3D` in capability.ts.
+- [w1-shell] `resetApp()` in the e2e helpers sets `introSeen` unless `{ intro: true }`, so other suites never wait on the 2.5 s intro — pass `intro: true` to test it.
+- [w1-shell] Only Nirsh sees "Write a future note" (SPEC §13) — change `canWrite` in LettersScreen.tsx to let both write.
+- [w1-shell] "Written in Dubai" uses COUPLE.defaultHomeBase.city, not the current home base — a letter's place shouldn't move if home base changes — add a `written_in` column to Letters.

@@ -15,6 +15,8 @@ import { onRemoteChange, useBootError, useMe, getState } from '@/data/store';
 import { useReducedMotionAttribute } from '@/lib/motion';
 import { toast } from '@/lib/toast';
 import { PwaHost } from '@/pwa/PwaHost';
+import { Intro } from '@/features/intro/Intro';
+import { PillowHost } from '@/features/letters/PillowHost';
 import { ErrorBoundary } from './ErrorBoundary';
 import { getLastScreen, matchRoute, navigate, useRoute, type RouteDef } from './router';
 import { useShortcuts } from './shortcuts';
@@ -212,6 +214,8 @@ export function Shell() {
       </main>
       {chrome ? <TabBar active={active} /> : null}
       <ToastHost />
+      <PillowHost />
+      <Intro />
       <PwaHost />
     </div>
   );

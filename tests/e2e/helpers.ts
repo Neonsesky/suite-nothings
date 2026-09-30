@@ -8,7 +8,7 @@ export type Person = 'nirsh' | 'shady';
  * Fresh app state: wipes every IndexedDB database, localStorage and sessionStorage, then
  * optionally sets who is on this device, and loads `hash`.
  */
-export async function resetApp(page: Page, opts: { me?: Person | null; hash?: string } = {}): Promise<void> {
+export async function resetApp(page: Page, opts: { me?: Person | null; hash?: string; intro?: boolean } = {}): Promise<void> {
   // A static same-origin file, so the app never boots (and never preloads) during the wipe.
   await page.goto('./favicon.svg');
   await page.evaluate(async () => {
@@ -26,6 +26,8 @@ export async function resetApp(page: Page, opts: { me?: Person | null; hash?: st
     localStorage.clear();
     sessionStorage.clear();
   });
+  // The full first-launch intro only plays when a test asks for it.
+  if (!opts.intro) await page.evaluate(() => localStorage.setItem('sn:device:introSeen', 'true'));
   if (opts.me !== null) {
     const me = opts.me ?? 'nirsh';
     await page.evaluate((m) => localStorage.setItem('sn:device:me', JSON.stringify(m)), me);
@@ -68,4 +70,15 @@ export async function checkpoint(page: Page, testInfo: TestInfo, name: string, o
 
 export async function waitForStays(page: Page): Promise<void> {
   await expect(page.getByRole('heading', { name: 'Our stays' })).toBeVisible();
+}
+
+/** Same behaviour as `checkpoint`, but into an arbitrary task folder under design/checkpoints. */
+export async function checkpointTo(page: Page, testInfo: TestInfo, folder: string, name: string, opts: { fullPage?: boolean } = {}): Promise<void> {
+  if (!WRITE_CHECKPOINTS) {
+    await testInfo.attach(name, { body: await page.screenshot({ fullPage: opts.fullPage ?? false }), contentType: 'image/png' });
+    return;
+  }
+  const path = `design/checkpoints/${folder}/${name}-${testInfo.project.name}.png`;
+  mkdirSync(dirname(path), { recursive: true });
+  await page.screenshot({ path, fullPage: opts.fullPage ?? false });
 }

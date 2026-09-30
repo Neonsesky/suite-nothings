@@ -17,3 +17,9 @@
 - Ink-outline icon set (55 icons), mood stamps (8), map pin SVGs (stay, wishlist, home, cluster).
 - Design plan with wireframes for every screen + critique (`design/plan.md`), copy deck (`design/copy.md`).
 - Static clickable prototype (`design/prototype/`) and Checkpoint 1 artifacts (`design/checkpoints/cp1/`).
+
+## w1-shell
+- Intro: a lazy Three.js first-launch scene (toon-shaded door, card reader and the 619 key tag on its ring, with ink edge lines). The card taps the lock, the light goes green and the door opens. There's a 2D SVG/CSS fallback for reduced motion, low-end devices and slow chunk loads, and a 400 ms version on later launches. Tap or any key skips.
+- Onboarding: Who's checking in → Connect (Try demo or ConnectionForm; skipped after an invite) → Home base (mini map plus a Photon city picker) → Install (Android prompt, iOS illustrated steps, Maybe later) → Check-in complete.
+- The letter: "A note on your pillow" slides in on the reader's first launch, lifts and flips in CSS 3D, and reveals line by line with a mask sweep. It's signed, with "Written in Dubai, September 2026" beneath. The markdown is rendered safely and `read_at` is written on open. Nirsh gets a one-time "Shady read your note" toast. The Letters list shows sealed envelopes with hints, and "Write a future note" saves through `upsertLetter`.
+- Settings, export/import, PWA manifest, service worker and install wiring (see the helper commits).
