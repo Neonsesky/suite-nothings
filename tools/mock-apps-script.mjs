@@ -17,7 +17,8 @@ function entityId(action, payload) {
   if (!payload || typeof payload !== 'object') return null;
   if (action === 'uploadPhoto') return payload.photo?.photo_id ?? null;
   if (action === 'updateSettings') return 'settings';
-  const key = Object.keys(payload).find((k) => k.endsWith('_id') && payload[k]);
+  const byAction = { upsertHotel: 'hotel_id', upsertVisit: 'visit_id', deleteVisit: 'visit_id', upsertWish: 'wish_id', upsertLetter: 'letter_id', markLetterRead: 'letter_id' };
+  const key = byAction[action] ?? Object.keys(payload).find((k) => k.endsWith('_id') && payload[k]);
   return key ? String(payload[key]) : null;
 }
 
@@ -67,7 +68,7 @@ export async function startMockServer({ port = Number(process.env.MOCK_PORT || 0
 
   async function exec(req, res, url, deployment) {
     if (req.method === 'OPTIONS') return send(res, 405, { 'Content-Type': 'text/html; charset=utf-8' }, 'Method Not Allowed');
-    if (state.login.has(deployment) || url.pathname.endsWith('/dev')) return send(res, 302, { Location: `${origin(req)}/login` });
+    if (state.login.has(deployment) || url.pathname.endsWith('/dev')) return send(res, 302, { Location: `${origin(req)}/login`, ...CORS });
     if (!state.active.has(deployment)) return send(res, 404, { ...CORS, 'Content-Type': 'text/html; charset=utf-8' }, NOT_FOUND_HTML);
     const params = Object.fromEntries(url.searchParams);
     let out;
@@ -87,7 +88,8 @@ export async function startMockServer({ port = Number(process.env.MOCK_PORT || 0
     const token = randomUUID().replace(/-/g, '');
     state.echoes.set(token, JSON.stringify(out));
     if (state.echoes.size > 500) state.echoes.delete(state.echoes.keys().next().value);
-    return send(res, 302, { Location: `${origin(req)}/macros/echo?user_content_key=${token}` });
+    // Google sends CORS "*" on the 302 too; browsers require it to follow a cross-origin redirect.
+    return send(res, 302, { Location: `${origin(req)}/macros/echo?user_content_key=${token}`, ...CORS });
   }
 
   const server = createServer(async (req, res) => {

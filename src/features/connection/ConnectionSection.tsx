@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/Button';
 import { ChipGroup } from '@/components/Chip';
-import { IconLink, IconQr, IconShare, IconSync, IconUpload } from '@/components/icons';
+import { IconCheck, IconLink, IconQr, IconShare, IconSync, IconUpload } from '@/components/icons';
 import { otherPerson, personName } from '@/config/couple';
 import { demoOnlyStays, inviteLink, shortenUrl } from '@/data/connection';
 import { activateDemo, activateLive, importData, syncNow, useDemoMode, useDevicePref, useMe, useSyncState } from '@/data/store';
@@ -17,6 +17,7 @@ export function ConnectionSection() {
   const demo = useDemoMode();
   const connection = useDevicePref('connection');
   const [editing, setEditing] = useState(false);
+  const [connected, setConnected] = useState<string | null>(null);
   const mode: Mode = demo ? 'demo' : 'live';
 
   const onMode = (next: Mode | null) => {
@@ -41,11 +42,11 @@ export function ConnectionSection() {
       {demo ? (
         <p className={s.note}>Demo mode: sample stays, nothing saved to our Sheet.</p>
       ) : null}
-      {!demo && connection && !editing ? <LinkStatus onChange={() => setEditing(true)} /> : null}
+      {!demo && connection && !editing ? <LinkStatus connectedMessage={connected} onChange={() => { setConnected(null); setEditing(true); }} /> : null}
       {demo || !connection || editing ? (
         <div className={s.card}>
           {connection && editing ? <p className={s.meta}>Paste the new link to reconnect. Everything saved on this phone stays and syncs once it works.</p> : null}
-          <ConnectionForm onConnected={() => setEditing(false)} />
+          <ConnectionForm onConnected={(r) => { setConnected(r.message); setEditing(false); }} />
         </div>
       ) : null}
       {!demo && connection ? <Invite apiUrl={connection.apiUrl} passphrase={connection.key} /> : null}
@@ -54,7 +55,7 @@ export function ConnectionSection() {
   );
 }
 
-function LinkStatus({ onChange }: { onChange(): void }) {
+function LinkStatus({ onChange, connectedMessage }: { onChange(): void; connectedMessage: string | null }) {
   const connection = useDevicePref('connection');
   const sync = useSyncState();
   const [, tick] = useState(0);
@@ -79,6 +80,12 @@ function LinkStatus({ onChange }: { onChange(): void }) {
           : 'Connected';
   return (
     <div className={s.card} data-testid="connection-status">
+      {connectedMessage ? (
+        <p className={[s.result, s.ok].join(' ')} role="status" data-testid="connection-result" data-outcome="connected">
+          <IconCheck size={18} />
+          <span>{connectedMessage}</span>
+        </p>
+      ) : null}
       <div className={s.row}>
         <span className={s.linkText} title={connection.apiUrl}>{shortenUrl(connection.apiUrl)}</span>
         <Button variant="ghost" size="sm" icon={<IconLink size={16} />} onClick={onChange}>Change link</Button>

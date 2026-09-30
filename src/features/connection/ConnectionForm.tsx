@@ -13,7 +13,8 @@ import { useMarkBusy } from '@/lib/busy';
 import s from './Connection.module.css';
 
 export interface ConnectionFormProps {
-  onConnected?(): void;
+  /** Called after a successful test has saved the link and switched to our Sheet. */
+  onConnected?(result: TestResult): void;
   /** Tighter layout for onboarding. */
   compact?: boolean;
   /** Prefill (e.g. from a partial invite link). */
@@ -60,7 +61,7 @@ export function ConnectionForm({ onConnected, compact, initialUrl, initialKey, a
     if (as) setMe(as);
     await activateLive(config);
     setUrl(c.url);
-    onConnected?.();
+    onConnected?.(r);
   }
 
   return (
