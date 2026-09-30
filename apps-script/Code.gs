@@ -1071,6 +1071,7 @@ function setup() {
     summary.push('Letters checked');
   }
   log_('editor', 'setup', 'version ' + VERSION);
+  summary.push('setup finished');
   var text = summary.join('\n');
   Logger.log(text);
   return text;
