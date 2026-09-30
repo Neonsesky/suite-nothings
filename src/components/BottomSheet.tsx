@@ -192,6 +192,8 @@ function SheetInner({
     const target = e.target as HTMLElement;
     const fromContent = !!contentRef.current?.contains(target);
     if (fromContent && (contentRef.current!.scrollTop > 0 || target.closest('input,textarea,select,[data-no-drag]'))) return;
+    // Footer/header controls: capturing the pointer on the panel would swallow their click.
+    if (!fromContent && target.closest('button,a,input,textarea,select')) return;
     anim.current?.stop();
     drag.current = { id: e.pointerId, startY: e.clientY, startSheetY: y.get(), samples: [{ t: e.timeStamp, y: e.clientY }], active: !fromContent, fromContent };
     if (!fromContent) (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);

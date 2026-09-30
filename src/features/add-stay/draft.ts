@@ -101,12 +101,43 @@ export function isDirty(d: AddStayDraft, base: AddStayDraft): boolean {
   return keys.some((k) => JSON.stringify(d[k]) !== JSON.stringify(base[k]));
 }
 
+/** Photo bytes as stored in a draft. Plain bytes, because some WebKit builds refuse Blobs in IndexedDB. */
+interface StoredBlob {
+  bytes: ArrayBuffer;
+  type: string;
+}
+const bytesCache = new WeakMap<Blob, ArrayBuffer>();
+async function storeBlob(b: Blob | null): Promise<StoredBlob | null> {
+  if (!b) return null;
+  let bytes = bytesCache.get(b);
+  if (!bytes) {
+    bytes = await b.arrayBuffer();
+    bytesCache.set(b, bytes);
+  }
+  return { bytes, type: b.type };
+}
+function reviveBlob(v: unknown): Blob | null {
+  if (v instanceof Blob) return v;
+  if (v && typeof v === 'object' && (v as StoredBlob).bytes instanceof ArrayBuffer) return new Blob([(v as StoredBlob).bytes], { type: (v as StoredBlob).type });
+  return null;
+}
+
+/** The draft as saved in the `drafts` store. */
+export async function toStoredDraft(d: AddStayDraft): Promise<unknown> {
+  const photos = await Promise.all(d.photos.map(async (p) => ({ ...p, thumb: await storeBlob(p.thumb), full: await storeBlob(p.full) })));
+  return { ...d, photos };
+}
+
 /** Loads a stored draft if it looks like ours; anything else is ignored. */
 export function reviveDraft(data: unknown): AddStayDraft | null {
   if (!data || typeof data !== 'object') return null;
   const d = data as Partial<AddStayDraft>;
   if (d.v !== DRAFT_VERSION || typeof d.date !== 'string' || !Array.isArray(d.photos)) return null;
-  return { ...emptyDraft(d.date), ...d } as AddStayDraft;
+  const photos = d.photos
+    .map((p) => ({ ...p, thumb: reviveBlob(p.thumb), full: reviveBlob(p.full) }))
+    // A new photo whose bytes didn't survive can't be saved; drop it rather than save a blank.
+    .filter((p) => p.photo_id || (p.thumb && p.full));
+  return { ...emptyDraft(d.date), ...d, photos } as AddStayDraft;
 }
 
 /** A Photon (or server geocoder) result as a new hotel. Brand, wikidata and contact come from OSM tags. */

@@ -1,0 +1,87 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     55.1392,
+     25.0805
+    ]
+   },
+   "properties": {
+    "osm_type": "W",
+    "osm_id": 301245871,
+    "osm_key": "tourism",
+    "osm_value": "hotel",
+    "type": "house",
+    "name": "Marina Lanterns Hotel",
+    "street": "Al Marsa Street",
+    "district": "Dubai Marina",
+    "city": "Dubai",
+    "state": "Dubai",
+    "country": "United Arab Emirates",
+    "countrycode": "AE",
+    "extra": {
+     "brand": "Lanterns",
+     "wikidata": "Q130000001",
+     "stars": "4",
+     "website": "https://example.org/lanterns"
+    }
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     55.136,
+     25.0772
+    ]
+   },
+   "properties": {
+    "osm_type": "W",
+    "osm_id": 301245872,
+    "osm_key": "tourism",
+    "osm_value": "hotel",
+    "type": "house",
+    "name": "Marina Tides Suites",
+    "street": "King Salman bin Abdulaziz Al Saud Street",
+    "district": "Dubai Marina",
+    "city": "Dubai",
+    "state": "Dubai",
+    "country": "United Arab Emirates",
+    "countrycode": "AE",
+    "extra": {
+     "stars": "5"
+    }
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     55.1421,
+     25.084
+    ]
+   },
+   "properties": {
+    "osm_type": "W",
+    "osm_id": 301245873,
+    "osm_key": "tourism",
+    "osm_value": "hotel",
+    "type": "house",
+    "name": "Harbour Loft Hotel",
+    "street": "Marina Walk",
+    "district": "Dubai Marina",
+    "city": "Dubai",
+    "state": "Dubai",
+    "country": "United Arab Emirates",
+    "countrycode": "AE",
+    "extra": {}
+   }
+  }
+ ]
+}

@@ -7,6 +7,7 @@
  * Every change autosaves to the `drafts` store; reopening offers to pick up where we left off.
  */
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { BottomSheet } from '@/components/BottomSheet';
 import { Button } from '@/components/Button';
 import { ClockLoader } from '@/components/ClockLoader';
@@ -29,6 +30,7 @@ import {
   isDirty,
   NEW_DRAFT_ID,
   reviveDraft,
+  toStoredDraft,
   revisitDefaults,
   STEP_TITLES,
   stepProblem,
@@ -120,7 +122,10 @@ export default function AddStaySheet() {
     if (!draft || !base || resume || celebration || saving) return;
     const t = setTimeout(() => {
       if (isDirty(draft, base)) {
-        void saveDraft(draftId, draft).then(() => setSavedFlash(true));
+        void toStoredDraft(draft)
+          .then((stored) => saveDraft(draftId, stored))
+          .then(() => setSavedFlash(true))
+          .catch(() => undefined);
       } else void deleteDraft(draftId).catch(() => undefined);
     }, 300);
     return () => clearTimeout(t);
@@ -351,7 +356,7 @@ function DiscardConfirm({ onKeep, onDiscard }: { onKeep(): void; onDiscard(): vo
     document.addEventListener('keydown', onKey, true);
     return () => document.removeEventListener('keydown', onKey, true);
   }, [onKeep]);
-  return (
+  return createPortal(
     <div className={s.confirmLayer} onClick={onKeep}>
       <div className={s.confirm} role="alertdialog" aria-modal="true" aria-labelledby="discard-title" aria-describedby="discard-body" onClick={(e) => e.stopPropagation()}>
         <h3 id="discard-title" className={s.cardTitle}>
@@ -369,6 +374,7 @@ function DiscardConfirm({ onKeep, onDiscard }: { onKeep(): void; onDiscard(): vo
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

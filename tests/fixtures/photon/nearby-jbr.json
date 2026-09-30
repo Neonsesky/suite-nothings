@@ -1,0 +1,57 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     55.1349,
+     25.0787
+    ]
+   },
+   "properties": {
+    "osm_type": "W",
+    "osm_id": 401245881,
+    "osm_key": "tourism",
+    "osm_value": "hotel",
+    "type": "house",
+    "name": "JBR Sands Hotel",
+    "street": "The Walk",
+    "district": "Jumeirah Beach Residence",
+    "city": "Dubai",
+    "state": "Dubai",
+    "country": "United Arab Emirates",
+    "countrycode": "AE",
+    "extra": {
+     "stars": "4"
+    }
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     55.1331,
+     25.0761
+    ]
+   },
+   "properties": {
+    "osm_type": "W",
+    "osm_id": 401245882,
+    "osm_key": "tourism",
+    "osm_value": "resort",
+    "type": "house",
+    "name": "Beachfront Palms Resort",
+    "street": "The Walk",
+    "district": "Jumeirah Beach Residence",
+    "city": "Dubai",
+    "state": "Dubai",
+    "country": "United Arab Emirates",
+    "countrycode": "AE",
+    "extra": {}
+   }
+  }
+ ]
+}

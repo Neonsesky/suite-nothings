@@ -109,6 +109,8 @@ export interface PhotoBlob {
   size: 'thumb' | 'full';
   blob: Blob;
   mime: string;
+  /** Set instead of `blob` on engines that can't store Blobs in IndexedDB; read with `blobOf()`. */
+  bytes?: ArrayBuffer;
 }
 
 export interface Wish {
