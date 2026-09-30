@@ -1,0 +1,126 @@
+/*
+ * Suite Nothings design tokens.
+ * Measured from dayuse.ae (CSS bundles + getComputedStyle, Sep 2026); sources and WCAG
+ * contrast ratios are in design/tokens.md. Variable names are a contract with the app:
+ * add new ones freely, never rename.
+ */
+:root {
+  /* Colour: daylight hues, a cocktail of honey (functional) and ginger (love) */
+  --color-ink: #292935; /* Dayuse body/heading text */
+  --color-paper: #ffffff;
+  --color-cream: #fff8e9; /* honey at ~12% on paper: calm surfaces, splash, banners */
+  --color-honey: #ffc536; /* Dayuse brand yellow: fills only, never text on paper */
+  --color-honey-soft: #ffeab0; /* selected chips, highlight wash */
+  --color-honey-deep: #ffaf36; /* Dayuse hover/pressed yellow */
+  --color-ginger: #fc5e57; /* Dayuse coral: love and celebration only */
+  --color-ginger-soft: #ffe1dc; /* letter card, favourite wash */
+  --color-ginger-ink: #c93a33; /* ginger as text on paper (AA) */
+  --color-muted: #54545d; /* Dayuse secondary text */
+  --color-subtle: #6b7280; /* tertiary text, placeholders (AA on paper) */
+  --color-line: #e5e7eb; /* dividers, input borders */
+  --color-line-strong: #d1d5db;
+  --color-surface: #f6f6f8; /* grey section / skeleton ground */
+  --color-success: #1f8a5b;
+  --color-danger: #d93a32;
+  --color-focus: #2299dd; /* Dayuse link/focus blue */
+  --color-scrim: rgb(20 20 28 / 0.45);
+  --color-footer: #292935;
+
+  /* Type: Manrope is the free family dayuse.ae itself loads */
+  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  --font-display: var(--font-sans);
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --text-2xs: 0.6875rem; /* 11 */
+  --text-xs: 0.75rem; /* 12 */
+  --text-sm: 0.875rem; /* 14 */
+  --text-md: 1rem; /* 16 */
+  --text-lg: 1.125rem; /* 18 */
+  --text-xl: 1.25rem; /* 20 */
+  --text-2xl: 1.5rem; /* 24 */
+  --text-3xl: 2rem; /* 32 */
+  --text-4xl: 3rem; /* 48 */
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --tracking-tight: -0.01em;
+  --tracking-caps: 0.04em;
+
+  /* Radii */
+  --radius-xs: 0.25rem; /* 4: timestamp chip */
+  --radius-sm: 0.5rem; /* 8: buttons, inputs */
+  --radius-md: 0.75rem; /* 12: card photos, search bar */
+  --radius-lg: 1rem; /* 16: panels, banners */
+  --radius-xl: 1.5rem; /* 24: sheet tops */
+  --radius-pill: 9999px;
+
+  /* Shadows: Dayuse uses one soft, centred shadow */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06), 0 0 6px rgb(0 0 0 / 0.06);
+  --shadow-card: 0 0 10px rgb(0 0 0 / 0.1);
+  --shadow-sheet: 0 -4px 24px rgb(0 0 0 / 0.12);
+  --shadow-pop: 0 8px 28px rgb(0 0 0 / 0.16);
+
+  /* Spacing: 4 px grid, rem so it follows text-size settings */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-9: 2.25rem;
+  --space-10: 2.5rem;
+  --space-11: 2.75rem;
+  --space-12: 3rem;
+  --space-13: 3.25rem;
+  --space-14: 3.5rem;
+  --space-15: 3.75rem;
+  --space-16: 4rem;
+
+  /* Layout */
+  --header-h: 3.5rem; /* 56 mobile; 64 from 768 */
+  --tabbar-h: 4rem; /* plus env(safe-area-inset-bottom) */
+  --content-max: 80rem; /* 1280, Dayuse container */
+  --gutter: 1rem; /* 16 mobile; 24 from 768 */
+  --card-w-mobile: min(78vw, 18.75rem);
+  --tap-min: 2.75rem; /* 44 */
+
+  /* Breakpoints (for reference; CSS vars can't drive media queries): 640, 768, 1024, 1280 */
+
+  /* Motion: Dayuse transitions are short (150 ms) and plain */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1.15);
+  --ease-exit: cubic-bezier(0.3, 0, 1, 1);
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 400ms;
+
+  /* Layers */
+  --z-header: 100;
+  --z-sheet: 1000;
+  --z-overlay: 1031; /* Dayuse modal layer */
+  --z-toast: 1060;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --header-h: 4rem;
+    --gutter: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 150ms;
+  }
+}
