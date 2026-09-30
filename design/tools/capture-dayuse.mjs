@@ -134,106 +134,141 @@ const FINDERS = {
       null
     );
   },
+  // Shared helper (inlined into every hotelCard* finder below, since finder
+  // functions must be self-contained for page.evaluateHandle serialisation):
+  // homepage cards live in a horizontally-scrolling carousel, so several
+  // DOM nodes can share the exact same className while off-screen clones
+  // report a zero-size bounding rect. We scan every "-NN%" badge in
+  // document order and return the first ancestor card whose rect is
+  // actually visible (non-zero size).
   hotelCard: () => {
-    const badge = [...document.body.querySelectorAll('*')].find(
+    const badges = [...document.body.querySelectorAll('*')].filter(
       (e) => e.children.length === 0 && /^-\d+%$/.test(e.textContent.trim())
     );
-    let cur = badge;
-    for (let i = 0; i < 10 && cur; i++) {
-      cur = cur.parentElement;
-      if (cur && cur.parentElement) {
-        const sibs = [...cur.parentElement.children].filter((c) => c.className === cur.className);
-        if (sibs.length >= 2) return cur;
+    for (const badge of badges) {
+      let cur = badge;
+      for (let i = 0; i < 10 && cur; i++) {
+        cur = cur.parentElement;
+        if (cur && cur.parentElement) {
+          const sibs = [...cur.parentElement.children].filter((c) => c.className === cur.className);
+          if (sibs.length >= 2) {
+            const r = cur.getBoundingClientRect();
+            if (r.width > 0 && r.height > 0) return cur;
+            break;
+          }
+        }
       }
     }
     return null;
   },
   hotelCardImageWrapper: () => {
-    const badge = [...document.body.querySelectorAll('*')].find(
+    const badges = [...document.body.querySelectorAll('*')].filter(
       (e) => e.children.length === 0 && /^-\d+%$/.test(e.textContent.trim())
     );
-    let cur = badge,
-      card = null;
-    for (let i = 0; i < 10 && cur; i++) {
-      cur = cur.parentElement;
-      if (cur && cur.parentElement) {
-        const sibs = [...cur.parentElement.children].filter((c) => c.className === cur.className);
-        if (sibs.length >= 2) {
-          card = cur;
-          break;
+    for (const badge of badges) {
+      let cur = badge;
+      for (let i = 0; i < 10 && cur; i++) {
+        cur = cur.parentElement;
+        if (cur && cur.parentElement) {
+          const sibs = [...cur.parentElement.children].filter((c) => c.className === cur.className);
+          if (sibs.length >= 2) {
+            const r = cur.getBoundingClientRect();
+            if (r.width > 0 && r.height > 0) return cur.querySelector('img')?.parentElement || null;
+            break;
+          }
         }
       }
     }
-    return card ? card.querySelector('img')?.parentElement || null : null;
+    return null;
   },
   hotelCardImage: () => {
-    const badge = [...document.body.querySelectorAll('*')].find(
+    const badges = [...document.body.querySelectorAll('*')].filter(
       (e) => e.children.length === 0 && /^-\d+%$/.test(e.textContent.trim())
     );
-    let cur = badge,
-      card = null;
-    for (let i = 0; i < 10 && cur; i++) {
-      cur = cur.parentElement;
-      if (cur && cur.parentElement) {
-        const sibs = [...cur.parentElement.children].filter((c) => c.className === cur.className);
-        if (sibs.length >= 2) {
-          card = cur;
-          break;
+    for (const badge of badges) {
+      let cur = badge;
+      for (let i = 0; i < 10 && cur; i++) {
+        cur = cur.parentElement;
+        if (cur && cur.parentElement) {
+          const sibs = [...cur.parentElement.children].filter((c) => c.className === cur.className);
+          if (sibs.length >= 2) {
+            const r = cur.getBoundingClientRect();
+            if (r.width > 0 && r.height > 0) return cur.querySelector('img');
+            break;
+          }
         }
       }
     }
-    return card ? card.querySelector('img') : null;
+    return null;
   },
   hotelCardName: () => {
-    const badge = [...document.body.querySelectorAll('*')].find(
+    const badges = [...document.body.querySelectorAll('*')].filter(
       (e) => e.children.length === 0 && /^-\d+%$/.test(e.textContent.trim())
     );
-    let cur = badge,
-      card = null;
-    for (let i = 0; i < 10 && cur; i++) {
-      cur = cur.parentElement;
-      if (cur && cur.parentElement) {
-        const sibs = [...cur.parentElement.children].filter((c) => c.className === cur.className);
-        if (sibs.length >= 2) {
-          card = cur;
-          break;
+    for (const badge of badges) {
+      let cur = badge;
+      for (let i = 0; i < 10 && cur; i++) {
+        cur = cur.parentElement;
+        if (cur && cur.parentElement) {
+          const sibs = [...cur.parentElement.children].filter((c) => c.className === cur.className);
+          if (sibs.length >= 2) {
+            const r = cur.getBoundingClientRect();
+            if (r.width > 0 && r.height > 0) return cur.querySelector('p.truncate');
+            break;
+          }
         }
       }
     }
-    return card ? card.querySelector('p.truncate') : null;
+    return null;
   },
   hotelCardLocation: () => null, // not present on homepage "Our selection" cards
   hotelCardPrice: () => {
-    const badge = [...document.body.querySelectorAll('*')].find(
+    const badges = [...document.body.querySelectorAll('*')].filter(
       (e) => e.children.length === 0 && /^-\d+%$/.test(e.textContent.trim())
     );
-    let cur = badge,
-      card = null;
-    for (let i = 0; i < 10 && cur; i++) {
-      cur = cur.parentElement;
-      if (cur && cur.parentElement) {
-        const sibs = [...cur.parentElement.children].filter((c) => c.className === cur.className);
-        if (sibs.length >= 2) {
-          card = cur;
-          break;
+    for (const badge of badges) {
+      let cur = badge;
+      for (let i = 0; i < 10 && cur; i++) {
+        cur = cur.parentElement;
+        if (cur && cur.parentElement) {
+          const sibs = [...cur.parentElement.children].filter((c) => c.className === cur.className);
+          if (sibs.length >= 2) {
+            const r = cur.getBoundingClientRect();
+            if (r.width > 0 && r.height > 0) return cur.querySelector('p.text-2xl');
+            break;
+          }
         }
       }
     }
-    return card ? card.querySelector('p.text-2xl') : null;
+    return null;
   },
   hotelCardStruckPrice: () => {
-    const badge = [...document.body.querySelectorAll('*')].find(
+    const badges = [...document.body.querySelectorAll('*')].filter(
       (e) => e.children.length === 0 && /^-\d+%$/.test(e.textContent.trim())
     );
-    return badge ? badge.parentElement.querySelector('.line-through') : null;
+    for (const badge of badges) {
+      const r = badge.getBoundingClientRect();
+      if (r.width > 0 && r.height > 0) return badge.parentElement.querySelector('.line-through');
+    }
+    return null;
   },
-  hotelCardDiscountBadge: () =>
-    [...document.body.querySelectorAll('*')].find(
+  hotelCardDiscountBadge: () => {
+    const badges = [...document.body.querySelectorAll('*')].filter(
       (e) => e.children.length === 0 && /^-\d+%$/.test(e.textContent.trim())
-    ) || null,
+    );
+    return badges.find((b) => { const r = b.getBoundingClientRect(); return r.width > 0 && r.height > 0; }) || null;
+  },
   hotelCardRating: () => {
-    const star = document.querySelector('svg use[href*="solid-star"]');
-    return star ? star.closest('svg').parentElement : null;
+    const stars = [...document.querySelectorAll('svg use[href*="solid-star"]')];
+    for (const use of stars) {
+      const svg = use.closest('svg');
+      const wrap = svg ? svg.parentElement : null;
+      if (wrap) {
+        const r = wrap.getBoundingClientRect();
+        if (r.width > 0 && r.height > 0) return wrap;
+      }
+    }
+    return null;
   },
   cityTabActive: () => {
     const btns = [...document.querySelectorAll('button')];
@@ -367,9 +402,11 @@ async function describeElement(page, handle) {
   }
 }
 
-async function safeCropScreenshot(handle, filePath) {
+async function safeCropScreenshot(page, handle, filePath) {
   if (!handle) return false;
   try {
+    await handle.scrollIntoViewIfNeeded({ timeout: 3000 });
+    await page.waitForTimeout(300);
     const box = await handle.boundingBox();
     if (!box || box.width === 0 || box.height === 0) return false;
     await handle.screenshot({ path: filePath });
@@ -433,7 +470,7 @@ async function main() {
         for (const key of HOME_CROPS) {
           const handle = await getHandle(page, FINDERS[key]);
           const cropPath = path.join(CROPS_DIR, `${key}-${vp.width}.png`);
-          const ok = await safeCropScreenshot(handle, cropPath);
+          const ok = await safeCropScreenshot(page, handle, cropPath);
           console.log(`  crop ${key}: ${ok ? 'saved' : 'NOT FOUND'}`);
           if (handle) await handle.dispose();
         }
@@ -441,7 +478,7 @@ async function main() {
       if (pageName === 'hotel') {
         const handle = await getHandle(page, FINDERS.galleryTitleArea);
         const cropPath = path.join(CROPS_DIR, `hotel-gallery-title-${vp.width}.png`);
-        const ok = await safeCropScreenshot(handle, cropPath);
+        const ok = await safeCropScreenshot(page, handle, cropPath);
         console.log(`  crop hotel-gallery-title: ${ok ? 'saved' : 'NOT FOUND'}`);
         if (handle) await handle.dispose();
       }

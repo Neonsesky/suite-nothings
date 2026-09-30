@@ -67,7 +67,8 @@
 
   /* Shadows: Dayuse uses one soft, centred shadow */
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06), 0 0 6px rgb(0 0 0 / 0.06);
-  --shadow-card: 0 0 10px rgb(0 0 0 / 0.1);
+  --shadow-card: 0 0 10px rgb(0 0 0 / 0.1); /* Dayuse shadow-100 */
+  --shadow-card-hover: 0 0 15px rgb(0 0 0 / 0.12); /* Dayuse shadow-200 */
   --shadow-sheet: 0 -4px 24px rgb(0 0 0 / 0.12);
   --shadow-pop: 0 8px 28px rgb(0 0 0 / 0.16);
 
