@@ -168,6 +168,18 @@ test.describe('add a stay', () => {
     await expect(options.first()).toContainText(/\d+ m|km/);
   });
 
+  test('reduced motion gets the calm celebration', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await openAdd(page);
+    await page.getByRole('option').first().click();
+    for (let i = 0; i < 3; i++) await next(page).click();
+    await page.getByTestId('save-stay').click();
+    const c = page.getByTestId('celebration');
+    await expect(c).toHaveAttribute('data-phase', 'locked');
+    await expect(c).toBeHidden({ timeout: 4000 });
+    await expect(page.getByText('Stay saved')).toBeVisible();
+  });
+
   test('a draft survives a reload', async ({ page }) => {
     await openAdd(page);
     await page.getByRole('option').first().click();
