@@ -1,0 +1,159 @@
+/**
+ * The intro (SPEC §8.1, §14). First launch: the 619 key tag swings in on its ring, a key card
+ * taps the lock, the light turns green and the door opens into the app (at most 2.5 s, tap or
+ * any key skips). Later launches get a 400 ms version. Three.js loads lazily and is skipped on
+ * reduced motion and low-end devices, which get the 2D drawing of the same beats.
+ */
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { getDevice, setDevice } from '@/data/device';
+import { useReducedMotion } from '@/lib/motion';
+import { play } from '@/lib/sound';
+import { Door2D, type Door2DVariant } from './Door2D';
+import { canRun3D, probeFrameTime } from './capability';
+import { setIntroActive } from './state';
+import s from './Intro.module.css';
+
+/** How long we wait for the 3D chunk before drawing the 2D version instead. */
+const LOAD_BUDGET_MS = 450;
+const DURATION = { full: 2000, short: 400, still: 700 } as const;
+
+type Kind = 'wait' | '3d' | Door2DVariant;
+
+function initialMode(): 'full' | 'short' | null {
+  if (typeof window === 'undefined' || /^#\/gallery/.test(location.hash)) return null;
+  return getDevice('introSeen') ? 'short' : 'full';
+}
+
+export function Intro() {
+  const [mode] = useState(initialMode);
+  if (!mode) return null;
+  return <IntroPlayer mode={mode} />;
+}
+
+function IntroPlayer({ mode }: { mode: 'full' | 'short' }) {
+  const reduced = useReducedMotion();
+  const [kind, setKind] = useState<Kind>(() => (mode === 'short' ? (reduced ? 'still' : 'short') : reduced ? 'still' : 'wait'));
+  const [leaving, setLeaving] = useState(false);
+  const [gone, setGone] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Mark the intro active for its lifetime (the pillow note waits for it).
+  useEffect(() => {
+    setIntroActive(true);
+    return () => setIntroActive(false);
+  }, []);
+
+  const finish = useRef(() => {});
+  useLayoutEffect(() => {
+    finish.current = () => {
+    if (leaving) return;
+    setLeaving(true);
+    setDevice('introSeen', true);
+    setTimeout(() => {
+      setGone(true);
+      setIntroActive(false);
+      }, mode === 'short' ? 120 : 260);
+    };
+  });
+
+  // Full intro: race the 3D chunk against the load budget and a frame-time probe.
+  useEffect(() => {
+    if (kind !== 'wait') return;
+    let cancelled = false;
+    const fallback = setTimeout(() => !cancelled && setKind('full'), LOAD_BUDGET_MS);
+    if (!canRun3D()) {
+      clearTimeout(fallback);
+      queueMicrotask(() => !cancelled && setKind('full'));
+      return;
+    }
+    Promise.all([import('./scene3d'), probeFrameTime()])
+      .then(([, frame]) => {
+        if (cancelled) return;
+        clearTimeout(fallback);
+        setKind((k) => (k === 'wait' ? (frame > 30 ? 'full' : '3d') : k));
+      })
+      .catch(() => !cancelled && setKind('full'));
+    return () => {
+      cancelled = true;
+      clearTimeout(fallback);
+    };
+  }, [kind]);
+
+  // Play the chosen version.
+  useEffect(() => {
+    if (kind === 'wait') return;
+    if (kind !== '3d') {
+      const total = DURATION[kind];
+      const beep = kind === 'full' ? setTimeout(() => play('beep'), 860) : undefined;
+      const t = setTimeout(() => finish.current(), total - (kind === 'short' ? 120 : 250));
+      return () => {
+        clearTimeout(t);
+        clearTimeout(beep);
+      };
+    }
+    let raf = 0;
+    let disposed = false;
+    let handle: import('./scene3d').IntroHandle | null = null;
+    let beeped = false;
+    void import('./scene3d').then(({ createIntroScene, INTRO_3D_MS }) => {
+      if (disposed || !canvasRef.current) return;
+      try {
+        handle = createIntroScene(canvasRef.current);
+      } catch {
+        setKind('full');
+        return;
+      }
+      const start = performance.now();
+      const onResize = () => handle?.resize();
+      window.addEventListener('resize', onResize);
+      const loop = (now: number) => {
+        const ms = now - start;
+        handle?.render(Math.min(ms, INTRO_3D_MS));
+        if (!beeped && ms > 860) {
+          beeped = true;
+          play('beep');
+        }
+        if (ms >= INTRO_3D_MS - 250) finish.current();
+        if (ms < INTRO_3D_MS + 300) raf = requestAnimationFrame(loop);
+      };
+      raf = requestAnimationFrame(loop);
+      const prev = handle.dispose;
+      handle.dispose = () => {
+        window.removeEventListener('resize', onResize);
+        prev();
+      };
+    });
+    return () => {
+      disposed = true;
+      cancelAnimationFrame(raf);
+      handle?.dispose();
+    };
+  }, [kind]);
+
+  // Tap or any key skips.
+  useEffect(() => {
+    if (mode === 'short') return;
+    const skip = () => finish.current();
+    window.addEventListener('keydown', skip);
+    return () => window.removeEventListener('keydown', skip);
+  }, [mode]);
+
+  if (gone) return null;
+  return (
+    <div
+      className={s.intro}
+      data-kind={kind}
+      data-leaving={leaving || undefined}
+      data-mode={mode}
+      data-testid="intro"
+      onPointerDown={mode === 'full' ? () => finish.current() : undefined}
+    >
+      {kind === '3d' ? <canvas ref={canvasRef} className={s.canvas} aria-hidden="true" /> : kind === 'wait' ? null : <Door2D variant={kind} />}
+      {mode === 'full' ? (
+        <button type="button" className={s.skip} onClick={() => finish.current()}>
+          Skip
+        </button>
+      ) : null}
+    </div>
+  );
+}

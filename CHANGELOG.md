@@ -46,3 +46,9 @@
 - Stay detail: shared-element header, ink-outlined photo patchwork with a full-screen viewer (pinch-zoom, swipe, keyboard), notes with inline editing, mood stamp, both ratings (rate in place), our visits here plus "Visit again", hotel info with enrichment skeletons and "Refresh info", MiniMap, Google/Apple/Waze links, edit/share/soft delete with undo, and a not-found state.
 - Archivo is now the display face; the `src/features/share` fallback (Web Share, then clipboard) is in place.
 - Tests: `tests/unit/stays-logic.test.ts` (headline, FAQ, filters, moments), `tests/unit/photo-viewer.test.tsx`, `tests/e2e/stays.spec.ts` (24 passing across 3 projects).
+
+## w1-shell
+- Intro: a lazy Three.js first-launch scene (toon-shaded door, card reader and the 619 key tag on its ring, with ink edge lines). The card taps the lock, the light goes green and the door opens. There's a 2D SVG/CSS fallback for reduced motion, low-end devices and slow chunk loads, and a 400 ms version on later launches. Tap or any key skips.
+- Onboarding: Who's checking in → Connect (Try demo or ConnectionForm; skipped after an invite) → Home base (mini map plus a Photon city picker) → Install (Android prompt, iOS illustrated steps, Maybe later) → Check-in complete.
+- The letter: "A note on your pillow" slides in on the reader's first launch, lifts and flips in CSS 3D, and reveals line by line with a mask sweep. It's signed, with "Written in Dubai, September 2026" beneath. The markdown is rendered safely and `read_at` is written on open. Nirsh gets a one-time "Shady read your note" toast. The Letters list shows sealed envelopes with hints, and "Write a future note" saves through `upsertLetter`.
+- Settings, export/import, PWA manifest, service worker and install wiring (see the helper commits).

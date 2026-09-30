@@ -474,6 +474,27 @@ export async function markLetterRead(letterId: string): Promise<void> {
   await write('letters', letter, 'markLetterRead', { letter_id: letterId, read_at });
 }
 
+export type LetterInput = Partial<Letter> & Pick<Letter, 'title' | 'body_md' | 'to' | 'unlock_rule'>;
+
+/** Create or update a letter (w1-shell: "Write a future note"). `from` defaults to me. */
+export async function upsertLetter(input: LetterInput): Promise<Letter> {
+  const now = nowIso();
+  const cur = input.letter_id ? state.letters.get(input.letter_id) : undefined;
+  const letter: Letter = {
+    from: getDevice('me') ?? 'nirsh',
+    written_at: now,
+    read_at: null,
+    ...cur,
+    ...input,
+    letter_id: input.letter_id ?? ulid(),
+    created_at: cur?.created_at ?? now,
+    updated_at: now,
+  };
+  setState({ letters: new Map(state.letters).set(letter.letter_id, letter) });
+  await write('letters', letter, 'upsertLetter', letter);
+  return letter;
+}
+
 export async function updateSettings(patch: Partial<Omit<SettingsMap, 'updated_at'>>): Promise<SettingsMap> {
   const settings: SettingsMap = { ...state.settings, ...patch, updated_at: nowIso() };
   setState({ settings });
@@ -691,6 +712,17 @@ export async function importData(snap: Partial<Snapshot>): Promise<number> {
     await upsertWish({ ...w });
     n++;
   }
+  for (const l of snap.letters ?? []) {
+    if (!newer(l, state.letters.get(l.letter_id))) continue;
+    await upsertLetter({ ...l });
+    n++;
+  }
+  if (snap.settings && newer({ updated_at: snap.settings.updated_at ?? '' }, state.settings)) {
+    const { updated_at: _ignored, ...patch } = snap.settings;
+    void _ignored;
+    await updateSettings(patch);
+    n++;
+  }
   return n;
 }
 
@@ -781,7 +813,7 @@ export function useDemoMode(): boolean {
   return useStore((s) => s.ns === 'demo');
 }
 
-function useDevice<K extends 'me' | 'muted' | 'connection' | 'introSeen' | 'reducedMotion' | 'pillowShown' | 'mode'>(key: K) {
+function useDevice<K extends 'me' | 'muted' | 'connection' | 'introSeen' | 'reducedMotion' | 'pillowShown' | 'mode' | 'readReceiptsSeen'>(key: K) {
   return useSyncExternalStore(
     (cb) => onDeviceChange((k) => k === key && cb()),
     () => deviceSnapshot(key),
@@ -804,7 +836,7 @@ export function useMe(): PersonId | null {
 }
 
 /** Any device pref, reactive. */
-export function useDevicePref<K extends 'me' | 'muted' | 'connection' | 'introSeen' | 'reducedMotion' | 'pillowShown' | 'mode'>(key: K) {
+export function useDevicePref<K extends 'me' | 'muted' | 'connection' | 'introSeen' | 'reducedMotion' | 'pillowShown' | 'mode' | 'readReceiptsSeen'>(key: K) {
   return useDevice(key);
 }
 

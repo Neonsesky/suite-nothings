@@ -1,0 +1,58 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.compact .list {
+  gap: var(--space-3);
+}
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.art {
+  flex: 0 0 auto;
+  display: block;
+}
+.homeArt {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-block;
+}
+.homeArt svg {
+  display: block;
+}
+.homeMark {
+  position: absolute;
+  top: 64%;
+  left: 64%;
+  transform: translate(-50%, -50%);
+  display: flex;
+}
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+.num {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-subtle);
+}
+.title {
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: var(--color-ink);
+}
+.helper {
+  margin: var(--space-5) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+.compact .helper {
+  margin-top: var(--space-3);
+}

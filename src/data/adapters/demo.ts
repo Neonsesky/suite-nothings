@@ -181,6 +181,8 @@ export function createDemoAdapter(opts: DemoAdapterOptions = {}): DataAdapter {
         }
         case 'upsertWish':
           return { ok: true, applied: { wishes: [await upsert('wishes', op.payload)] }, serverTime };
+        case 'upsertLetter':
+          return { ok: true, applied: { letters: [await upsert('letters', op.payload)] }, serverTime };
         case 'markLetterRead': {
           const d = await db();
           const cur = (await d.get('rows', `letters:${op.payload.letter_id}`))?.row as Letter | undefined;

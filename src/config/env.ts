@@ -21,3 +21,5 @@ export const IS_DEMO_DEFAULT: boolean = API_URL === '';
 
 /** App version shown in About; injected by Vite `define`. */
 export const APP_VERSION: string = __APP_VERSION__;
+/** YYYY-MM-DD the app was built (About). */
+export const BUILD_DATE: string = __BUILD_DATE__;
