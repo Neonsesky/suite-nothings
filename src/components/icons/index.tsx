@@ -1,80 +1,606 @@
-/**
- * Provisional ink-outline icons (24×24, stroke = currentColor).
- * The w0-design agent replaces this file wholesale; keep every export name and the props.
+/*
+ * Suite Nothings icon set — original ink-outline icons on a 24 px grid.
+ * Rounded caps and joins, 1.8 px stroke in currentColor, 2 px safe margin.
+ * Self-contained: React types only. Decorative by default (aria-hidden); pass
+ * `title` to make an icon an accessible image.
  */
-import type { ReactNode, SVGProps } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 
-export interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'children'> {
-  /** px or any CSS length. Default 24. */
-  size?: number | string;
-  /** Accessible name. Without it the icon is decorative (aria-hidden). */
+export type IconProps = {
+  size?: number;
   title?: string;
-}
+  className?: string;
+  /** Override the house stroke weight (1.8 at 24 px). */
+  strokeWidth?: number;
+};
 
-function make(name: string, body: ReactNode) {
-  const Icon = ({ size = 24, title, ...rest }: IconProps) => (
+export type IconComponent = (props: IconProps) => ReactElement;
+
+function Svg({
+  size = 24,
+  title,
+  className,
+  strokeWidth = 1.8,
+  children,
+}: IconProps & { children: ReactNode }): ReactElement {
+  return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.75}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
+      className={className}
       role={title ? 'img' : undefined}
-      aria-hidden={title ? undefined : true}
       aria-label={title}
+      aria-hidden={title ? undefined : true}
       focusable="false"
-      {...rest}
     >
       {title ? <title>{title}</title> : null}
-      {body}
+      {children}
     </svg>
   );
-  Icon.displayName = name;
-  return Icon;
 }
 
-export const IconStays = make('IconStays', <><path d="M3 20V9l9-5 9 5v11" /><path d="M9 20v-6h6v6" /><path d="M3 20h18" /></>);
-export const IconMap = make('IconMap', <><path d="M9 4 3 6.5v13.5L9 17.5l6 2.5 6-2.5V4l-6 2.5z" /><path d="M9 4v13.5M15 6.5V20" /></>);
-export const IconPlus = make('IconPlus', <path d="M12 5v14M5 12h14" />);
-export const IconJourney = make('IconJourney', <><circle cx="5.5" cy="18" r="2" /><circle cx="18.5" cy="6" r="2" /><path d="M7.5 18h6a3.5 3.5 0 0 0 0-7h-3a3.5 3.5 0 0 1 0-7h6" /></>);
-export const IconUs = make('IconUs', <path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z" />);
-export const IconSearch = make('IconSearch', <><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4.5 4.5" /></>);
-export const IconFilter = make('IconFilter', <><path d="M4 6h16M7 12h10M10 18h4" /></>);
-export const IconClose = make('IconClose', <path d="M6 6l12 12M18 6 6 18" />);
-export const IconBack = make('IconBack', <path d="M15 5l-7 7 7 7" />);
-export const IconChevron = make('IconChevron', <path d="M9 5l7 7-7 7" />);
-export const IconCalendar = make('IconCalendar', <><rect x="3.5" y="5" width="17" height="15" rx="2" /><path d="M3.5 10h17M8 3v4M16 3v4" /></>);
-export const IconClock = make('IconClock', <><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></>);
-export const IconPin = make('IconPin', <><path d="M12 21s-6.5-6.1-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.9 12 21 12 21z" /><circle cx="12" cy="9.8" r="2.3" /></>);
-export const IconCamera = make('IconCamera', <><path d="M4 8h3.5L9 5.5h6L16.5 8H20v11H4z" /><circle cx="12" cy="13" r="3.5" /></>);
-export const IconStar = make('IconStar', <path d="m12 3.8 2.5 5.2 5.6.8-4 4 1 5.6-5.1-2.7-5.1 2.7 1-5.6-4-4 5.6-.8z" />);
-export const IconHeart = make('IconHeart', <path d="M12 19.5S4 14.8 4 9.3A4 4 0 0 1 12 7a4 4 0 0 1 8 2.3c0 5.5-8 10.2-8 10.2z" />);
-export const IconShare = make('IconShare', <><path d="M12 4v11M8 8l4-4 4 4" /><path d="M5 12v7h14v-7" /></>);
-export const IconSettings = make('IconSettings', <><circle cx="12" cy="12" r="3" /><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8" /></>);
-export const IconLocate = make('IconLocate', <><circle cx="12" cy="12" r="6.5" /><circle cx="12" cy="12" r="2" /><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3" /></>);
-export const IconList = make('IconList', <><path d="M9 6h11M9 12h11M9 18h11" /><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01" /></>);
-export const IconLayers = make('IconLayers', <><path d="m12 4 8.5 4.5L12 13 3.5 8.5z" /><path d="m3.5 12.5 8.5 4.5 8.5-4.5M3.5 16.5 12 21l8.5-4.5" /></>);
-export const IconPlay = make('IconPlay', <path d="M7 4.5v15l12-7.5z" />);
-export const IconPause = make('IconPause', <path d="M8 5v14M16 5v14" />);
-export const IconCompass = make('IconCompass', <><circle cx="12" cy="12" r="8.5" /><path d="m15.5 8.5-2 5-5 2 2-5z" /></>);
-export const IconHome = make('IconHome', <><path d="M4 11 12 4l8 7v9H4z" /><path d="M12 17.2s-2.6-1.5-2.6-3.3a1.4 1.4 0 0 1 2.6-.7 1.4 1.4 0 0 1 2.6.7c0 1.8-2.6 3.3-2.6 3.3z" /></>);
-export const IconKey = make('IconKey', <><path d="M9.5 3.5c3 0 5 2.4 5 5.7 0 3.9-2.4 7.3-5 7.3s-5-3.4-5-7.3c0-3.3 2-5.7 5-5.7z" /><circle cx="9.5" cy="7" r="1.2" /><path d="M13.6 13.5 20 20M17 17l1.8-1.8" /></>);
-export const IconSync = make('IconSync', <><path d="M19.5 9A7.5 7.5 0 0 0 6 6.8L4.5 8.5M4.5 15A7.5 7.5 0 0 0 18 17.2l1.5-1.7" /><path d="M4.5 4v4.5H9M19.5 20v-4.5H15" /></>);
-export const IconOffline = make('IconOffline', <><path d="M3 3l18 18" /><path d="M8.5 16.5a5 5 0 0 1 7 0M5 13a10 10 0 0 1 4-2.4M19 13a10 10 0 0 0-3.5-2.2M2 9.5a14.5 14.5 0 0 1 4.2-2.7M22 9.5A14.5 14.5 0 0 0 11 5.6" /><path d="M12 20h.01" /></>);
-export const IconCheck = make('IconCheck', <path d="m5 12.5 4.5 4.5L19 7.5" />);
-export const IconEdit = make('IconEdit', <><path d="M4 20h4L19 9l-4-4L4 16z" /><path d="m13.5 6.5 4 4" /></>);
-export const IconTrash = make('IconTrash', <><path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13" /></>);
-export const IconUndo = make('IconUndo', <><path d="M9 7 4.5 11.5 9 16" /><path d="M4.5 11.5H15a4.5 4.5 0 0 1 0 9h-3" /></>);
-export const IconSound = make('IconSound', <><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" /><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" /></>);
-export const IconMute = make('IconMute', <><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" /><path d="m16 9.5 5 5M21 9.5l-5 5" /></>);
-export const IconGlobe = make('IconGlobe', <><circle cx="12" cy="12" r="8.5" /><path d="M3.5 12h17M12 3.5c2.5 2.5 3.5 5.3 3.5 8.5s-1 6-3.5 8.5c-2.5-2.5-3.5-5.3-3.5-8.5s1-6 3.5-8.5z" /></>);
-export const IconCar = make('IconCar', <><path d="M4 16.5v-4l2-5h12l2 5v4z" /><path d="M4 12.5h16" /><circle cx="7.5" cy="16.5" r="1.8" /><circle cx="16.5" cy="16.5" r="1.8" /></>);
-export const IconPlane = make('IconPlane', <path d="M21 12.5 13.5 11 10 3.5H8L9.5 11 5 11.8 3 9.5H2l1 3.5-1 3.5h1l2-2.3 4.5.8L8 22.5h2L13.5 15z" />);
-export const IconLink = make('IconLink', <><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" /><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" /></>);
-export const IconQr = make('IconQr', <><rect x="4" y="4" width="6" height="6" rx="1" /><rect x="14" y="4" width="6" height="6" rx="1" /><rect x="4" y="14" width="6" height="6" rx="1" /><path d="M14 14h2v2h-2zM18 18h2v2h-2zM14 18h.01M18 14h2" /></>);
-export const IconDownload = make('IconDownload', <><path d="M12 4v11M8 11l4 4 4-4" /><path d="M5 19h14" /></>);
-export const IconUpload = make('IconUpload', <><path d="M12 15V4M8 8l4-4 4 4" /><path d="M5 19h14" /></>);
-export const IconSparkle = make('IconSparkle', <><path d="M12 3.5c.6 4.3 2.2 5.9 6.5 6.5-4.3.6-5.9 2.2-6.5 6.5-.6-4.3-2.2-5.9-6.5-6.5 4.3-.6 5.9-2.2 6.5-6.5z" /><path d="M18.5 16.5c.2 1.4.8 2 2 2.2-1.2.2-1.8.8-2 2.2-.2-1.4-.8-2-2-2.2 1.2-.2 1.8-.8 2-2.2z" /></>);
+/* Navigation */
+
+export function IconStays(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <g transform="rotate(-20 12 13)">
+        <path d="M9.1 9.1a3.6 3.6 0 1 1 5.8 0" />
+        <rect x="7.5" y="8.5" width="9" height="13.5" rx="4.5" />
+        <circle cx="12" cy="11.6" r="1" />
+        <path d="M10 16.8h4" />
+      </g>
+    </Svg>
+  );
+}
+
+export function IconMap(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M9 4.5 3.5 6.8v12.7L9 17.2l6 2.3 5.5-2.3V4.5L15 6.8z" />
+      <path d="M9 4.5v12.7M15 6.8v12.7" />
+    </Svg>
+  );
+}
+
+export function IconPlus(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M12 5v14M5 12h14" />
+    </Svg>
+  );
+}
+
+export function IconJourney(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M5 19.5c3.5-.4 3.2-4.7 6.8-5.5 2.6-.6 5.2.6 6.4-2.4" strokeDasharray="2.2 2.6" />
+      <circle cx="4.5" cy="19.5" r="1.5" />
+      <path d="M18.5 2.8a3 3 0 0 1 3 3c0 2.2-3 4.9-3 4.9s-3-2.7-3-4.9a3 3 0 0 1 3-3z" />
+    </Svg>
+  );
+}
+
+export function IconUs(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="9" cy="8.5" r="3.2" />
+      <path d="M3.5 19.5c.5-3.4 2.6-5.3 5.5-5.3s5 1.9 5.5 5.3" />
+      <circle cx="16.5" cy="9.2" r="2.6" />
+      <path d="M16.2 14.3c2.5 0 4 1.6 4.4 4.7" />
+    </Svg>
+  );
+}
+
+/* Actions and controls */
+
+export function IconSearch(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="10.8" cy="10.8" r="6.3" />
+      <path d="m19.5 19.5-4.2-4.2" />
+    </Svg>
+  );
+}
+
+export function IconFilter(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M4 7.5h8.5M17.5 7.5H20M4 16.5h2.5M11.5 16.5H20" />
+      <circle cx="15" cy="7.5" r="2.3" />
+      <circle cx="9" cy="16.5" r="2.3" />
+    </Svg>
+  );
+}
+
+export function IconClose(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="m6.5 6.5 11 11M17.5 6.5l-11 11" />
+    </Svg>
+  );
+}
+
+export function IconBack(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M14.5 5.5 8 12l6.5 6.5" />
+    </Svg>
+  );
+}
+
+/** Points right; rotate with CSS for down (accordions) or left. */
+export function IconChevron(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="m9.5 6 6 6-6 6" />
+    </Svg>
+  );
+}
+
+export function IconArrowRight(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M4.5 12h15M13.5 6l6 6-6 6" />
+    </Svg>
+  );
+}
+
+export function IconCalendar(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <rect x="3.5" y="5" width="17" height="15.5" rx="3" />
+      <path d="M3.5 10h17M8 3v4M16 3v4" />
+    </Svg>
+  );
+}
+
+export function IconClock(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7.5V12l3 2" />
+    </Svg>
+  );
+}
+
+export function IconPin(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" />
+      <circle cx="12" cy="10" r="2.3" />
+    </Svg>
+  );
+}
+
+export function IconCamera(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M3.5 9A2 2 0 0 1 5.5 7h2.2l1.6-2.3h5.4L16.3 7h2.2a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z" />
+      <circle cx="12" cy="13" r="3.3" />
+    </Svg>
+  );
+}
+
+export function IconStar(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="m12 3.8 2.5 5.1 5.6.8-4 4 .9 5.5-5-2.7-5 2.7.9-5.5-4-4 5.6-.8z" />
+    </Svg>
+  );
+}
+
+export function IconHeart(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M12 20s-7.5-4.6-7.5-10.1A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20z" />
+    </Svg>
+  );
+}
+
+export function IconShare(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M12 14.5v-11M8 7.2l4-3.7 4 3.7" />
+      <path d="M8.5 10.5H7.3a1.8 1.8 0 0 0-1.8 1.8v6.4a1.8 1.8 0 0 0 1.8 1.8h9.4a1.8 1.8 0 0 0 1.8-1.8v-6.4a1.8 1.8 0 0 0-1.8-1.8h-1.2" />
+    </Svg>
+  );
+}
+
+export function IconSettings(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="12" cy="12" r="2.8" />
+      <path d="M10.4 3.5h3.2l.5 2.4 1.6.9 2.3-.8 1.6 2.8-1.8 1.6v1.2l1.8 1.6-1.6 2.8-2.3-.8-1.6.9-.5 2.4h-3.2l-.5-2.4-1.6-.9-2.3.8-1.6-2.8 1.8-1.6v-1.2L4.4 8.8 6 6l2.3.8 1.6-.9z" />
+    </Svg>
+  );
+}
+
+export function IconLocate(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="12" cy="12" r="6.5" />
+      <circle cx="12" cy="12" r="2" />
+      <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3" />
+    </Svg>
+  );
+}
+
+export function IconList(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M9 6.5h11M9 12h11M9 17.5h11" />
+      <path d="M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01" strokeWidth={2.6} />
+    </Svg>
+  );
+}
+
+export function IconLayers(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="m12 3.5 8.5 4.5-8.5 4.5L3.5 8z" />
+      <path d="m3.5 12 8.5 4.5 8.5-4.5M3.5 16l8.5 4.5 8.5-4.5" />
+    </Svg>
+  );
+}
+
+export function IconPlay(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M8 5.2v13.6a.8.8 0 0 0 1.2.7l10.2-6.8a.8.8 0 0 0 0-1.4L9.2 4.5a.8.8 0 0 0-1.2.7z" />
+    </Svg>
+  );
+}
+
+export function IconPause(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <rect x="6.5" y="5" width="3.6" height="14" rx="1.2" />
+      <rect x="13.9" y="5" width="3.6" height="14" rx="1.2" />
+    </Svg>
+  );
+}
+
+export function IconCompass(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="m15.5 8.5-2 5-5 2 2-5z" />
+    </Svg>
+  );
+}
+
+/** Home base: a house with a heart. */
+export function IconHome(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19z" />
+      <path d="M12 17.3s-3-1.8-3-3.8a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 2-3 3.8-3 3.8z" />
+    </Svg>
+  );
+}
+
+export function IconKey(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="8" cy="15.5" r="4" />
+      <path d="m10.9 12.6 8.6-8.6M16.5 7l2.5 2.5M14 9.5l2 2" />
+    </Svg>
+  );
+}
+
+export function IconSync(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M19.5 12a7.5 7.5 0 0 1-13.2 4.9M4.5 12a7.5 7.5 0 0 1 13.2-4.9" />
+      <path d="M18 3.5v3.8h-3.8M6 20.5v-3.8h3.8" />
+    </Svg>
+  );
+}
+
+export function IconOffline(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M9 7.6a6 6 0 0 1 8.8 3 4 4 0 0 1 2 6.8M16 18.5H7a4.6 4.6 0 0 1-1.4-9" />
+      <path d="m4 4 16 16" />
+    </Svg>
+  );
+}
+
+export function IconCheck(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="m5 12.5 4.5 4.5L19 7.5" />
+    </Svg>
+  );
+}
+
+export function IconEdit(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z" />
+      <path d="m13.5 6.5 4 4" />
+    </Svg>
+  );
+}
+
+export function IconTrash(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l.9 12a1.5 1.5 0 0 0 1.5 1.4h6.2a1.5 1.5 0 0 0 1.5-1.4l.9-12" />
+      <path d="M10 11v5.5M14 11v5.5" />
+    </Svg>
+  );
+}
+
+export function IconUndo(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M9 5 4.5 9.5 9 14" />
+      <path d="M4.5 9.5H14a5.5 5.5 0 0 1 0 11h-3" />
+    </Svg>
+  );
+}
+
+export function IconSound(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
+      <path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" />
+    </Svg>
+  );
+}
+
+export function IconMute(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
+      <path d="m16 9.5 5 5M21 9.5l-5 5" />
+    </Svg>
+  );
+}
+
+export function IconGlobe(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M3.5 12h17M12 3.5c2.3 2.4 3.4 5.3 3.4 8.5s-1.1 6.1-3.4 8.5c-2.3-2.4-3.4-5.3-3.4-8.5s1.1-6.1 3.4-8.5z" />
+    </Svg>
+  );
+}
+
+export function IconCar(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M5.5 16.5H4.3a.8.8 0 0 1-.8-.8v-2.9a2 2 0 0 1 1.3-1.9l2.2-.8 1.9-3.2A2 2 0 0 1 10.6 6h4.1a2 2 0 0 1 1.6.8l2.5 3.4 1.2.4a2 2 0 0 1 1.5 1.9v3.2a.8.8 0 0 1-.8.8h-1.2M9.5 16.5h5" />
+      <path d="M7 10.5h13" />
+      <circle cx="7.5" cy="16.5" r="2" />
+      <circle cx="16.5" cy="16.5" r="2" />
+    </Svg>
+  );
+}
+
+export function IconPlane(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M20.6 3.4c.8.8.3 2.2-.7 3.2l-3.4 3.4 2.2 8.8-1.5 1.5-3.9-7-3.3 3.3.4 2.8-1.2 1.2-1.8-3.5-3.5-1.8 1.2-1.2 2.8.4 3.3-3.3-7-3.9L6 5.8l8.8 2.2 3.4-3.4c1-1 2.4-1.5 3.2-.7z" />
+    </Svg>
+  );
+}
+
+export function IconLink(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.2 1.2" />
+      <path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.2-1.2" />
+    </Svg>
+  );
+}
+
+export function IconExternal(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M13.5 4.5h6v6M19.5 4.5l-8 8" />
+      <path d="M17.5 14v4.5a1.5 1.5 0 0 1-1.5 1.5H6a1.5 1.5 0 0 1-1.5-1.5v-10A1.5 1.5 0 0 1 6 7h4.5" />
+    </Svg>
+  );
+}
+
+export function IconQr(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1.2" />
+      <rect x="14" y="3.5" width="6.5" height="6.5" rx="1.2" />
+      <rect x="3.5" y="14" width="6.5" height="6.5" rx="1.2" />
+      <path d="M14 14h2.5v2.5H14zM18 18h2.5v2.5H18zM14 20.5h.5M20.5 14v.5" />
+    </Svg>
+  );
+}
+
+export function IconDownload(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M4.5 19.5h15" />
+    </Svg>
+  );
+}
+
+export function IconUpload(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M4.5 19.5h15" />
+    </Svg>
+  );
+}
+
+export function IconSparkle(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M11 3.5c.6 4.4 2.1 5.9 6.5 6.5-4.4.6-5.9 2.1-6.5 6.5-.6-4.4-2.1-5.9-6.5-6.5 4.4-.6 5.9-2.1 6.5-6.5z" />
+      <path d="M18.5 15.5v4M16.5 17.5h4" />
+    </Svg>
+  );
+}
+
+/* Extras used across the app */
+
+export function IconBed(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M3.5 18.5V6M3.5 15h17v3.5M20.5 15v-3a2.5 2.5 0 0 0-2.5-2.5h-7V15" />
+      <circle cx="7.3" cy="11.5" r="1.8" />
+    </Svg>
+  );
+}
+
+export function IconMail(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <rect x="3.5" y="5.5" width="17" height="13" rx="2.5" />
+      <path d="m4.5 7 7.5 6 7.5-6" />
+    </Svg>
+  );
+}
+
+export function IconDice(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <rect x="4" y="4" width="16" height="16" rx="3.5" />
+      <path d="M8.5 8.5h.01M15.5 8.5h.01M12 12h.01M8.5 15.5h.01M15.5 15.5h.01" strokeWidth={2.8} />
+    </Svg>
+  );
+}
+
+export function IconSun(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="12" cy="12" r="3.8" />
+      <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4" />
+    </Svg>
+  );
+}
+
+export function IconMoon(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M19.5 14.5A7.5 7.5 0 0 1 9.5 4.5a7.5 7.5 0 1 0 10 10z" />
+    </Svg>
+  );
+}
+
+export function IconInfo(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 11v5.5M12 7.8h.01" />
+    </Svg>
+  );
+}
+
+export function IconAlert(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M10.3 4.6 3.2 17a2 2 0 0 0 1.7 3h14.2a2 2 0 0 0 1.7-3L13.7 4.6a2 2 0 0 0-3.4 0z" />
+      <path d="M12 9.5v4M12 16.8h.01" />
+    </Svg>
+  );
+}
+
+export function IconPhone(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M5 4.5h3.2l1.6 4-2 1.3a10 10 0 0 0 6.4 6.4l1.3-2 4 1.6V19a1.5 1.5 0 0 1-1.6 1.5A15.5 15.5 0 0 1 3.5 6.1 1.5 1.5 0 0 1 5 4.5z" />
+    </Svg>
+  );
+}
+
+export function IconMore(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M6 12h.01M12 12h.01M18 12h.01" strokeWidth={2.8} />
+    </Svg>
+  );
+}
+
+export function IconMinus(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M5 12h14" />
+    </Svg>
+  );
+}
+
+export function IconBookmark(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M6.5 4.5A1.5 1.5 0 0 1 8 3h8a1.5 1.5 0 0 1 1.5 1.5V21L12 17l-5.5 4z" />
+    </Svg>
+  );
+}
+
+/** Name → component, for pickers, docs and tests. */
+export const icons = {
+  IconStays,
+  IconMap,
+  IconPlus,
+  IconJourney,
+  IconUs,
+  IconSearch,
+  IconFilter,
+  IconClose,
+  IconBack,
+  IconChevron,
+  IconArrowRight,
+  IconCalendar,
+  IconClock,
+  IconPin,
+  IconCamera,
+  IconStar,
+  IconHeart,
+  IconShare,
+  IconSettings,
+  IconLocate,
+  IconList,
+  IconLayers,
+  IconPlay,
+  IconPause,
+  IconCompass,
+  IconHome,
+  IconKey,
+  IconSync,
+  IconOffline,
+  IconCheck,
+  IconEdit,
+  IconTrash,
+  IconUndo,
+  IconSound,
+  IconMute,
+  IconGlobe,
+  IconCar,
+  IconPlane,
+  IconLink,
+  IconExternal,
+  IconQr,
+  IconDownload,
+  IconUpload,
+  IconSparkle,
+  IconBed,
+  IconMail,
+  IconDice,
+  IconSun,
+  IconMoon,
+  IconInfo,
+  IconAlert,
+  IconPhone,
+  IconMore,
+  IconMinus,
+  IconBookmark,
+} satisfies Record<string, IconComponent>;
+
+export type IconName = keyof typeof icons;

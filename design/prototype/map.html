@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Map — Suite Nothings</title>
+<link rel="stylesheet" href="../../src/styles/tokens.css">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="proto.css">
+</head>
+<body class="page-map">
+
+<header class="site-header is-solid">
+  <div class="header-row">
+    <a class="brand" href="index.html"><span data-mark="32"></span><span>Suite Nothings</span></a>
+    <nav class="header-nav"><a href="map.html">Map</a><a href="#journey">Journey</a><a href="#us">Us</a></nav>
+    <div class="header-actions"><button class="btn btn-primary" data-open-add="0">+ Add a stay</button></div>
+  </div>
+</header>
+
+<div class="map-page scale-city" data-map-root>
+  <div class="map-backdrop">
+    <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice">
+      <rect width="1000" height="700" fill="#fbf3e2"/>
+      <path d="M620 0 H1000 V700 H700 C650 500 630 300 620 0 Z" fill="#bcd9d6"/>
+      <path d="M0 660 Q500 600 1000 660 V700 H0 Z" fill="#e9dcc0"/>
+      <g stroke="#eee3c9" stroke-width="14" fill="none" opacity="0.9">
+        <path d="M0 420 H1000"/><path d="M300 0 V700"/><path d="M520 0 V700"/>
+      </g>
+      <g stroke="var(--color-line-strong)" stroke-width="1.5" fill="none">
+        <path d="M0 420 H1000"/><path d="M300 0 V700"/><path d="M520 0 V700"/>
+      </g>
+      <g fill="#f1e3c2" stroke="#d8c79f" stroke-width="2">
+        <rect x="420" y="470" width="34" height="60"/><rect x="462" y="450" width="28" height="80"/>
+        <rect x="500" y="490" width="30" height="40"/><rect x="360" y="500" width="26" height="50"/>
+        <rect x="560" y="440" width="24" height="70"/><rect x="260" y="520" width="30" height="36"/>
+        <rect x="620" y="520" width="26" height="42"/>
+      </g>
+      <g fill="#bcd9d6" opacity="0.7">
+        <ellipse cx="150" cy="470" rx="70" ry="40"/>
+        <ellipse cx="870" cy="480" rx="80" ry="46"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="map-hud-top">
+    <div class="map-chapter">
+      <div class="map-chapter-board splitflap-board" data-map-title></div>
+      <span class="map-stays-in-view" data-map-count></span>
+    </div>
+    <div class="map-chip-row">
+      <button class="map-chip is-active" data-map-chip="city">City</button>
+      <button class="map-chip" data-map-chip="country">Country</button>
+      <button class="map-chip" data-map-chip="world">World</button>
+      <button class="map-chip" data-toggle-list><svg class="icon" style="width:1rem;height:1rem"><use href="#i-list"></use></svg> List view</button>
+    </div>
+  </div>
+
+  <div data-pin-layer></div>
+  <div class="map-home-pin" style="left:50%;top:60%">
+    <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17.5" fill="#fff" stroke="#1A1A1A" stroke-width="2.4"/><path d="M11 18.6 20 11l9 7.6v9.2a1.7 1.7 0 0 1-1.7 1.7H12.7a1.7 1.7 0 0 1-1.7-1.7z" fill="#FFF7E6" stroke="#1A1A1A" stroke-width="2" stroke-linejoin="round"/><path d="M20 26.4s-3.6-2.2-3.6-4.6a1.9 1.9 0 0 1 3.6-1 1.9 1.9 0 0 1 3.6 1c0 2.4-3.6 4.6-3.6 4.6z" fill="#FF6A3D" stroke="#1A1A1A" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  </div>
+
+  <div class="map-controls">
+    <button class="map-ctrl-btn" data-compass aria-label="Reset north"><svg class="icon"><use href="#i-compass"></use></svg></button>
+    <button class="map-ctrl-btn" data-locate aria-label="Locate me"><svg class="icon"><use href="#i-locate"></use></svg></button>
+  </div>
+
+  <div class="map-attribution">Map data &copy; OpenStreetMap contributors, tiles via OpenFreeMap</div>
+
+  <div class="pin-sheet" data-pin-sheet>
+    <div class="pin-card">
+      <div class="pin-card-photo"><div class="stayart" style="width:100%;height:100%" data-pc-art></div></div>
+      <div class="pin-card-body">
+        <div class="pin-card-name" data-pc-name></div>
+        <div class="pin-card-area" data-pc-area></div>
+        <div class="pin-card-when"><span class="pill-ink" data-pc-badge></span><span data-pc-date></span><span class="timestamp-chip" data-pc-time></span></div>
+      </div>
+      <button class="btn-icon-circle" data-close-pin aria-label="Close"><svg class="icon"><use href="#i-close"></use></svg></button>
+    </div>
+    <a class="btn btn-primary pin-card-cta" data-pc-link href="stay.html">Open stay</a>
+  </div>
+
+  <div class="map-list" data-map-list>
+    <button class="btn-icon-circle map-list-close" data-close-list aria-label="Close list"><svg class="icon"><use href="#i-close"></use></svg></button>
+    <h2 style="font-size:var(--text-xl);font-weight:800;margin-bottom:1rem">Our stays, listed</h2>
+    <div data-map-list-body></div>
+  </div>
+</div>
+
+<nav class="tab-bar">
+  <a class="tab-item" href="index.html"><svg class="icon"><use href="#i-stays"></use></svg>Stays</a>
+  <a class="tab-item is-active" href="map.html"><svg class="icon"><use href="#i-map"></use></svg>Map</a>
+  <button class="tab-add" data-open-add="0" aria-label="Add a stay"><svg class="icon"><use href="#i-plus"></use></svg></button>
+  <a class="tab-item" href="#journey"><svg class="icon"><use href="#i-journey"></use></svg>Journey</a>
+  <a class="tab-item" href="#us"><svg class="icon"><use href="#i-us"></use></svg>Us</a>
+</nav>
+<div class="demo-badge">Demo</div>
+
+<div class="scrim" id="add-scrim"></div>
+<section class="sheet" id="add-sheet" aria-label="Add a stay">
+  <div class="sheet-grabber"></div>
+  <div class="sheet-header"><button class="btn-icon-circle" data-back style="visibility:hidden"><svg class="icon"><use href="#i-back"></use></svg></button><span class="sheet-header-title">Hotel 1/5</span><button class="btn-icon-circle" data-close-add><svg class="icon"><use href="#i-close"></use></svg></button></div>
+  <div class="sheet-progress"><div class="sheet-progress-bar" style="width:20%"></div></div>
+  <div class="sheet-body">
+    <div class="sheet-step is-active"><p class="sheet-step-helper">Search, or pick somewhere we've stayed before.</p><div class="search-field"><svg class="icon"><use href="#i-search"></use></svg><input class="field-input" placeholder="Search hotels or areas"></div></div>
+    <div class="sheet-step"><p class="sheet-step-helper">Today's fine, or pick another date.</p><div class="timestamp-preview">14:00 &rarr; 18:00 &middot; 4 h</div></div>
+    <div class="sheet-step"><p class="sheet-step-helper">Pick as many as fit.</p><div class="chip-grid"><button class="chip is-selected">Day use</button></div></div>
+    <div class="sheet-step"><p class="sheet-step-helper">Add a few, or skip for now.</p><div class="photo-grid"><div class="photo-tile is-add"><svg class="icon"><use href="#i-camera"></use></svg></div></div></div>
+    <div class="sheet-step"><p class="sheet-step-helper">The good part.</p><div class="field-group"><textarea class="field-input" placeholder="What do we want to remember?"></textarea></div></div>
+  </div>
+  <div class="sheet-footer"><button class="btn-ghost" data-close-add>Skip</button><button class="btn btn-primary" data-next>Next</button></div>
+</section>
+
+<script src="proto.js"></script>
+</body>
+</html>

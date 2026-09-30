@@ -1,37 +1,50 @@
 /*
- * Provisional design tokens (SPEC §3.4). The w0-design agent replaces this file wholesale
- * with values extracted from dayuse.ae. Variable NAMES are a contract: keep them.
+ * Suite Nothings design tokens.
+ * Measured from dayuse.ae (CSS bundles + getComputedStyle, Sep 2026); sources and WCAG
+ * contrast ratios are in design/tokens.md. Variable names are a contract with the app:
+ * add new ones freely, never rename.
  */
 :root {
-  /* Colour */
-  --color-ink: #000000;
+  /* Colour: daylight hues, a cocktail of honey (functional) and ginger (love) */
+  --color-ink: #292935; /* Dayuse body/heading text */
   --color-paper: #ffffff;
-  --color-cream: #fff7e6;
-  --color-honey: #ffc83d;
-  --color-honey-soft: #ffe9a8;
-  --color-ginger: #ff6a3d;
-  --color-ginger-soft: #ffd9cc;
-  --color-muted: #6e6e6e;
-  --color-line: #e8e8e8;
-  --color-surface: #f7f7f7;
-  --color-success: #1f8a4c;
-  --color-danger: #c62f1a;
-  --color-focus: #1a5cff;
+  --color-cream: #fff8e9; /* honey at ~12% on paper: calm surfaces, splash, banners */
+  --color-honey: #ffc536; /* Dayuse brand yellow: fills only, never text on paper */
+  --color-honey-soft: #ffeab0; /* selected chips, highlight wash */
+  --color-honey-deep: #ffaf36; /* Dayuse hover/pressed yellow */
+  --color-ginger: #fc5e57; /* Dayuse coral: love and celebration only */
+  --color-ginger-soft: #ffe1dc; /* letter card, favourite wash */
+  --color-ginger-ink: #b3302a; /* ginger as text on paper (AA) */
+  --color-muted: #54545d; /* Dayuse secondary text */
+  --color-subtle: #6b7280; /* tertiary text, placeholders (AA on paper) */
+  --color-line: #e5e7eb; /* dividers, input borders */
+  --color-line-strong: #d1d5db;
+  --color-surface: #f6f6f8; /* grey section / skeleton ground */
+  --color-success: #17784f;
+  --color-danger: #d93a32;
+  --color-focus: #2299dd; /* Dayuse link/focus blue */
+  --color-struck: #a9a9ae; /* Dayuse struck-through nightly price */
+  --color-teal: #51b0b0; /* Dayuse reassurance text ("Free cancellation"); decorative/large only */
+  --color-line-input: #eaeaeb; /* Dayuse search bar border */
+  --color-scrim: rgb(20 20 28 / 0.45);
+  --color-footer: #292935;
+  --color-footer-text: #d4d4d7;
 
-  /* Type */
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* Type: Manrope is the free family dayuse.ae itself loads */
+  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
   --font-display: var(--font-sans);
-  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  --text-2xs: 0.6875rem;
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-md: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.375rem;
-  --text-2xl: 1.75rem;
-  --text-3xl: 2.25rem;
-  --text-4xl: 3rem;
+  --text-2xs: 0.6875rem; /* 11 */
+  --text-xs: 0.75rem; /* 12 */
+  --text-sm: 0.875rem; /* 14 */
+  --text-md: 1rem; /* 16 */
+  --text-lg: 1.125rem; /* 18 */
+  --text-xl: 1.25rem; /* 20 */
+  --text-2xl: 1.5rem; /* 24 */
+  --text-3xl: 2rem; /* 32 */
+  --text-4xl: 3rem; /* 48 */
 
   --weight-regular: 400;
   --weight-medium: 500;
@@ -39,23 +52,27 @@
   --weight-bold: 700;
   --weight-extrabold: 800;
 
-  --leading-tight: 1.15;
+  --leading-tight: 1.2;
   --leading-normal: 1.5;
+  --tracking-tight: -0.01em;
+  --tracking-caps: 0.04em;
 
-  /* Shape */
-  --radius-xs: 0.25rem;
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-pill: 999px;
+  /* Radii */
+  --radius-xs: 0.25rem; /* 4: timestamp chip */
+  --radius-sm: 0.5rem; /* 8: buttons, inputs */
+  --radius-md: 0.75rem; /* 12: card photos, search bar */
+  --radius-lg: 1rem; /* 16: panels, banners */
+  --radius-xl: 1.5rem; /* 24: sheet tops */
+  --radius-pill: 9999px;
 
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.08);
-  --shadow-card: 0 2px 12px rgb(0 0 0 / 0.08);
-  --shadow-sheet: 0 -8px 32px rgb(0 0 0 / 0.16);
-  --shadow-pop: 0 12px 32px rgb(0 0 0 / 0.18);
+  /* Shadows: Dayuse uses one soft, centred shadow */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06), 0 0 6px rgb(0 0 0 / 0.06);
+  --shadow-card: 0 0 10px rgb(0 0 0 / 0.1); /* Dayuse shadow-100 */
+  --shadow-card-hover: 0 0 15px rgb(0 0 0 / 0.12); /* Dayuse shadow-200 */
+  --shadow-sheet: 0 -4px 24px rgb(0 0 0 / 0.12);
+  --shadow-pop: 0 8px 28px rgb(0 0 0 / 0.16);
 
-  /* Space (4px grid, rem) */
+  /* Spacing: 4 px grid, rem so it follows text-size settings */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -74,27 +91,41 @@
   --space-16: 4rem;
 
   /* Layout */
-  --header-h: 4rem;
-  --tabbar-h: 4rem;
-  --content-max: 75rem;
-  --gutter: 1rem;
+  --header-h: 3.5rem; /* 56 mobile; 80 from 768 (Dayuse header) */
+  --tabbar-h: 4rem; /* plus env(safe-area-inset-bottom) */
+  --content-max: 80rem; /* 1280, Dayuse container */
+  --gutter: 1rem; /* 16 mobile; 24 from 768 */
+  --card-w-mobile: min(78vw, 18.75rem);
+  --tap-min: 2.75rem; /* 44 */
 
-  /* Motion */
+  /* Breakpoints (for reference; CSS vars can't drive media queries): 640, 768, 1024, 1280 */
+
+  /* Motion: Dayuse transitions are short (150 ms) and plain */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1.2);
-  --dur-fast: 120ms;
-  --dur-base: 240ms;
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1.15);
+  --ease-exit: cubic-bezier(0.3, 0, 1, 1);
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
   --dur-slow: 400ms;
 
   /* Layers */
   --z-header: 100;
-  --z-sheet: 400;
-  --z-overlay: 500;
-  --z-toast: 900;
+  --z-sheet: 1000;
+  --z-overlay: 1031; /* Dayuse modal layer */
+  --z-toast: 1060;
 }
 
-@media (min-width: 64rem) {
+@media (min-width: 768px) {
   :root {
-    --gutter: 2rem;
+    --header-h: 5rem;
+    --gutter: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 150ms;
   }
 }
