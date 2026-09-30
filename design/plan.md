@@ -62,57 +62,66 @@ tabular-nums`.
   first card aligned to the gutter). Desktop: 4-column grid with 24 px gap.
 - Header 64 px desktop, 56 px mobile (`--header-h`); tab bar 64 px + safe area (`--tabbar-h`).
 
-## 4. Card anatomy (1:1 with the Dayuse hotel card)
+## 4. Card anatomy (1:1 with the Dayuse hotel card), revised in pass 2
 
 ```
-Dayuse card                              Suite Nothings card
-┌──────────────────────────┐             ┌──────────────────────────┐
-│[-30%]              ♡     │ photo 4:3   │[Visit 3]           ♡     │  StayArt/photo 4:3, radius md
-│                          │ radius      │                          │  badge: top-left pill
-│         photo            │             │        our photo         │  heart: top-right, 36 px disc
-│                          │             │                          │
-└──────────────────────────┘             └──────────────────────────┘
- Golden Tulip Al Barsha    ★ 8.2         Golden Tulip Al Barsha   ★ 4.5   name 16/700, rating 14/700
- Al Barsha, Dubai                        Al Barsha, Dubai                 area 14/500 muted
- AED 189  ~~AED 450~~                    19 Jun 2026   [14:00→18:00]      date where price sits (16/800)
- 11:00 – 16:00                                                            timestamp chip where struck price sits
+Dayuse card (results list / home rail)       Suite Nothings card
+┌──────────────────────────┐                 ┌──────────────────────────┐
+│(Pool access included) (♡)│ photo, r12      │(First stay)          (♡) │ StayArt/photo 4:3, radius md
+│                          │ white pill tl   │                          │ white pill top-left
+│          photo           │ heart tr        │         our photo        │ heart in white 32 disc, top-right
+└──────────────────────────┘                 └──────────────────────────┘
+ Raviz Center Point Hotel   20/700            Rove Downtown             name 18/700 (20 on desktop list)
+ ★★★★ Al Mankhool           13/500            ★★★ Downtown, Dubai       stars + area 13/500 muted
+ ◌ 4.4/5 | 53 Reviews                         ◌ 4.5 · Nirsh 4 · Shady 5 rating row
+                 AED 130    32/800                         28 Sep 2026  date where the price sits (20/800)
+         [-79%] ~~AED 600~~ ink pill + struck         [Visit 3] 4 h     ink pill where the discount sits
+ (9am - 6pm) (11am - 7pm)   outlined pills   (14:00 → 18:00)            timestamp pill where the time slots sit
 ```
 
-- **Container:** no border, no shadow at rest (Dayuse cards are flat on white); the photo carries
-  the radius. Hover (desktop): photo scales 1.03 inside its frame, 250 ms.
-- **Photo:** aspect 4:3, `--radius-md`, `object-fit: cover`.
-- **Badge** (where the discount sits): top-left, 8 px inset, pill, `--text-2xs` 800 caps, ink
-  text on honey for "Visit n" / "First" / "Our regular"; paper text on ginger for "♡ n"
-  (favourite count), so ginger stays love-only.
-- **Heart** (Dayuse's wishlist heart): top-right, white disc 32 px, `IconHeart` 18 px; filled
-  ginger when a favourite.
-- **Text block:** 8 px under the photo. Line 1: hotel name (1 line, ellipsis) + stars/rating
-  right-aligned. Line 2: area, city in muted. Line 3: visit date in the price slot
-  (`--text-md` 800) + the timestamp chip in the struck-price slot (`--font-mono` 12,
-  `--color-muted`, 1 px line border, `--radius-xs`).
-- "Waiting for Shady's rating" replaces the rating with a 12 px muted italic-free note.
+- **Container:** paper, `--radius-md` (12 px), `--shadow-card` (Dayuse's one soft centred
+  shadow), content padding 16 px. Home rail cards are photo-on-top; the Map list and search
+  results use Dayuse's horizontal list card (photo left 45%, text right) on desktop.
+- **Photo:** aspect 4:3 in rails, `object-fit: cover`, top corners follow the card radius.
+  Desktop hover: photo scales 1.03 inside its frame, 250 ms.
+- **Feature pill** (Dayuse "Pool access included"): top-left, 12 px inset, paper pill,
+  13/600 ink: "First stay", "Our regular", "Latest".
+- **Heart:** top-right, 32 px paper disc, `IconHeart` 18 px ink outline; filled ginger when a
+  favourite (the only ginger on the card).
+- **Ink pill** (Dayuse discount badge "-79%"): `--color-ink` bg, paper text, 12/800, radius 6,
+  padding 6×8: "Visit 3", "♡ 5". Beside it, where the struck price sits, the stay length in
+  `--color-struck`-free muted text ("4 h", "2 nights"), never struck through.
+- **Date** (Dayuse price): 20/800 in rails, 32/800 on the desktop list card, tabular numerals.
+- **Timestamp pill** (Dayuse time-slot buttons): outlined pill, 1 px `--color-line-strong`,
+  36–40 px tall, `--font-mono` 13/500 ink, `14:00 → 18:00`.
+- "Waiting for Shady's rating" replaces the partner rating with a 13/500 muted note.
 
-## 5. Components
+## 5. Components (revised in pass 2 to match measured styles)
 
-- **Buttons.** Primary: honey fill, ink text, 700, height 48 (mobile) / 44 (desktop),
-  `--radius-sm`, no border. Secondary: paper fill, 1 px ink border. Ghost: underline text link
-  (Dayuse's "See hourly hotels" link). Press: `scale(0.97)` on pointer-down.
-- **Search bar.** Paper, `--radius-pill` on mobile, `--radius-md` bar on desktop, `--shadow-card`,
-  64 px tall on desktop with the honey round search button at the right; 52 px on mobile with the
-  search icon at the left.
-- **Tabs (city tabs).** Text tabs 14/600 muted; active is ink with a 3 px honey underline
-  (rounded). Scroll horizontally on mobile.
-- **Chips.** 36 px, pill, 1 px `--color-line`, 14/600; selected: honey-soft fill, ink border.
-- **Sheets.** Paper, top radius `--radius-xl`, grabber 36×4 `--color-line`, `--shadow-sheet`,
-  sticky footer with the primary action.
-- **Timestamp chip.** `--font-mono` 12/500, `14:00 → 18:00`, muted ink, 1 px line border,
-  radius xs, padding 2×6.
-- **Stats row** (Dayuse trust badges): icon in a 40 px cream circle + number 20/800 + label
-  12/500 muted, in a row that scrolls on mobile and spreads to 5 columns on desktop.
-- **FAQ accordion.** 1 px line dividers, question 16/700, chevron rotates 90° → 270°, answer
-  15/500 muted, 250 ms height transition (instant with reduced motion).
-- **Footer.** Ink background (Dayuse's dark footer), paper text, muted links, the mark in
-  mono variant.
+- **Buttons.** All pills. Primary: honey fill (subtle vertical honey → honey-deep gradient, as on
+  Dayuse's "See hotels"/"Open"), ink text 700, 52 px tall mobile / 42–44 px desktop, padding
+  0 28 / 12 20. Secondary: paper, 1 px `--color-line` border, ink text. Ghost: underlined
+  text link (Dayuse's "See the day hotels around me"). Press: `scale(0.97)` on pointer-down.
+- **Search bar.** Paper pill, 58 px tall on desktop with a 1 px `--color-line-input` border;
+  fields start with a 36 px ink disc holding a paper glyph (pin, calendar, search); the honey
+  pill button sits inside the bar at the right. Mobile: 56 px pill, ink search disc at the
+  left, placeholder 16/500.
+- **City tabs.** Pills 54 px tall (44 on mobile), padding 0 20; active = ink fill + paper text,
+  inactive = paper + 1 px line border + ink text. Horizontal scroll on mobile.
+- **Chips / filters.** Outlined pills 40 px tall with a trailing chevron (Dayuse filter row);
+  selected = honey-soft fill + ink border.
+- **Stats panel** (Dayuse trust panel). `--color-surface` panel, `--radius-xl`, full container
+  width; per stat a 48 px icon filled with a honey → ginger gradient, value 20/700 ink, label
+  14/500 muted; 5 centred columns on desktop, stacked rows (icon left) on mobile.
+- **Sheets.** Paper, top radius `--radius-xl`, grabber 36×4 `--color-line-strong`,
+  `--shadow-sheet`, sticky footer holding the primary pill.
+- **FAQ accordion.** 1 px line dividers, padding 24 px (mobile) / 32 px (desktop), question
+  16–18/700, chevron rotates, answer 15/500 muted.
+- **Header.** Over the home hero it's transparent with paper text; elsewhere paper with a 1 px
+  bottom line; 80 px desktop, 56 px mobile; desktop nav links 14/600 with 12×20 padding.
+- **Footer.** Ink background, `--color-footer-text` text, the mark in mono paper.
+- **Map controls.** 48 px paper circles with `--shadow-card`, stacked at the right (zoom,
+  locate, compass, layers), the same as the Dayuse results map.
 
 ## 6. Motion tone
 
@@ -163,15 +172,15 @@ DESKTOP: the same steps in a 480 px centred card on cream, mark above, step dots
 ```
 MOBILE 390                                   DESKTOP 1440
 ┌──────────────────────────┐                 ┌────────────────────────────────────────────────┐
-│ [mark] Suite Nothings  ⚙ │ header 56       │ [mark] Suite Nothings       Map  Journey  Us  [+ Add a stay]│ header 64
+│ [mark] Suite Nothings  ⚙ │ header 56, clear│ [mark] Suite Nothings       Map  Journey  Us  [+ Add a stay]│ header 64
 ├──────────────────────────┤                 ├────────────────────────────────────────────────┤
-│▢▢▢▢▢ hero photo ▢▢▢▢▢▢▢▢│ latest stay     │▢▢▢▢▢▢▢▢▢▢▢▢ full-bleed hero, 520 tall ▢▢▢▢▢▢▢▢▢│
-│ Stay 12, and still       │ headline 32/800 │   Stay 12, and still checking in.   48/800   │
-│ checking in.             │ paper on scrim  │   ┌──────────────────────────────────────┬──┐ │
-│ ┌──────────────────────┐ │                 │   │ ⌕ Find a stay we've had              │⌕ │ │
-│ │⌕ Find a stay we've had│ │ pill search     │   └──────────────────────────────────────┴──┘ │
-│ └──────────────────────┘ │                 │   ◎ We're at a hotel right now               │
-│ ◎ We're at a hotel now   │                 │                                               │
+│▢ ┌────────────────────┐▢│ search on top   │▢▢▢▢▢▢▢▢▢▢▢▢ full-bleed hero, 520 tall ▢▢▢▢▢▢▢▢▢│
+│▢ │(⌕) Find a stay we've│▢│ 56 pill, ink    │   Stay 12, and still checking in.   48/800   │
+│▢ └────────────────────┘▢│ disc            │   ┌──────────────────────────────────────┬──┐ │
+│▢ We're at a hotel now ▢▢│ underlined link │   │ ⌕ Find a stay we've had              │⌕ │ │
+│▢▢▢ latest stay photo ▢▢▢│                 │   └──────────────────────────────────────┴──┘ │
+│ Stay 12, and still       │ headline 32/800 │   ◎ We're at a hotel right now               │
+│ checking in.             │ bottom-left     │                                               │
 ├──────────────────────────┤                 ├────────────────────────────────────────────────┤
 │ ═27═ hotels together     │ split-flap      │  ═ 2 7 ═  hotels together                     │
 │ (🏨 27)(🗝 31)(⏱ 112h)… ▸│ stats rail      │  🏨 27 hotels  🗝 31 visits  ⏱ 112 h  🏙 6  🌍 3 │ 5 cols
@@ -371,4 +380,24 @@ SETTINGS                        JOIN (invite link)              EMPTY (zero stay
 
 ## 8. Critique, pass 1 → revisions
 
-See §9 (written after comparing with the captures).
+Pass 1 was written from the brief and the CSS alone. Setting it against the captures
+(`design/references/home-*`, `dubai-*`, `hotel-*`) and `computed.json` turned up these problems:
+
+| # | What was off in pass 1 | Evidence | Revision |
+|---|---|---|---|
+| 1 | Buttons at `--radius-sm` (8 px) | Every Dayuse action is a pill: "See hotels", "Open", "Read more", filters and time slots | All buttons, chips, tabs and search bars are pills (§5) |
+| 2 | City tabs as text with a honey underline | Computed: the active tab is an ink-filled pill with white text, inactive tabs are outlined pills, 54 px tall | Ink-filled active pill (§5); honey stays for primary actions only |
+| 3 | Card with no container, badge honey | Result cards are white, radius 12, with a soft shadow; the discount badge is an **ink** pill; the photo carries a **white** feature pill; time slots are outlined pills | Card rebuilt 1:1 (§4): feature pill, ink pill, timestamp pill |
+| 4 | Search bar with a small shadow, radius md on desktop | Paper pill with a 1 px #EAEAEB border and no heavy shadow; icons sit in ink discs; honey pill button inside the bar | Search bar spec rewritten (§5) |
+| 5 | Header: paper, 64 px desktop | 80 px; transparent with white logo and links over the home hero | 80 px desktop; transparent over our hero (§5) |
+| 6 | Trust badges as a plain icon row | A light-grey rounded panel (radius ≈ 24) with honey → coral gradient icons and two-line labels | Stats panel (§5); the gradient icons are the one place honey meets ginger outside love moments, as on Dayuse |
+| 7 | Text ink pure black (#000) | Computed body, heading and footer colour is #292935 | `--color-ink` #292935 everywhere, including the mark |
+| 8 | Hero headline centred at every size | Mobile puts search at the top of the hero and the headline bottom-left over the photo; desktop centres both | Mobile hero: search on top, headline bottom-left (§7.2) |
+| 9 | Ginger used for the favourite badge fill with white text | White on #FC5E57 is 3.05:1 (fails AA for small text) | Favourite count uses the ink pill; ginger only fills hearts and illustrations; `--color-ginger-ink` for coloured text |
+| 10 | Desktop footer copied the mobile layout | Dayuse's footer is a dark multi-column block (473 px at 1440) | Desktop footer: 3 columns (mark + counter, app links, About) on ink |
+
+Things kept on purpose: our map pins stay honey key tags (Dayuse uses purple price pills,
+which would read as prices); the bottom tab bar on mobile (their site uses a hamburger, but
+their app uses a tab bar); and ink outlines only on story elements, never on chrome.
+
+The prototype went through two more critique loops after this; see §9.
