@@ -191,6 +191,7 @@ export type OutboxOp =
   | { op_id: string; action: 'uploadPhoto'; payload: { photo: Photo; thumb_key: string | null; full_key: string | null }; created_at: string; attempts: number; last_error?: string }
   | { op_id: string; action: 'upsertWish'; payload: Wish; created_at: string; attempts: number; last_error?: string }
   | { op_id: string; action: 'markLetterRead'; payload: { letter_id: string; read_at: string }; created_at: string; attempts: number; last_error?: string }
+  | { op_id: string; action: 'upsertLetter'; payload: Letter; created_at: string; attempts: number; last_error?: string }
   | { op_id: string; action: 'updateSettings'; payload: Partial<SettingsMap>; created_at: string; attempts: number; last_error?: string };
 
 export type OutboxAction = OutboxOp['action'];

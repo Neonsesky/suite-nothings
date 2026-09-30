@@ -5,7 +5,7 @@ import { privateLetter } from './build/private-letter.ts';
 
 export default defineConfig({
   plugins: [react(), privateLetter()],
-  define: { __APP_VERSION__: JSON.stringify('test') },
+  define: { __APP_VERSION__: JSON.stringify('test'), __BUILD_DATE__: JSON.stringify('2026-09-30') },
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   test: {
     environment: 'happy-dom',
