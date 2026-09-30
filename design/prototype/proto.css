@@ -272,8 +272,12 @@ ul { margin: 0; padding: 0; list-style: none; }
   .hero-headline { font-size: var(--text-4xl); max-width: 46rem; margin-bottom: var(--space-3); }
   .hero-sub { font-size: var(--text-lg); margin-bottom: var(--space-6); }
   .hero-top { order: 3; margin-top: var(--space-6); }
-  .hero-search-wrap { order: 2; width: 100%; max-width: 42rem; }
+  .hero-search-wrap { order: 2; width: 100%; max-width: 34rem; }
+  .hero-search-wrap .search-pill { width: 100%; }
   .hero-spacer { display: none; }
+  /* cp1 loop 2: Dayuse's hero is 700 px with a 64 px display headline */
+  .hero { min-height: 43.75rem; }
+  .hero-headline { font-size: 4rem; font-weight: var(--weight-extrabold); line-height: 1.08; letter-spacing: -0.02em; }
 }
 
 /* Search bar */

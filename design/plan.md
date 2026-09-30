@@ -401,3 +401,21 @@ which would read as prices); the bottom tab bar on mobile (their site uses a ham
 their app uses a tab bar); and ink outlines only on story elements, never on chrome.
 
 The prototype went through two more critique loops after this; see §9.
+
+## 9. Prototype critique loops (Checkpoint 1)
+
+Composites (Dayuse left, ours right) are in `design/references/cp1/` (gitignored); our side is
+in `design/checkpoints/cp1/proto/`.
+
+- **Loop 1** (prototype agent, mid-build, from the captures): buttons, search and tabs became
+  pills; the header is transparent over the hero; city tabs are ink-filled when active; the
+  stats sit in a grey radius-xl panel with honey → ginger icons; cards got the two-badge system
+  (white feature pill, ink visit pill) plus the outlined timestamp pill; map controls are 48 px
+  white circles. Also fixed: a scrim that blocked the sheet, and pointer-events leaks on the map.
+- **Loop 2** (home 1440 against Dayuse): the hero was 520 px tall with a 48 px headline, where
+  Dayuse has 700 px and 64 px. Now 700 px, 64/800, -0.02em. Still open, and the React build
+  should fix these: (a) the hero search pill renders about 330 px wide, but Dayuse's is about
+  550 px, so the pill should fill `.hero-search-wrap` (34rem); (b) Dayuse orders the hero as
+  headline → search → trust line → link, but ours puts the link and trust line above the
+  search, so move them below; (c) the FAQ chevron should use `IconChevron`; (d) Waldorf Astoria
+  RAK should get its own city tab ("Ras Al Khaimah") or go under "Abroad/Other".
