@@ -54,8 +54,9 @@ export function StayArt({ seed, motif, label, className, rounded }: StayArtProps
   const uid = useId().replace(/:/g, '');
   const h = hashSeed(seed);
   const r = rng(h);
+  const h2 = hashSeed(`${seed}|motif`);
   const p = PALETTES[h % PALETTES.length];
-  const m = motif ?? MOTIFS[(h >>> 3) % MOTIFS.length];
+  const m = motif ?? MOTIFS[h2 % MOTIFS.length];
   const sunX = 60 + r() * 280;
   const sunY = 50 + r() * 50;
   const gid = `sa-sky-${uid}`;

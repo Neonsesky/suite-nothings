@@ -5,35 +5,26 @@
   padding-bottom: var(--space-12);
 }
 .hero {
-  position: relative;
-  min-height: 26rem;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
   color: var(--color-ink);
-  overflow: hidden;
 }
 .heroArt {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  height: 14rem;
+  overflow: hidden;
+  border-bottom: 0.09375rem solid var(--color-ink);
 }
 .heroArt img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.heroArt::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 20%, var(--color-paper) 100%);
-  opacity: 0.85;
-}
 .heroInner {
-  position: relative;
   width: 100%;
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: var(--space-16) var(--gutter) var(--space-6);
+  padding: var(--space-5) var(--gutter) 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -140,7 +131,26 @@
 }
 @media (min-width: 64rem) {
   .hero {
-    min-height: 32rem;
+    position: relative;
+    min-height: 30rem;
+    justify-content: flex-end;
+  }
+  .heroArt {
+    position: absolute;
+    inset: 0;
+    height: auto;
+    border-bottom: 0;
+  }
+  .heroArt::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--color-paper) 0%, var(--color-paper) 30%, transparent 75%);
+    opacity: 0.92;
+  }
+  .heroInner {
+    position: relative;
+    padding: var(--space-16) var(--gutter) var(--space-10);
   }
   .headline {
     font-size: var(--text-4xl);

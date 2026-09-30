@@ -11,7 +11,7 @@ import { StayCardSkeleton } from '@/components/Skeleton';
 import { SplitFlap } from '@/components/SplitFlap';
 import { StayArt } from '@/components/StayArt';
 import { StayCard } from '@/components/StayCard';
-import { FOCUS_SEARCH_EVENT } from '@/app/shortcuts';
+import { consumeSearchFocus, FOCUS_SEARCH_EVENT } from '@/app/shortcuts';
 import { href } from '@/app/router';
 import { personName } from '@/config/couple';
 import { ABROAD, cityTab } from '@/data/stays';
@@ -37,7 +37,10 @@ function Hero({ stays }: { stays: Stay[] }) {
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    const focus = () => inputRef.current?.focus();
+    const focus = () => {
+      if (inputRef.current && consumeSearchFocus()) inputRef.current.focus();
+    };
+    focus();
     window.addEventListener(FOCUS_SEARCH_EVENT, focus);
     return () => window.removeEventListener(FOCUS_SEARCH_EVENT, focus);
   }, []);

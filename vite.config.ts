@@ -3,8 +3,8 @@ import { fileURLToPath, URL } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig, loadEnv } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
-import { privateLetter } from './build/private-letter';
-import { COUPLE } from './src/config/couple';
+import { privateLetter } from './build/private-letter.ts';
+import { COUPLE } from './src/config/couple.ts';
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as { version: string };
 

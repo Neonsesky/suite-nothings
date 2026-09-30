@@ -165,15 +165,11 @@ function SheetInner({
           panel.focus();
           return;
         }
-        const firstEl = items[0];
-        const lastEl = items[items.length - 1];
-        if (e.shiftKey && (document.activeElement === firstEl || document.activeElement === panel)) {
-          e.preventDefault();
-          lastEl.focus();
-        } else if (!e.shiftKey && document.activeElement === lastEl) {
-          e.preventDefault();
-          firstEl.focus();
-        }
+        // Move focus ourselves so the trap behaves the same on every engine (Safari skips buttons).
+        e.preventDefault();
+        const i = items.indexOf(document.activeElement as HTMLElement);
+        const next = e.shiftKey ? (i <= 0 ? items.length - 1 : i - 1) : i < 0 || i === items.length - 1 ? 0 : i + 1;
+        items[next].focus();
       }
     };
     document.addEventListener('keydown', onKey, true);

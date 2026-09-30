@@ -114,7 +114,7 @@ function FlapCell({ char, delay, reduced, charset, riffle, sound, onSettled, ini
   const glyph = (c: string) => (c === ' ' ? ' ' : c);
   const style = flip ? ({ '--flap-dur': `${flip.dur}ms` } as CSSProperties) : undefined;
   return (
-    <span className={s.cell} style={style}>
+    <span className={s.cell} style={style} data-flipping={flip ? 'true' : undefined}>
       <span className={`${s.half} ${s.top}`}>
         <span className={s.glyph}>{glyph(shown)}</span>
       </span>

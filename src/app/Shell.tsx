@@ -110,7 +110,7 @@ export function Shell() {
   const background = route?.kind === 'sheet' ? matchRoute(getLastScreen().path) : null;
 
   // First launch: pick who's checking in.
-  const needsWelcome = !me && route?.name !== 'welcome' && route?.name !== 'join';
+  const needsWelcome = !me && route != null && !['welcome', 'join', 'gallery'].includes(route.name);
   useEffect(() => {
     if (needsWelcome) navigate('/welcome', { replace: true });
   }, [needsWelcome]);

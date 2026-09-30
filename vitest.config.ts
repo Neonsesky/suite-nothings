@@ -1,7 +1,7 @@
 import { fileURLToPath, URL } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
-import { privateLetter } from './build/private-letter';
+import { privateLetter } from './build/private-letter.ts';
 
 export default defineConfig({
   plugins: [react(), privateLetter()],

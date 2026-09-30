@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.test.tsbuildinfo",
     "target": "ES2022",
     "lib": [
       "ES2023",
@@ -11,7 +11,8 @@
     "moduleResolution": "bundler",
     "types": [
       "vite/client",
-      "vite-plugin-pwa/client"
+      "vite-plugin-pwa/client",
+      "node"
     ],
     "jsx": "react-jsx",
     "strict": true,
@@ -32,6 +33,8 @@
     }
   },
   "include": [
-    "src"
+    "src/vite-env.d.ts",
+    "tests/unit",
+    "tests/setup.ts"
   ]
 }

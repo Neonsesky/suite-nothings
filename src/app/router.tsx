@@ -16,7 +16,8 @@ export type RouteName =
   | 'settings'
   | 'join'
   | 'welcome'
-  | 'wishlist';
+  | 'wishlist'
+  | 'gallery';
 
 export interface RouteDef {
   name: RouteName;
@@ -41,6 +42,8 @@ export const ROUTES: readonly RouteDef[] = [
   { name: 'join', pattern: '/join', kind: 'fullscreen', Component: lazy(() => import('@/features/connection/JoinRoute')) },
   { name: 'welcome', pattern: '/welcome', kind: 'fullscreen', Component: lazy(() => import('@/features/onboarding/Onboarding')) },
   { name: 'wishlist', pattern: '/wishlist', kind: 'screen', tab: 'us', Component: lazy(() => import('@/features/wishlist/WishlistScreen')) },
+  // Unlinked component gallery for visual QA (foundation-owned).
+  { name: 'gallery', pattern: '/gallery', kind: 'fullscreen', Component: lazy(() => import('./Gallery')) },
 ];
 
 export interface Location {
