@@ -174,7 +174,7 @@ export function InstallBanner() {
         </div>
       </div>
       <BottomSheet open={help} onClose={() => setHelp(false)} title="Add us to your home screen" snapPoints={[0.6]}>
-        <ol className={s.installSteps}>
+        <ol className={s.installSteps} data-no-drag>
           <li>
             <span className={s.stepNum}>1</span>
             <span>

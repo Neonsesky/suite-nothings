@@ -54,7 +54,9 @@ function Stars({ value, label }: { value: number; label?: string }) {
   return (
     <span className={s.stars} aria-label={label ?? `${value} out of 5`}>
       {Array.from({ length: 5 }, (_, i) => (
-        <IconStar key={i} size={16} aria-hidden="true" data-on={i < value || undefined} />
+        <span key={i} data-on={i < value || undefined}>
+          <IconStar size={16} aria-hidden="true" />
+        </span>
       ))}
     </span>
   );
@@ -295,6 +297,8 @@ export default function StayDetailScreen() {
 
   const doDelete = async () => {
     setConfirm(false);
+    // Let the sheet finish closing (it restores focus and page semantics) before we leave.
+    await new Promise((r) => window.setTimeout(r, 400));
     await softDeleteVisit(visit.visit_id);
     navigate('/', { replace: true });
     toast.show({ message: 'Stay moved out.', action: { label: 'Undo', onClick: () => void undoDeleteVisit(visit.visit_id) } });
@@ -403,7 +407,7 @@ export default function StayDetailScreen() {
         title="Remove this stay?"
         snapPoints={[0.4]}
         footer={
-          <div className={s.confirmRow}>
+          <div className={s.confirmRow} data-no-drag>
             <Button variant="secondary" onClick={() => setConfirm(false)}>
               Cancel
             </Button>

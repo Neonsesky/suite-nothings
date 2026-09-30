@@ -173,8 +173,8 @@
   min-height: var(--space-16); padding: var(--space-4) 0; border: 0; background: transparent; color: var(--color-ink);
   font-size: var(--text-md); font-weight: var(--weight-bold); text-align: left; cursor: pointer;
 }
-.chevron { flex: none; transition: transform var(--dur-base) var(--ease-standard); }
-.faqItem[data-open] .chevron { transform: rotate(180deg); }
+.chevron { flex: none; transform: rotate(90deg); transition: transform var(--dur-base) var(--ease-standard); }
+.faqItem[data-open] .chevron { transform: rotate(-90deg); }
 .faqA { padding: 0 0 var(--space-5); color: var(--color-muted); font-size: 0.9375rem; font-weight: var(--weight-medium); }
 
 /* Chain marquee */

@@ -42,7 +42,7 @@ function FiltersSheet({ open, onClose, stays, draft, setDraft, onApply }: { open
       title="Filters"
       snapPoints={[0.8]}
       footer={
-        <div className={s.sheetFooter}>
+        <div className={s.sheetFooter} data-no-drag>
           <Button variant="ghost" onClick={() => setDraft({})}>
             Clear
           </Button>
@@ -58,7 +58,7 @@ function FiltersSheet({ open, onClose, stays, draft, setDraft, onApply }: { open
         </div>
       }
     >
-      <div className={s.filterGroups}>
+      <div className={s.filterGroups} data-no-drag>
         <div className={s.filterGroup}>
           <h3>City</h3>
           <ChipGroup label="City" allowEmpty options={opts.cities.map((c) => ({ value: c, label: c }))} value={draft.city ?? null} onChange={(v) => setDraft({ ...draft, city: (v as string) ?? null })} />

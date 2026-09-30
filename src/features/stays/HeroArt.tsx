@@ -36,14 +36,19 @@ interface Palette {
   waterBottom: string;
   litColor: string;
   litOpacity: number;
+  unlitColor: string;
   unlitOpacity: number;
   drawUnlit: boolean;
   litRatio: number;
   farOpacity: number;
+  farFill: string;
   midOpacity: number;
   nearOpacity: number;
+  landmarkOpacity: number;
   stars: boolean;
 }
+
+const INK = 'var(--color-ink)';
 
 const PALETTES: Record<TimeOfDay, Palette> = {
   day: {
@@ -54,14 +59,17 @@ const PALETTES: Record<TimeOfDay, Palette> = {
     isMoon: false,
     waterTop: '#bfe3e6',
     waterBottom: '#6fb2c4',
-    litColor: 'var(--color-ink)',
-    litOpacity: 0.28,
-    unlitOpacity: 0.16,
+    litColor: '#eef8fc',
+    litOpacity: 0.4,
+    unlitColor: INK,
+    unlitOpacity: 0.28,
     drawUnlit: true,
-    litRatio: 0.12,
-    farOpacity: 0.22,
-    midOpacity: 0.48,
+    litRatio: 0.14,
+    farOpacity: 0.34,
+    farFill: '#a9cddb',
+    midOpacity: 0.52,
     nearOpacity: 0.92,
+    landmarkOpacity: 0.6,
     stars: false,
   },
   golden: {
@@ -74,12 +82,15 @@ const PALETTES: Record<TimeOfDay, Palette> = {
     waterBottom: '#fc8f68',
     litColor: 'var(--color-honey)',
     litOpacity: 0.92,
+    unlitColor: INK,
     unlitOpacity: 0.18,
     drawUnlit: true,
     litRatio: 0.58,
-    farOpacity: 0.3,
-    midOpacity: 0.58,
+    farOpacity: 0.4,
+    farFill: '#e2a877',
+    midOpacity: 0.6,
     nearOpacity: 0.95,
+    landmarkOpacity: 0.68,
     stars: false,
   },
   dawn: {
@@ -92,12 +103,15 @@ const PALETTES: Record<TimeOfDay, Palette> = {
     waterBottom: '#f2b8ae',
     litColor: 'var(--color-honey-soft)',
     litOpacity: 0.8,
+    unlitColor: INK,
     unlitOpacity: 0.14,
     drawUnlit: true,
     litRatio: 0.3,
-    farOpacity: 0.26,
-    midOpacity: 0.5,
+    farOpacity: 0.36,
+    farFill: '#dba79e',
+    midOpacity: 0.52,
     nearOpacity: 0.92,
+    landmarkOpacity: 0.62,
     stars: false,
   },
   night: {
@@ -110,17 +124,18 @@ const PALETTES: Record<TimeOfDay, Palette> = {
     waterBottom: '#0f0f22',
     litColor: 'var(--color-honey)',
     litOpacity: 0.95,
+    unlitColor: INK,
     unlitOpacity: 0,
     drawUnlit: false,
     litRatio: 0.66,
-    farOpacity: 0.3,
-    midOpacity: 0.55,
+    farOpacity: 0.42,
+    farFill: '#20203a',
+    midOpacity: 0.6,
     nearOpacity: 0.98,
+    landmarkOpacity: 0.7,
     stars: true,
   },
 };
-
-const INK = 'var(--color-ink)';
 
 type TowerKind = 'block' | 'stepped' | 'round' | 'needle' | 'sail';
 
@@ -158,7 +173,7 @@ function steppedTower(x: number, w: number, baseY: number, h: number): string {
 
 function roundedTopTower(x: number, w: number, baseY: number, h: number): string {
   const topY = baseY - h;
-  const r = Math.min(w * 0.48, h * 0.3);
+  const r = Math.min(w * 0.42, h * 0.14);
   return `M${x} ${baseY} L${x} ${topY + r} A${r} ${r} 0 0 1 ${x + w} ${topY + r} L${x + w} ${baseY} Z`;
 }
 
@@ -208,46 +223,56 @@ interface LayerConfig {
   landmark?: 'needle' | 'sail';
 }
 
+interface Landmark {
+  kind: 'needle' | 'sail';
+  d: string;
+  spire?: string;
+}
+
+/** Filler tower kinds, weighted so plain blocks dominate but the skyline stays varied. */
+const FILLER_KINDS: TowerKind[] = ['block', 'block', 'block', 'stepped', 'round'];
+
 function buildLayer(seedBase: number, cfg: LayerConfig, litRatio: number) {
   const r = rng(seedBase);
   const towers: Tower[] = [];
-  let needleSpire: { d: string; cx: number } | null = null;
-  const landmarkIndex = Math.floor(r() * cfg.count);
+  let landmark: Landmark | null = null;
+  // Keep the landmark away from the first/last slot: those sit near the viewBox edges
+  // (towers start bleeding off-canvas at x=-60) and would get cropped almost entirely.
+  const landmarkIndex = 1 + Math.floor(r() * Math.max(1, cfg.count - 2));
   let x = -60;
   let i = 0;
-  const kinds: TowerKind[] = ['block', 'block', 'stepped', 'round', 'block'];
   while (i < cfg.count && x < W + 60) {
     const w = cfg.minW + r() * (cfg.maxW - cfg.minW);
     const h = cfg.minH + r() * (cfg.maxH - cfg.minH);
     const baseY = WATER_Y;
     const isLandmark = i === landmarkIndex && !!cfg.landmark;
-    let d: string;
-    let windows: Tower['windows'] = [];
     if (isLandmark && cfg.landmark === 'needle') {
-      const tallH = h * 1.55;
-      const needle = needleTower(x, w * 1.1, baseY, tallH);
-      d = needle.body;
-      towers.push({ d, windows: [] });
-      needleSpire = { d: needle.spire, cx: needle.cx };
-      x += w * 1.1 + 26 + r() * 30;
+      // Tiered and tall enough to rise clear of the mid/near skyline into open sky.
+      const needleW = w * 1.05;
+      const needle = needleTower(x, needleW, baseY, h * 2.5);
+      landmark = { kind: 'needle', d: needle.body, spire: needle.spire };
+      x += needleW + 30 + r() * 30;
       i++;
       continue;
-    } else if (isLandmark && cfg.landmark === 'sail') {
-      d = sailTower(x, w * 1.2, baseY, h * 1.25);
-    } else {
-      const kind = kinds[Math.floor(r() * kinds.length)];
-      if (kind === 'stepped') d = steppedTower(x, w, baseY, h);
-      else if (kind === 'round') d = roundedTopTower(x, w, baseY, h);
-      else d = trapezoid(x, w, baseY, baseY - h, 0.08 + r() * 0.18);
     }
-    if (cfg.withWindows) {
-      windows = windowFloors(r, x, w, baseY, baseY - h, litRatio);
+    if (isLandmark && cfg.landmark === 'sail') {
+      const sailW = w * 1.2;
+      landmark = { kind: 'sail', d: sailTower(x, sailW, baseY, h * 1.6) };
+      x += sailW + 24 + r() * 30;
+      i++;
+      continue;
     }
+    const kind = FILLER_KINDS[Math.floor(r() * FILLER_KINDS.length)];
+    let d: string;
+    if (kind === 'stepped') d = steppedTower(x, w, baseY, h);
+    else if (kind === 'round') d = roundedTopTower(x, w, baseY, h);
+    else d = trapezoid(x, w, baseY, baseY - h, 0.08 + r() * 0.18);
+    const windows = cfg.withWindows ? windowFloors(r, x, w, baseY, baseY - h, litRatio) : [];
     towers.push({ d, windows });
     x += w + 18 + r() * 34;
     i++;
   }
-  return { towers, needleSpire };
+  return { towers, landmark };
 }
 
 interface PalmSpec {
@@ -333,12 +358,11 @@ export function HeroArt({ seed, time, className }: HeroArtProps) {
   const grainId = `hero-grain-${uid}`;
   const skylineGroupId = `hero-skyline-${uid}`;
 
-  const renderTower = (tower: Tower, key: string, fillOpacity: number, outline: boolean) => (
+  const renderTower = (tower: Tower, key: string, fill: string, outline: boolean) => (
     <g key={key}>
       <path
         d={tower.d}
-        fill={INK}
-        fillOpacity={fillOpacity}
+        fill={fill}
         stroke={outline ? INK : 'none'}
         strokeWidth={outline ? 2 : 0}
         strokeLinejoin="round"
@@ -353,7 +377,7 @@ export function HeroArt({ seed, time, className }: HeroArtProps) {
             x2={win.x2}
             y1={win.y}
             y2={win.y}
-            stroke={win.lit ? p.litColor : INK}
+            stroke={win.lit ? p.litColor : p.unlitColor}
             strokeOpacity={win.lit ? p.litOpacity : p.unlitOpacity}
             strokeWidth={3}
             strokeDasharray="5 5"
@@ -419,21 +443,24 @@ export function HeroArt({ seed, time, className }: HeroArtProps) {
 
         {/* Skyline (far -> mid -> near), grouped so the reflection can reuse it via <use>. */}
         <g id={skylineGroupId}>
-          <g opacity={p.farOpacity}>
-            {scene.far.towers.map((tw, i) => renderTower(tw, `f${i}`, 1, false))}
-            {scene.far.needleSpire ? (
-              <path
-                d={scene.far.needleSpire.d}
-                stroke={INK}
-                strokeWidth={2.5}
-                fill="none"
-                strokeLinecap="round"
-                vectorEffect="non-scaling-stroke"
-              />
-            ) : null}
-          </g>
-          <g opacity={p.midOpacity}>{scene.mid.towers.map((tw, i) => renderTower(tw, `m${i}`, 1, false))}</g>
-          <g opacity={p.nearOpacity}>{scene.near.towers.map((tw, i) => renderTower(tw, `n${i}`, 1, true))}</g>
+          <g opacity={p.farOpacity}>{scene.far.towers.map((tw, i) => renderTower(tw, `f${i}`, p.farFill, false))}</g>
+          <g opacity={p.midOpacity}>{scene.mid.towers.map((tw, i) => renderTower(tw, `m${i}`, INK, false))}</g>
+          <g opacity={p.nearOpacity}>{scene.near.towers.map((tw, i) => renderTower(tw, `n${i}`, INK, true))}</g>
+          {/* Landmarks: drawn last so the two "recognisable" towers never vanish behind filler,
+              but still tinted below full near-layer opacity so they read as sitting further back. */}
+          {scene.far.landmark ? (
+            <g opacity={p.landmarkOpacity} data-landmark="needle">
+              <path d={scene.far.landmark.d} fill={INK} stroke={INK} strokeWidth={1.5} vectorEffect="non-scaling-stroke" />
+              {scene.far.landmark.spire ? (
+                <path d={scene.far.landmark.spire} stroke={INK} strokeWidth={2.5} fill="none" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+              ) : null}
+            </g>
+          ) : null}
+          {scene.mid.landmark ? (
+            <g opacity={Math.min(1, p.landmarkOpacity + 0.15)} data-landmark="sail">
+              <path d={scene.mid.landmark.d} fill={INK} stroke={INK} strokeWidth={1.5} vectorEffect="non-scaling-stroke" />
+            </g>
+          ) : null}
         </g>
 
         {/* Water + blurred, fading reflection of the skyline */}
