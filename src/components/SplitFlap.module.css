@@ -1,0 +1,99 @@
+.root {
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+  line-height: 1;
+  vertical-align: middle;
+}
+.sm { font-size: var(--text-md); }
+.md { font-size: var(--text-2xl); }
+.lg { font-size: var(--text-3xl); }
+.xl { font-size: var(--text-4xl); }
+.board {
+  display: inline-flex;
+  gap: 0.08em;
+}
+.cell {
+  --flap-dur: 200ms;
+  position: relative;
+  display: inline-block;
+  width: 0.78em;
+  height: 1.28em;
+  perspective: 6em;
+  border-radius: 0.12em;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  box-shadow: var(--shadow-sm);
+}
+.half {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  overflow: hidden;
+  background: var(--color-ink);
+  backface-visibility: hidden;
+}
+.top {
+  top: 0;
+  border-radius: 0.12em 0.12em 0 0;
+}
+.bottom {
+  bottom: 0;
+  border-radius: 0 0 0.12em 0.12em;
+}
+.glyph {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 200%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.top .glyph { top: 0; }
+.bottom .glyph { bottom: 0; }
+.hinge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 0.04em;
+  transform: translateY(-50%);
+  background: var(--color-paper);
+  opacity: 0.35;
+  z-index: 3;
+}
+.flapTop {
+  z-index: 2;
+  transform-origin: 50% 100%;
+  animation: foldTop calc(var(--flap-dur) / 2) cubic-bezier(0.55, 0, 1, 0.45) forwards;
+}
+.flapBottom {
+  z-index: 2;
+  transform-origin: 50% 0%;
+  transform: rotateX(90deg);
+  animation: foldBottom calc(var(--flap-dur) / 2) cubic-bezier(0, 0.55, 0.45, 1) calc(var(--flap-dur) / 2) forwards;
+}
+.flapTop::after,
+.flapBottom::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink);
+  opacity: 0;
+  animation: shade calc(var(--flap-dur) / 2) linear forwards;
+}
+@keyframes foldTop {
+  from { transform: rotateX(0deg); }
+  to { transform: rotateX(-90deg); }
+}
+@keyframes foldBottom {
+  from { transform: rotateX(90deg); }
+  to { transform: rotateX(0deg); }
+}
+@keyframes shade {
+  from { opacity: 0; }
+  to { opacity: 0.35; }
+}

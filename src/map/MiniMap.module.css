@@ -1,0 +1,19 @@
+.root {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  aspect-ratio: 16 / 9;
+  background: var(--color-cream);
+  border: 0.0625rem solid var(--color-line);
+}
+.pin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -100%);
+  color: var(--color-ink);
+  background: var(--color-honey);
+  border-radius: var(--radius-pill);
+  padding: var(--space-1);
+  box-shadow: var(--shadow-sm);
+}

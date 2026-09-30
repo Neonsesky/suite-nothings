@@ -1,0 +1,36 @@
+.root {
+  display: inline-flex;
+  color: var(--color-ink);
+}
+.face {
+  fill: var(--color-cream);
+  stroke: currentColor;
+  stroke-width: 2.5;
+}
+.tick {
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.hand {
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transform-origin: 24px 24px;
+}
+.minute {
+  stroke: var(--color-ginger);
+  animation: sweep 1.2s linear infinite;
+}
+.hour {
+  animation: sweep 14.4s linear infinite;
+}
+.pin {
+  fill: currentColor;
+}
+@keyframes sweep {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .minute, .hour { animation-duration: 0s; animation: none; }
+}

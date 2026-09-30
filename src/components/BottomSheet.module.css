@@ -1,0 +1,103 @@
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-sheet);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+}
+.layer[data-sheet-state='closing'] .scrim {
+  pointer-events: none;
+}
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.4);
+  pointer-events: auto;
+}
+.panel {
+  position: relative;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  outline: none;
+}
+.sheet {
+  width: 100%;
+  max-width: 40rem;
+  max-height: 100dvh;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  box-shadow: var(--shadow-sheet);
+  touch-action: none;
+  will-change: transform;
+}
+.modal {
+  align-self: center;
+  width: min(36rem, calc(100% - 2 * var(--space-8)));
+  max-height: min(48rem, calc(100dvh - 2 * var(--space-8)));
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-pop);
+}
+.grab {
+  display: grid;
+  place-items: center;
+  height: var(--space-6);
+  flex: none;
+  cursor: grab;
+}
+.handle {
+  width: var(--space-10);
+  height: 0.3125rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-line);
+}
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-3) var(--space-2) var(--space-5);
+  flex: none;
+}
+.modal .header {
+  padding-top: var(--space-4);
+}
+.title {
+  flex: 1;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+}
+.close {
+  display: grid;
+  place-items: center;
+  width: var(--space-11);
+  height: var(--space-11);
+  border-radius: var(--radius-pill);
+  margin-left: auto;
+}
+.close:active {
+  transform: scale(0.97);
+}
+.content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 var(--space-5) var(--space-5);
+  touch-action: pan-y;
+}
+.footer {
+  flex: none;
+  padding: var(--space-3) var(--space-5) calc(var(--space-3) + env(safe-area-inset-bottom));
+  border-top: 0.0625rem solid var(--color-line);
+  background: var(--color-paper);
+}
+.modal .footer {
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+}
+.sheet .content:last-child {
+  padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom));
+}
