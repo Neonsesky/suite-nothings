@@ -36,8 +36,14 @@ h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, ul, ol {
 }
 h1, h2, h3, h4 {
   font-family: var(--font-display);
+  font-stretch: var(--font-display-stretch);
   line-height: var(--leading-tight);
   font-weight: var(--weight-bold);
+}
+/* Dayuse sets only its display classes (h1/h2 scale) in the extended face; smaller titles are Manrope. */
+h3, h4 {
+  font-family: var(--font-sans);
+  font-stretch: normal;
 }
 ul[role='list'], ol[role='list'] {
   list-style: none;

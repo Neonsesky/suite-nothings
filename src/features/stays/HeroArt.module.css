@@ -1,0 +1,51 @@
+.root {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--color-cream);
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Bottom-to-top scrim: darkest at the bottom (copy legibility), lighter through the
+   middle, a touch of ink again at the very top so a fixed header keeps contrast too. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-ink) 25%, transparent) 0%,
+    color-mix(in srgb, var(--color-ink) 10%, transparent) 42%,
+    color-mix(in srgb, var(--color-ink) 16%, transparent) 62%,
+    color-mix(in srgb, var(--color-ink) 55%, transparent) 100%
+  );
+}
+
+.shimmer {
+  animation: shimmer 9s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    animation: none;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    opacity: 0.18;
+    transform: translateX(-1.5%);
+  }
+  to {
+    opacity: 0.4;
+    transform: translateX(1.5%);
+  }
+}
