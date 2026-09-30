@@ -36,7 +36,8 @@ export default defineConfig(({ mode }) => {
             if (id.includes('node_modules/maplibre-gl')) return 'maplibre';
             if (id.includes('node_modules/three')) return 'three';
             if (id.includes('node_modules/gsap')) return 'gsap';
-            if (id.includes('node_modules/exifr')) return 'exifr';
+            // exifr: no manual chunk. Its own dynamic import() already splits it, and a manual chunk
+            // would capture Vite's preload helper and get modulepreloaded on the initial path.
             if (id.includes('node_modules/qrcode')) return 'qrcode';
             return undefined;
           },

@@ -1,5 +1,13 @@
 # Changelog
 
+## [w1-add-stay] 2026-10-01
+- Add a stay (`#/add`): draggable five-step sheet (Hotel, When, What we did, Photos, The good part) with a progress bar, Back/Next in the thumb zone, draft autosave with "Pick up where we left off?", and a "Discard this stay?" confirm on swipe-down, Esc or close.
+- Hotel step: previous hotels first (one-tap revisit straight to When), debounced Photon autocomplete biased to GPS/home base with keyboard navigation and loading/empty/error/offline states, the server geocoder as a fallback, "We're here now" (nearest first, denied/unavailable states) and a manual pin drop.
+- Photos: library + camera, EXIF read first ("These photos say 12 Jul 2026 at … Use that?"), on-device resize to 480/1600 px WebP (JPEG fallback) with orientation applied and EXIF stripped, reorder, remove, captions.
+- Save: hotel → visit → photos through the store/outbox; "Stay saved" or "Saved on this phone, will sync"; save celebration (key card, green light, split-flap, pin drop, haptic, sound; tap to skip; reduced-motion crossfade), then the stay detail or home. Edit mode via `?edit=`.
+- Router: sheet routes keep the background screen's params (`LocationProvider`). BottomSheet: `onDismissAttempt`, footer taps no longer swallowed. exifr no longer preloaded (initial JS 130 KB).
+- Tests: draft/save-plan/saveStay units, EXIF + image units with fixture JPEGs, real-browser image pipeline spec (dev), nine add-stay e2e flows incl. a timed revisit (< 30 s), offline, manual pin, draft reload, edit mode and the stay-detail background. Checkpoint 2: `design/checkpoints/cp2/save-celebration/`.
+
 ## [w0-foundation] 2026-09-30
 - Scaffold: Vite 8, React 19.3, TypeScript 6.0 (strict), ESLint 10 and typescript-eslint 8 (zero warnings), Vitest 5 with happy-dom and fake-indexeddb, Playwright 1.63 (WebKit 390, Chromium 412, desktop 1440), vite-plugin-pwa (generateSW, prompt; runtime caching for OpenFreeMap and Photon). Every dependency is pinned and the lockfile is committed.
 - Hash router with every route pre-registered and lazy-loaded; shell with the mobile tab bar, desktop header, N/M/J// shortcuts, global and per-route error boundary, toast host, offline banner and Demo badge; first-launch redirect to `#/welcome`.

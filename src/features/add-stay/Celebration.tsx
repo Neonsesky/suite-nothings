@@ -6,7 +6,7 @@
 import { motion } from 'motion/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { SplitFlap } from '@/components/SplitFlap';
+import { FLAP_CHARSET_DIGITS, SplitFlap } from '@/components/SplitFlap';
 import { haptic } from '@/lib/haptics';
 import { SPRING_THROW, useReducedMotion } from '@/lib/motion';
 import { play } from '@/lib/sound';
@@ -94,10 +94,10 @@ export function Celebration({ from, to, unit, stayNumber, hotelName, lat, lng, o
         </motion.div>
       </div>
       <div className={s.board}>
-        <SplitFlap value={board} ariaLabel={`${to} ${unit}`} length={Math.max(2, String(to).length)} size="xl" sound={!reduced} />
+        <SplitFlap value={board} ariaLabel={`${to} ${unit}`} length={Math.max(2, String(to).length)} size="xl" charset={FLAP_CHARSET_DIGITS} sound={!reduced} />
         <span className={s.unit}>{unit}</span>
       </div>
-      <div className={s.map}>{locked ? <MiniMap lat={lat} lng={lng} zoom={13} dropPin={!reduced} label={hotelName} /> : null}</div>
+      <div className={s.map} data-on={locked}>{locked ? <MiniMap lat={lat} lng={lng} zoom={13} dropPin={!reduced} label={hotelName} /> : null}</div>
       <p className={s.line}>{line}</p>
       <p className={s.skip}>Tap to skip</p>
     </motion.div>,

@@ -27,3 +27,12 @@
 - [w0-design] Mood stamps: Blissful, Lazy, Fancy, Giggly, Romantic, Adventurous, Cosy, Fizzy (ids lowercase) — 8 covers the day-use moods without a picker scroll on 390 px — `MOODS` in MoodStamps.tsx.
 - [w0-design] Map pins ship as SVG strings with literal hex colours (a rasterised image can't read CSS vars) — `PIN_COLORS` in pins.ts must track tokens.css.
 - [w0-design] iOS splash screens cover 12 portrait sizes (iPhone SE 2 → 17 Pro Max/Air); no landscape — the PWA is portrait-first — add sizes to `SPLASHES` in export-icons.mjs.
+- [w1-add-stay] One-tap revisit = tapping a "Stayed here before" row preselects the hotel, copies last visit's type/booking/nights, keeps today's date and jumps to When — fastest path that still lets us change things — change `pickHotel` in AddStaySheet.tsx.
+- [w1-add-stay] Visit type is single-select using `types.ts` values, labelled "Day use", "Something else" etc.; the copy deck's multi-select chips (Date night, Birthday…) don't exist in the data model — add a `tags` column to support them.
+- [w1-add-stay] `booked_via` "Dayuse" shows as "Day-use app" — the brand name may appear only in the About credit — edit `BOOKED_VIA_LABELS` in Steps.tsx.
+- [w1-add-stay] Times are 24 h text fields with auto-colon and slot chips (10:00/14:00/20:00 in, 12:00/18:00/22:00 out), not `<input type=time>` — native pickers show 12 h on en-US phones — swap `TimeField`.
+- [w1-add-stay] A draft with content prompts "Pick up where we left off?" instead of resuming silently — a stale half-entry shouldn't hijack a one-tap revisit — make `setDraft(stored)` unconditional in AddStaySheet.
+- [w1-add-stay] Drafts store photo bytes as ArrayBuffers and the store falls back to bytes in `photoBlobs` — Playwright WebKit (and some Safari private modes) throw on Blobs in IndexedDB — drop the fallback once WebKit stores Blobs everywhere.
+- [w1-add-stay] Celebration auto-closes after 2.1 s (1.6 s reduced motion), tap skips; counter shows hotels for a new hotel and stays for a revisit — a revisit wouldn't move the hotel count — `Celebration.tsx`.
+- [w1-add-stay] Edit mode (`?edit=`) reuses the steps, all step segments are tappable, saves with "Save changes" and no celebration — edits aren't a new check-in — AddStaySheet `editId` branches.
+- [w1-add-stay] Removed the `exifr` manualChunk in vite.config.ts — it captured Vite's preload helper so the entry modulepreloaded exifr — restore it only together with a rule that keeps `vite/preload-helper` out.
