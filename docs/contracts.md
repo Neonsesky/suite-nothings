@@ -286,7 +286,8 @@ flush(): Promise<void>            // outbox oldest-first; stops at the first fai
 pull(): Promise<RemoteChange | null>   // changes(since) or bootstrap() the first time
 kick(): void                      // debounced flush after a local write
 onRemoteChange(cb: (c: RemoteChange) => void): () => void
-backoffDelay(attempt, random?): number   // 1s, 2s, 4s … max 5 min, ±20% jitter
+backoffDelay(attempt, random?): number   // 1s, 2s, 4s … max 5 min, ±20% jitter (BACKOFF_BASE_MS, BACKOFF_MAX_MS)
+activeAdapter(): DataAdapter | null      // diagnostics
 interface RemoteChange { hotels; visits; newVisits; photos; wishes; letters; settings; source: 'pull'|'echo' }
 interface SyncContext { adapter; listOutbox; removeOp; updateOp; applyRemote; onApplied?; getSince; setSince; setSyncState }
 ```
@@ -317,7 +318,7 @@ screenshot of the letter body goes in `private/checkpoints/…`.
 
 | Module | Exports |
 |---|---|
-| `dates.ts` | `formatDate('2026-06-19')→'19 Jun 2026'`, `formatDateShort`, `formatMonth→'June 2026'`, `isIsoDate`, `parseDate`, `toIsoDate`, `daysInMonth`, `normaliseTime`, `formatTimeRange(in,out)→'14:00 → 20:00'`, `timeToMinutes`, `zonedParts`, `today(tz?, now?)` (Asia/Dubai), `nowTime`, `dayNumber`, `addDays`, `daysBetween`, `compareDates`, `togetherDuration(now?)→{days,hours,minutes,seconds,months,monthDays,totalMs}`, `monthAnniversaryDate(n)`, `monthsTogether(now?)`, `isMonthAnniversary(date)`, `anniversaryNumber(date)`, `formatRelative(iso)` |
+| `dates.ts` | `formatDate('2026-06-19')→'19 Jun 2026'`, `formatDateShort`, `formatMonth→'June 2026'`, `isIsoDate`, `parseDate`, `toIsoDate`, `daysInMonth`, `normaliseTime`, `formatTimeRange(in,out)→'14:00 → 20:00'`, `timeToMinutes`, `zonedParts`, `today(tz?, now?)` (Asia/Dubai), `nowTime`, `dayNumber`, `addDays`, `daysBetween`, `compareDates`, `togetherDuration(now?)→{days,hours,minutes,seconds,months,monthDays,totalMs}`, `monthAnniversaryDate(n)`, `monthsTogether(now?)`, `isMonthAnniversary(date)`, `anniversaryNumber(date)`, `formatRelative(iso)`, `MONTHS_SHORT`, `MONTHS_LONG` |
 | `geo.ts` | `LatLng`, `BBox`, `haversineKm`, `kmToMiles`, `bearing`, `interpolateGreatCircle(a,b,t)`, `greatCircle(a,b,steps)` (unwrapped longitudes), `bbox`, `padBBox`, `inBBox`, `classifyLeg(km)→'glide'|'hop'|'flight'` (< 30, < 400, above), `legs(points)`, `pathKm`, `formatKm(km, units)`, `GLIDE_MAX_KM`, `HOP_MAX_KM` |
 | `geocode.ts` | `searchPlaces(q, { near?, hotelsOnly?=true, limit?=8, lang?, signal?, timeoutMs? })` (tries `osm_tag=tourism:hotel` first, then a looser search with hotels sorted first), `reverse(lat,lng,opts?)`, `nearbyHotels(lat,lng,{radiusKm?,limit?})` (nearest first), `normalisePhoton(feature, near?)`, `PlaceResult` (`id, name, lat, lng, osm_id, kind, isHotel, street, housenumber, area, city, region, country, country_code, postcode, address, tags, source, distanceKm?`), `GeocodeError` (codes `timeout|network|aborted|bad_response`) |
 | `ulid.ts` | `ulid(now?)` (monotonic), `ulidTime(id)`, `isUlid(id)` |
@@ -390,8 +391,9 @@ E2E helpers live in `tests/e2e/helpers.ts`:
 - `resetApp(page, { me?: 'nirsh'|'shady'|null, hash? })` wipes IDB and storage, sets `me`
   (default `nirsh`) and loads `hash`.
 - `watchConsole(page)` collects console errors and warnings.
-- `checkpoint(page, testInfo, name)` saves to `design/checkpoints/w0-foundation/`. Copy the
-  pattern for your own task folder.
+- `checkpoint(page, testInfo, name)` saves to `design/checkpoints/w0-foundation/`, but only
+  with `CHECKPOINTS=1`; otherwise it attaches the image to the report, so plain `npm run e2e`
+  never dirties the tree. Copy the pattern for your own task folder.
 - `isMobile(testInfo)` and `waitForStays(page)` are helpers.
 
 Tooling ignores `design/**`, `private/**`, `dist/**`, `dev-dist/**`, `.tmp/**` and `apps-script/**`.
