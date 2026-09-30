@@ -233,7 +233,9 @@ export default function MapScreen() {
 
       <div className={s.hud}>
         <div className={s.plate} data-tone={night ? 'dark' : 'light'}>
-          <SplitFlap value={title} ariaLabel={title} size="sm" className={s.title} live />
+          <span data-testid="map-title" data-chapter={chapter}>
+            <SplitFlap value={title} ariaLabel={title} size="sm" className={s.title} live />
+          </span>
           <span className={s.count} aria-live="polite" data-testid="map-count">
             {status === 'nowebgl' ? `${stays.length} ${stays.length === 1 ? 'stay' : 'stays'}` : countLabel}
           </span>

@@ -63,7 +63,7 @@ export function MapList({
       ) : null}
       {groups.map((g) => (
         <div key={g.key} className={s.listGroup}>
-          <h3>{g.title}</h3>
+          <h3 data-group-title>{g.title}</h3>
           {g.cities.map(({ city, stays: list }) => (
             <div key={city} className={s.listCity}>
               {g.key !== 'city' ? <h4>{city}</h4> : null}
