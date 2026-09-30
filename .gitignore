@@ -1,0 +1,30 @@
+node_modules/
+dist/
+dev-dist/
+coverage/
+.tmp/
+.vite/
+*.log
+*.tsbuildinfo
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Private (letter text, full spec, generated Letter.gs) — a symlink to a folder outside git
+private
+private/
+
+# Reference captures of other sites: never shipped, never committed (symlink to shared folder)
+design/references
+design/references/
+design/tools/node_modules/
+
+# Claude Code local state
+.claude/

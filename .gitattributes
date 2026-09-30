@@ -1,0 +1,12 @@
+# Append-only logs written by several parallel agents: keep both sides on merge
+CHANGELOG.md merge=union
+DECISIONS.md merge=union
+docs/handoff/*.md merge=union
+
+*.png binary
+*.jpg binary
+*.webp binary
+*.woff2 binary
+*.pbf binary
+*.webm binary
+*.mp4 binary
