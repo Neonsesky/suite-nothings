@@ -6,6 +6,10 @@
   background: var(--color-cream);
   overscroll-behavior: contain;
 }
+.screen[data-tone='dark'] {
+  background: var(--color-ink);
+  transition: background-color var(--dur-slow) var(--ease-standard);
+}
 @media (min-width: 64rem) {
   .screen {
     top: var(--header-h);
