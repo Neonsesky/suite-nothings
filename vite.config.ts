@@ -51,8 +51,9 @@ export default defineConfig(({ mode }) => {
         strategies: 'generateSW',
         registerType: 'prompt',
         injectRegister: false,
-        includeAssets: ['favicon.svg', 'icons/*.png'],
+        includeAssets: ['favicon.svg'],
         manifest: {
+          id: base,
           name: COUPLE.appName,
           short_name: COUPLE.shortName,
           description: COUPLE.tagline,
@@ -61,19 +62,35 @@ export default defineConfig(({ mode }) => {
           scope: base,
           display: 'standalone',
           orientation: 'portrait',
-          background_color: '#FFFFFF',
+          background_color: '#FFF8E9',
           theme_color: '#FFFFFF',
+          categories: ['lifestyle', 'travel'],
           icons: [
-            { src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+            { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+            { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+            { src: 'icons/icon-maskable-192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+            { src: 'icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+            { src: 'icons/icon-monochrome-512.png', sizes: '512x512', type: 'image/png', purpose: 'monochrome' },
+          ],
+          shortcuts: [
+            { name: 'Add a stay', url: `${base}#/add`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' }] },
+            { name: 'Map', url: `${base}#/map`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' }] },
           ],
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,svg,png,woff2,webmanifest,json,pbf}'],
+          // Splash images are excluded below: iOS fetches `apple-touch-startup-image` itself,
+          // and at ~12 large PNGs they're not worth the install-time precache weight.
+          globPatterns: ['**/*.{js,css,html,svg,png,woff2,webmanifest,json,pbf,geojson}'],
+          globIgnores: ['**/icons/splash-*.png'],
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
           navigateFallback: `${base}index.html`,
+          // Only extensionless (hash-routed) paths fall back to the shell; a request for a
+          // real asset that 404s should 404, not silently return index.html.
+          navigateFallbackDenylist: [/\/[^/?]+\.[^/]+$/],
           cleanupOutdatedCaches: true,
           runtimeCaching: [
             {
+              // Covers tiles, glyphs, sprites and the style JSON: all served from this host.
               urlPattern: ({ url }) => url.hostname === 'tiles.openfreemap.org',
               handler: 'CacheFirst',
               options: {
@@ -91,6 +108,12 @@ export default defineConfig(({ mode }) => {
                 expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
                 cacheableResponse: { statuses: [0, 200] },
               },
+            },
+            {
+              // Apps Script API responses must never be served from the SW cache; IndexedDB
+              // (via the outbox/store) is the offline source of truth for that data.
+              urlPattern: ({ url }) => url.hostname === 'script.google.com' || url.hostname.endsWith('.googleusercontent.com'),
+              handler: 'NetworkOnly',
             },
           ],
         },
