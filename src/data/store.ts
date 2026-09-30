@@ -516,9 +516,10 @@ export function setPhotoProcessor(p: PhotoProcessor): void {
 }
 
 /** Process, store blobs locally, attach to the visit, and queue the upload. */
-export async function addPhoto(visitId: string, file: Blob, opts: { caption?: string } = {}): Promise<Photo> {
+export async function addPhoto(visitId: string, file: Blob, opts: { caption?: string; processed?: ProcessedPhoto } = {}): Promise<Photo> {
   const d = requireDb();
-  const processed = await photoProcessor(file);
+  // `processed` skips the pipeline when the caller already resized the image (add-stay drafts).
+  const processed = opts.processed ?? (await photoProcessor(file));
   const now = nowIso();
   const photo_id = ulid();
   const thumbKey = `${photo_id}:thumb`;

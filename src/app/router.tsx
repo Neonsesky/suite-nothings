@@ -2,7 +2,7 @@
  * Tiny hash router. Every route is registered here (feature agents never edit this file):
  * each lazy-loads a component from its feature folder. URLs look like `#/map?city=Dubai`.
  */
-import { lazy, useSyncExternalStore, type ComponentType, type LazyExoticComponent, type MouseEvent, type ReactNode } from 'react';
+import { createContext, createElement, lazy, useContext, useSyncExternalStore, type ComponentType, type LazyExoticComponent, type MouseEvent, type ReactNode } from 'react';
 
 export type RouteName =
   | 'stays'
@@ -109,9 +109,19 @@ function subscribe(cb: () => void) {
   return () => window.removeEventListener('hashchange', cb);
 }
 
-/** Current hash location (reactive). */
+/**
+ * Pins the location for a subtree. The shell wraps the screen behind a sheet route in it, so
+ * `#/stay/:id` keeps its own params while `#/add` is open over it.
+ */
+const LocationOverride = createContext<Location | null>(null);
+export function LocationProvider({ location: loc, children }: { location: Location; children: ReactNode }) {
+  return createElement(LocationOverride.Provider, { value: loc }, children);
+}
+
+/** Current hash location (reactive), or the pinned one inside a `LocationProvider`. */
 export function useLocation(): Location {
-  return useSyncExternalStore(subscribe, snapshot, snapshot);
+  const live = useSyncExternalStore(subscribe, snapshot, snapshot);
+  return useContext(LocationOverride) ?? live;
 }
 
 /** Current route match + params + query. */
