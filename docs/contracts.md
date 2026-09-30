@@ -293,8 +293,25 @@ interface SyncContext { adapter; listOutbox; removeOp; updateOp; applyRemote; on
 ```
 It listens for `online` and `offline`. A `conflict` error drops the op, because the server copy
 wins on the next pull. Non-retryable errors (such as `unauthorized`) keep the ops and surface
-in `SyncState`. **Still to add (w1-backend):** 20 s polling while visible, a refresh on focus
-and visibility, and a pull right after writes.
+in `SyncState`. It polls every 20 s while visible, on focus/visibility/`online`, and right after
+writes (w1-backend). Additions:
+```ts
+POLL_INTERVAL_MS = 20_000; SINCE_OVERLAP_MS; withOverlap(since); opEntity(op)
+onArrival(cb: (a: Arrival) => void): () => void      // a stay the *other* person added (pulled)
+useRecentArrivals(): readonly Arrival[]              // last 30 s, newest first; animate the card in
+acknowledgeArrival(visitId): void
+interface Arrival { visitId; hotelId; addedBy; at }
+```
+
+### `connection.ts` (w1-backend)
+```ts
+validateApiUrl(raw, { allowLocal? }): { ok: true; url } | { ok: false; reason: 'empty'|'bad_url'|'dev_url'; message }
+testConnection(url, key): Promise<{ ok; outcome: 'connected'|'wrong_passphrase'|'not_apps_script'|'unreachable'|'server'|'bad_url'; message; stays? }>
+saveConnection(config|null), getConnection(), restoreConnection(), defaultApiUrl(), shortenUrl(url)
+inviteLink({ apiUrl, key }, as, base?), parseJoinParams(query), demoOnlyStays()
+```
+`ConnectionForm` also takes optional `initialUrl`, `initialKey` and `as`. Wire format:
+`apps-script/PROTOCOL.md`.
 
 ### `seed.ts`
 `buildSeed(letterBody?: string | null): Snapshot` returns 11 hotels, 12 visits (19 Jun 2026 →
