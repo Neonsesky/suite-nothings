@@ -227,3 +227,14 @@ export async function demoOnlyStays(): Promise<{ hotels: Hotel[]; visits: Visit[
   const hotels = (await db.getAll('hotels')).filter((h) => hotelIds.has(h.hotel_id));
   return { hotels, visits };
 }
+
+// ───────────────────────────── test hook ─────────────────────────────
+
+/**
+ * Test builds only (`VITE_ALLOW_LOCAL_API=1`): `window.__sn.store()` resolves the store module so
+ * Playwright can write stays without driving other teams' screens. Compiled out of production.
+ */
+export function installTestHooks(): void {
+  if (!ALLOW_LOCAL || typeof window === 'undefined') return;
+  (window as unknown as { __sn: unknown }).__sn = { store: () => import('./store'), sync: () => import('./sync') };
+}
