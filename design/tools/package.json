@@ -1,0 +1,11 @@
+{
+  "name": "suite-nothings-design-tools",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Design tooling: Dayuse token extraction, icon rendering, prototype screenshots.",
+  "dependencies": {
+    "@resvg/resvg-js": "2.6.2",
+    "playwright": "1.63.0"
+  }
+}
