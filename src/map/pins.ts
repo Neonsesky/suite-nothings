@@ -5,7 +5,7 @@
  */
 import type { FeatureCollection, LineString, Point } from 'geojson';
 import type { Map as MlMap } from 'maplibre-gl';
-import { clusterPin, homePin, rasterizePin, stayPin, wishlistPin, type PinArt } from '@/components/brand/pins';
+import { clusterPin, homePin, pinDataUrl, stayPin, wishlistPin, type PinArt } from '@/components/brand/pins';
 import type { HomeBase, Stay, Wish } from '@/data/types';
 import { averageRating } from '@/data/stays';
 import { greatCircle } from '@/lib/geo';
@@ -171,11 +171,30 @@ export function mapPixelRatio(): number {
   return Math.min(2, Math.max(1, typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1));
 }
 
+/**
+ * Rasterise pin art to ImageData. Like `rasterizePin` from the brand kit, but on a
+ * `willReadFrequently` (CPU) canvas, so reading pixels back never stalls the GPU.
+ */
+async function rasterize(art: PinArt, ratio: number): Promise<ImageData> {
+  const w = Math.round(art.width * ratio);
+  const h = Math.round(art.height * ratio);
+  const img = new Image(w, h);
+  img.src = pinDataUrl(art);
+  await img.decode();
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  if (!ctx) throw new Error('Canvas 2D is unavailable, so map pins cannot be drawn.');
+  ctx.drawImage(img, 0, 0, w, h);
+  return ctx.getImageData(0, 0, w, h);
+}
+
 /** Rasterise and add any images the map doesn't have yet. Safe to call repeatedly. */
 export async function ensurePinImages(map: MlMap, agg: PinAggregates): Promise<void> {
   const ratio = mapPixelRatio();
   const missing = [...requiredImages(agg)].filter(([id]) => !map.hasImage(id));
-  const rasters = await Promise.all(missing.map(async ([id, art]) => [id, await rasterizePin(art, ratio)] as const));
+  const rasters = await Promise.all(missing.map(async ([id, art]) => [id, await rasterize(art, ratio)] as const));
   for (const [id, data] of rasters) {
     if (!map.hasImage(id)) map.addImage(id, data, { pixelRatio: ratio });
   }

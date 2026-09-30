@@ -39,6 +39,8 @@ export function watchConsole(page: Page): string[] {
   const errors: string[] = [];
   page.on('console', (msg) => {
     if (msg.text().includes('Service Worker registration blocked by Playwright')) return;
+    // Headless Chromium's GL driver logs this for any WebGL page (the map); it isn't app output.
+    if (/GL Driver Message .*GPU stall due to ReadPixels/.test(msg.text())) return;
     if (msg.type() === 'error' || msg.type() === 'warning') errors.push(`${msg.type()}: ${msg.text()}`);
   });
   page.on('pageerror', (err) => errors.push(`pageerror: ${err.message}`));

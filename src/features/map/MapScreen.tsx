@@ -6,7 +6,7 @@ import { Button, ButtonLink } from '@/components/Button';
 import { ClockLoader } from '@/components/ClockLoader';
 import { SplitFlap } from '@/components/SplitFlap';
 import { IconClose, IconCompass, IconLayers, IconList, IconMap } from '@/components/icons';
-import { updateSettings, useSettings, useStays, useStoreReady, useWishes } from '@/data/store';
+import { updateSettings, useSettings, useStays, useStoreReady, useSyncState, useWishes } from '@/data/store';
 import { ABROAD, cityTab } from '@/data/stays';
 import type { MapLighting, Stay } from '@/data/types';
 import { haptic } from '@/lib/haptics';
@@ -56,6 +56,7 @@ export default function MapScreen() {
   const focus = useQueryParam('focus');
   const reduced = useReducedMotion();
   const isDesktop = useIsDesktop();
+  const { online } = useSyncState();
 
   const stays = useMemo(() => {
     if (!cityParam) return allStays;
@@ -222,6 +223,7 @@ export default function MapScreen() {
 
   return (
     <div className={s.screen} data-tone={night ? 'dark' : 'light'} data-list={listOpen || undefined} data-chapter={chapter} data-fallback={fallback || undefined} data-status={status}>
+      <h1 className="sr-only">Our map</h1>
       <div ref={containerRef} className={s.map} data-testid="map-canvas" />
 
       {status === 'loading' ? (
@@ -264,7 +266,7 @@ export default function MapScreen() {
             </button>
           ) : null}
         </div>
-        {fallback || (engine && !navigator.onLine) ? <p className={s.notice}>Offline. Showing what we&apos;ve already loaded.</p> : null}
+        {fallback || (engine && !online) ? <p className={s.notice}>Offline. Showing what we&apos;ve already loaded.</p> : null}
         {empty ? (
           <div className={s.emptyCard}>
             <strong>No pins yet</strong>
