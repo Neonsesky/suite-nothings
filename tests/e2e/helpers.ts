@@ -49,8 +49,18 @@ export function isMobile(testInfo: TestInfo): boolean {
   return !testInfo.project.name.startsWith('desktop');
 }
 
-/** Saves a screenshot into design/checkpoints/w0-foundation/<name>-<project>.png (committed evidence). */
+/** True when the run should write committed evidence (`CHECKPOINTS=1 npm run e2e`). */
+export const WRITE_CHECKPOINTS = process.env.CHECKPOINTS === '1';
+
+/**
+ * Saves design/checkpoints/w0-foundation/<name>-<project>.png (committed evidence) when
+ * CHECKPOINTS=1; otherwise attaches the screenshot to the test report only.
+ */
 export async function checkpoint(page: Page, testInfo: TestInfo, name: string, opts: { fullPage?: boolean } = {}): Promise<void> {
+  if (!WRITE_CHECKPOINTS) {
+    await testInfo.attach(name, { body: await page.screenshot({ fullPage: opts.fullPage ?? false }), contentType: 'image/png' });
+    return;
+  }
   const path = `design/checkpoints/w0-foundation/${name}-${testInfo.project.name}.png`;
   mkdirSync(dirname(path), { recursive: true });
   await page.screenshot({ path, fullPage: opts.fullPage ?? false });

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
-import { checkpoint, isMobile, resetApp, watchConsole } from './helpers';
+import { checkpoint, isMobile, resetApp, watchConsole, WRITE_CHECKPOINTS } from './helpers';
 
 test.describe('split-flap', () => {
   test('flips only changed cells, then settles on the new value', async ({ page }, testInfo) => {
@@ -12,7 +12,7 @@ test.describe('split-flap', () => {
     // 11 → 12: only the second cell animates.
     await expect(board.locator('[data-flipping="true"]')).toHaveCount(1);
     const frames = `design/checkpoints/w0-foundation/splitflap-frames-${testInfo.project.name}`;
-    if (testInfo.project.name === 'desktop-1440') {
+    if (WRITE_CHECKPOINTS && testInfo.project.name === 'desktop-1440') {
       mkdirSync(frames, { recursive: true });
       for (let i = 0; i < 6; i++) await board.screenshot({ path: `${frames}/frame-${i}.png` });
     }

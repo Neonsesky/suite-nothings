@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
-import { resetApp } from './helpers';
+import { resetApp, WRITE_CHECKPOINTS } from './helpers';
 
 // Records the signature split-flap animation for the checkpoint folder (desktop only).
 test.use({ video: { mode: 'on', size: { width: 720, height: 360 } }, viewport: { width: 720, height: 360 } });
@@ -23,7 +23,7 @@ test.describe('split-flap recording', () => {
     await expect(counter.locator('[data-value="14"]')).toBeVisible();
     const video = page.video();
     await page.close();
-    if (video) {
+    if (video && WRITE_CHECKPOINTS) {
       mkdirSync('design/checkpoints/w0-foundation', { recursive: true });
       await video.saveAs('design/checkpoints/w0-foundation/splitflap.webm');
     }
