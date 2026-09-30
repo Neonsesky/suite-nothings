@@ -9,6 +9,11 @@ test.describe('boot', () => {
     await expect(page.getByRole('heading', { name: "Who's checking in?" })).toBeVisible();
     await checkpoint(page, testInfo, 'welcome');
     await page.getByRole('button', { name: 'Nirsh' }).click();
+    // The rest of onboarding (w1-shell): demo, home base, install, in.
+    await page.getByRole('button', { name: 'Try demo' }).click();
+    await page.getByRole('button', { name: "That's home" }).click();
+    await page.getByRole('button', { name: 'Maybe later' }).click();
+    await page.getByRole('button', { name: 'Take me in' }).click();
     await waitForStays(page);
     await expect(page.getByText('Demo', { exact: true }).locator('visible=true')).toBeVisible();
     expect(errors).toEqual([]);
@@ -18,13 +23,13 @@ test.describe('boot', () => {
     const errors = watchConsole(page);
     await resetApp(page);
     await waitForStays(page);
-    await expect(page.getByText('11 hotels together', { exact: true })).toBeAttached();
+    await expect(page.getByText('11 hotels together', { exact: true }).first()).toBeAttached();
     await expect(page.locator('[data-visit-id]').first()).toBeVisible();
     await checkpoint(page, testInfo, 'stays');
     await checkpoint(page, testInfo, 'stays-full', { fullPage: true });
     // City tabs switch the grid.
-    await page.getByRole('group', { name: 'City' }).getByRole('button', { name: /Abroad/ }).click();
-    await expect(page.locator('[data-visit-id]')).toHaveCount(2);
+    await page.getByRole('tab', { name: /Abroad/ }).click();
+    await expect(page.locator('[data-section="our-stays"] a[data-visit-id]')).toHaveCount(2);
     await expect(page.getByRole('link', { name: /Çırağan Palace/ })).toBeVisible();
     expect(errors).toEqual([]);
   });
@@ -32,9 +37,9 @@ test.describe('boot', () => {
   test('search finds a stay by a word from our notes', async ({ page }) => {
     await resetApp(page);
     await waitForStays(page);
-    await page.getByRole('searchbox', { name: "Find a stay we've had" }).fill('lanterns');
-    await expect(page.locator('[data-visit-id]')).toHaveCount(1);
-    await expect(page.getByRole('link', { name: /The Chedi Muscat/ })).toBeVisible();
+    await page.getByRole('combobox', { name: "Find a stay we've had" }).fill('lanterns');
+    await expect(page.getByText('1 stay found')).toBeVisible();
+    await expect(page.getByRole('option').first()).toContainText('The Chedi Muscat');
   });
 });
 
@@ -75,7 +80,7 @@ test.describe('navigation', () => {
     await expect(page).toHaveURL(/#\/journey$/);
     await page.keyboard.press('/');
     await waitForStays(page);
-    await expect(page.getByRole('searchbox')).toBeFocused();
+    await expect(page.getByRole('combobox', { name: "Find a stay we've had" })).toBeFocused();
     await page.keyboard.press('Escape');
     await page.locator('body').click({ position: { x: 5, y: 300 } });
     await page.keyboard.press('n');
@@ -93,11 +98,14 @@ test.describe('delete and undo', () => {
   test('a deleted stay comes back with Undo', async ({ page }) => {
     await resetApp(page);
     await waitForStays(page);
-    const cards = page.locator('[data-visit-id]');
+    await page.getByRole('tab', { name: 'All' }).click();
+    const cards = page.locator('[data-section="our-stays"] a[data-visit-id]');
     const before = await cards.count();
     await cards.first().click();
-    await page.getByRole('button', { name: 'Delete this stay' }).click();
+    await page.getByRole('button', { name: 'Delete', exact: true }).click();
+    await page.getByRole('dialog', { name: 'Remove this stay?' }).getByRole('button', { name: 'Delete' }).click();
     await waitForStays(page);
+    await page.getByRole('tab', { name: 'All' }).click();
     await expect(cards).toHaveCount(before - 1);
     await page.getByRole('button', { name: 'Undo' }).click();
     await expect(cards).toHaveCount(before);

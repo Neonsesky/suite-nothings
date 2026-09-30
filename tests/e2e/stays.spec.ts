@@ -66,6 +66,9 @@ test.describe('Stays home', () => {
   test('empty state after clearing demo data', async ({ page }, testInfo) => {
     await resetApp(page, { hash: '#/settings' });
     await page.getByRole('button', { name: 'Clear demo data' }).click();
+    const confirm = page.getByRole('dialog', { name: 'Clear demo data?' });
+    await confirm.getByRole('button', { name: 'Clear' }).click();
+    await expect(confirm).toBeHidden();
     await page.goto('./#/');
     await expect(page.getByRole('heading', { name: 'Our first check-in is waiting' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Add our first stay' })).toHaveAttribute('href', '#/add');

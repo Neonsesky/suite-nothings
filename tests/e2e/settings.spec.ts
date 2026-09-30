@@ -50,7 +50,7 @@ test.describe('export and import', () => {
     const errors = watchConsole(page);
     await resetApp(page);
     await waitForStays(page);
-    await expect(page.getByText('11 hotels together', { exact: true })).toBeAttached();
+    await expect(page.getByText('11 hotels together', { exact: true }).first()).toBeAttached();
 
     await goToSettings(page);
     const [download] = await Promise.all([
@@ -84,7 +84,7 @@ test.describe('export and import', () => {
 
     await page.goto('./#/');
     await waitForStays(page);
-    await expect(page.getByText('11 hotels together', { exact: true })).toBeAttached();
+    await expect(page.getByText('11 hotels together', { exact: true }).first()).toBeAttached();
     expect(errors).toEqual([]);
   });
 });

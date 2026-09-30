@@ -385,18 +385,33 @@ The `#/gallery` route shows every component with demo data. Use it for screensho
 
 ---
 
-## Stubs with final signatures (owners replace the bodies)
+## Cross-feature seams (after int-1)
+
+These were stubs in wave 0. Wave 1 built them for real; the signatures below are current.
 
 | Module | Signature | Owner |
 |---|---|---|
-| `src/map/MiniMap.tsx` | `MiniMap(props: { lat; lng; zoom?; pitch?; dropPin?; label?; className?; interactive?; onMove?(center) })`, named and default export | w1-map |
-| `src/pwa/install.ts` | `useInstallPrompt(): { canInstall; isIOS; isStandalone; promptInstall(): Promise<'accepted'\|'dismissed'\|'unavailable'> }`, `detectIOS(ua?)`, `detectStandalone()` | w1-shell |
-| `src/pwa/register.ts` | `registerServiceWorker(): Promise<void>` (prompts "A fresh version is ready"; waits for `isBusy()` to clear) | w1-shell |
-| `src/features/connection/ConnectionForm.tsx` | `ConnectionForm({ onConnected?(), compact? })` | w1-backend |
-| `src/features/connection/ConnectionSection.tsx` | `ConnectionSection()` (Settings section) | w1-backend |
-| `src/features/milestones/engine.ts` | `checkMilestones(stays: readonly Stay[], prev: readonly Milestone[]): Milestone[]` (the stub returns `[]`); `Milestone { id: MilestoneId; title; caption; visitId; achievedOn }` | later wave |
+| `src/map/MiniMap.tsx` | `MiniMap(props: { lat; lng; zoom?; pitch?; dropPin?; label?; className?; interactive?; onMove?(center) })`, named and default export. Used by stay detail, add-stay (pin drop and celebration) and onboarding. | w1-map |
+| `src/pwa/install.ts` | `useInstallPrompt(): { canInstall; isIOS; isStandalone; promptInstall(): Promise<'accepted'\|'dismissed'\|'unavailable'> }` (on iOS it opens the illustrated sheet), `detectIOS(ua?)`, `detectIOSSafari(ua?)`, `detectStandalone()`, `openIOSInstallSheet()`, `closeIOSInstallSheet()`, `useIOSInstallSheetOpen()`. The window event `sn:open-ios-install` also opens the sheet. | w1-shell |
+| `src/pwa/register.ts` | `registerServiceWorker(): Promise<void>`. It prompts "A fresh version is ready" and waits for `isBusy()` to clear. | w1-shell |
+| `src/lib/busy.ts` | `markBusy(key): release`, `useMarkBusy(active, key)`, `isBusy()`, `onBusyChange(cb)`. Add-stay and Write a note register while open. | w0 |
+| `src/features/connection/ConnectionForm.tsx` | `ConnectionForm({ onConnected?(), compact?, initialUrl?, initialKey?, as? })` | w1-backend |
+| `src/features/connection/ConnectionSection.tsx` | `ConnectionSection()` (the Settings section, including Demo ↔ Live) | w1-backend |
+| `src/features/connection/JoinRoute.tsx` | `#/join?…`: sets `me`, connects, then goes to `#/welcome` (onboarding starts at Home base) or `#/` | w1-backend |
+| `src/features/share/index.ts` | `shareStay(visitId)`: Web Share, then clipboard, then a toast. The share-cards wave replaces the body and keeps the export. | w1-stays |
+| `src/features/stays/transition.ts` | `openStay(id)` and `closeStay(id)`: card ↔ detail View Transition | w1-stays |
+| `src/features/milestones/engine.ts` | `checkMilestones(stays: readonly Stay[], prev: readonly Milestone[]): Milestone[]` (the stub returns `[]`); `Milestone { id: MilestoneId; title; caption; visitId; achievedOn }`. `milestones/index.ts` `showMilestoneUnlock()` is a no-op. | later wave |
 | `src/features/letters/unlock.ts` | `parseUnlockRule(raw)`, `isUnlocked(letter, { visits, hotels, countriesAbroad }, today): boolean`, `unlockHint(rule)`. **Fully implemented and tested.** | w1-shell |
 | `src/enrichment/index.ts` | `requestEnrichment(hotelId, { force? }?): Promise<void>` (a no-op; marks the hotel `skipped`), `useEnrichmentStatus(hotelId): 'idle'\|'running'\|'done'\|'failed'\|'skipped'`, `EnrichmentProvider { id; canEnrich(hotel); enrich(hotel, signal): Promise<EnrichmentPatch> }` | later wave |
+
+**Hero header:** while its hero is at the top, a screen sets `<html data-hero-header="1">` and
+marks the hero element with a bare `data-hero` attribute. On desktop, `Shell` draws the header
+transparent until the page has scrolled 80% of the hero's height.
+
+**Outbox actions:** `upsertHotel`, `upsertVisit`, `deleteVisit`, `uploadPhoto`
+(`{ photo, thumb_key, full_key }`; the blobs stay in `photoBlobs`, which may hold `bytes` on WebKit), `upsertWish`,
+`markLetterRead`, `upsertLetter` (a full `Letter`) and `updateSettings`. Both adapters and
+`sync.opEntity()` handle every action.
 
 Feature stubs share `src/features/stubs.module.css`. Once no stub imports it, delete it.
 
