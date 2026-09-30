@@ -394,6 +394,78 @@ Feature stubs share `src/features/stubs.module.css`. Once no stub imports it, de
 
 ---
 
+## Map engine (`src/map/`, w1-map)
+
+Everything here lives in the lazy map chunk. Import `@/map/engine` **only** with dynamic
+`import()`; the pure modules (`chapters`, `lighting`, `pins`, `prewarm`) have no MapLibre runtime
+import and are safe anywhere (they're unit-tested).
+
+```ts
+// engine.ts
+loadMaplibre(): Promise<typeof import('maplibre-gl')>   // once; also loads the CSS and sets the worker URL
+supportsWebGL(): boolean
+createSuiteMap(container: HTMLElement, opts: SuiteMapOptions): Promise<SuiteMap>
+interface SuiteMapOptions {
+  home: HomeBase; lighting?: 'auto'|'day'|'golden'|'night'; data?: MapData;
+  camera?: Partial<Framing>; chapter?: Chapter /* initial framing, default 'city' */;
+  interactive?: boolean /* true */; overlays?: boolean /* pins etc., true */;
+  reducedMotion?: boolean; settle?: boolean /* = interactive */;
+}
+interface MapData { stays: readonly Stay[]; wishes?: readonly Wish[]; home?: HomeBase | null }
+interface SuiteMap {
+  map: maplibregl.Map; maplibre: typeof maplibregl; breakpoints: { city; country }; home: HomeBase;
+  chapter(): Chapter; framing(c): Framing; setChapter(c, { animate? }?): void;   // flyTo (jump under reduced motion)
+  setLighting(mode): void; look(): LightingLook;
+  setData(d: MapData): Promise<void>; setArcsVisible(b): void; setIdleSpin(b): void;
+  select(hotelId | null): void; flyToHotel(hotelId, { zoom? }?): void; resetNorth(): void;
+  onChapterChange(cb(chapter, prev)): off; onView(cb({ zoom, chapter, inView, bearing, pitch })): off;
+  onPinClick(cb(StayPinProps)): off /* hotelId '' = tapped empty map */;
+  onLookChange(cb(LightingLook)): off; onFallbackChange(cb(boolean)): off; isFallback(): boolean; hasTiles(): boolean;
+  // Journey helpers
+  addLine(id, coords: [lng, lat][], { color? /* ginger */, width?, outline? /* ink casing, true */, opacity?, dash? }?): LineHandle;
+  //   LineHandle { id; setCoordinates(c); setProgress(0..1) /* draws the first p of the line (line-progress) */; setOpacity(o); remove() }
+  addMarker(el: HTMLElement, lngLat, { anchor?: 'center'|'bottom' }?): MarkerHandle;   // traveller icon
+  //   MarkerHandle { element; setLngLat(ll); setRotation(deg /* map-aligned */); remove() }
+  project(lngLat): { x, y }; unproject({ x, y }): { lng, lat };
+  destroy(): void;
+}
+```
+- Lines and markers survive the offline fallback style swap (the engine re-installs them).
+- For the journey, drive the camera yourself with `map.jumpTo` each frame; call `setIdleSpin(false)`
+  and pass `settle: false` so the engine never fights your timeline.
+- Layer ids we add: `sn-pins`, `sn-cities`, `sn-countries`, `sn-wishes`, `sn-home`, `sn-arcs(-casing)`,
+  `sn-line-<id>(-casing)`; sources `sn-*`. The vector style is `src/map/style.json` (tile URL:
+  `openmaptiles` source; `TILE_STYLE_URL` in env stays the one-line swap for the whole style).
+
+```ts
+// chapters.ts (pure)
+type Chapter = 'city'|'country'|'world'
+computeBreakpoints(home): { city, country }        // Dubai ≈ 9.48 / 5.49
+chapterForZoom(zoom, bp): Chapter
+framingFor(chapter, home, bp, viewport): { center, zoom, pitch, bearing }
+chapterTitle(chapter, home): string                // DUBAI / UNITED ARAB EMIRATES / THE WORLD
+settleTarget(zoom, bp), fitZoom(bbox, vp?), cityBBox(home), countryBBox(home), flapText(s), CHAPTER_PITCH
+// lighting.ts (pure)
+solarPosition(date, lat, lng), phaseAt(date, lat, lng), resolvePhase(mode, date, lat, lng), lookFor(phase, sun?)
+LightingPhase = 'dawn'|'day'|'golden'|'sunset'|'night'; LIGHTING_REFRESH_MS = 5 min
+// pins.ts
+aggregate(stays, wishes, home): PinAggregates     // pins per hotel, city + country bubbles, wishes, arcs, home
+ensurePinImages(map, agg), mapPixelRatio() /* ≤ 2 */, neighbours(agg, hotelId, n)
+// prewarm.ts
+prewarmHomeTiles(home, tileJsonUrl, signal?)      // z9–14, ≤ 300 tiles, only with an SW, online, idle
+```
+
+`MiniMap` keeps its props contract. It's lazy (IntersectionObserver), non-interactive by default,
+pitched 50° at z15, shows a `StayArt` tile while loading or without WebGL, bounces the pin with
+`dropPin`, and with `interactive` + `onMove` becomes a pin picker (the pin lifts while dragging;
+`onMove` fires on `moveend` with the centre rounded to 6 dp).
+
+Test hook: with `localStorage['sn:e2e'] === '1'`, MapScreen sets `window.__sn.map` to its `SuiteMap`.
+Map specs are named `map*.spec.ts` and run only in the `map-390`, `map-412` and `map-1440`
+Playwright projects (Chromium with software GL flags).
+
+---
+
 ## Tooling
 
 | Command | What it does |

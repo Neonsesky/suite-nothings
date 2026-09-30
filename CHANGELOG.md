@@ -1,5 +1,14 @@
 # Changelog
 
+## [w1-map] 2026-10-01
+- The 3D map (SPEC §9): one MapLibre 6 adaptive globe with City / Country / World chapters whose breakpoints come from the home base (Dubai 9.48 / 5.49; London and Singapore are tested). Every chapter change is a zoom-interpolated crossfade (pins → city bubbles → country bubbles, 3D buildings, arcs), and a gentle settle after gestures stops as soon as you touch the map again.
+- HUD: a split-flap chapter title on a contrast plate (light or dark with the lighting), a debounced "n stays in view" count, one-line chips that scroll sideways (City, Country, World, List view), a lighting and route menu, a compass, and an always-visible OSM/OpenFreeMap attribution in the reserved bottom-left corner.
+- Pins: rasterised brand key-tag pins with revisit counts, a ginger glow for favourites, dashed wishlist pins and the home marker. The selected pin and its neighbours become labelled HTML buttons. Tapping a pin opens a StayCard (a sheet on mobile, a floating card on desktop) that links to `#/stay/:id`. `?city=` and `?focus=` work, and the list view groups stays by chapter and then city.
+- Daylight lighting from a solar-position model (dawn, day, golden hour, sunset, night) drives the sky, light, land, water, roads, buildings and labels. It refreshes every 5 minutes and Settings can override it. The World chapter has an idle spin, which reduced motion turns off.
+- Fallbacks: Natural Earth 110m land (86 KB) lets the globe, pins and arcs render offline, and home-city tiles for z9–14 are pre-warmed politely (at most 300).
+- `createSuiteMap` engine API for the journey (lines with `line-progress`, markers, project/unproject), and a real lazy `MiniMap` (pin drop, pin picker, StayArt fallback).
+- Tests: 46 new unit tests (chapters, lighting, pins, list grouping, prewarm) and 22 map e2e runs across 390, 412 and 1440 (about 32 fps zooming with software GL). Checkpoint 2 evidence is in `design/checkpoints/cp2/map/`.
+
 ## [w0-foundation] 2026-09-30
 - Scaffold: Vite 8, React 19.3, TypeScript 6.0 (strict), ESLint 10 and typescript-eslint 8 (zero warnings), Vitest 5 with happy-dom and fake-indexeddb, Playwright 1.63 (WebKit 390, Chromium 412, desktop 1440), vite-plugin-pwa (generateSW, prompt; runtime caching for OpenFreeMap and Photon). Every dependency is pinned and the lockfile is committed.
 - Hash router with every route pre-registered and lazy-loaded; shell with the mobile tab bar, desktop header, N/M/J// shortcuts, global and per-route error boundary, toast host, offline banner and Demo badge; first-launch redirect to `#/welcome`.
