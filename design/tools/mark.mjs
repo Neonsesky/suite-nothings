@@ -45,21 +45,26 @@ export function markSvg(o = {}) {
   const sw = 2.6;
   const mono = variant === 'mono';
   const fobFill = variant === 'full' ? honey : mono ? ink : 'none';
-  const detail = mono ? paper : ink;
   const ringEl = `<circle cx="${RING.cx}" cy="${RING.cy}" r="${RING.r}" fill="none" stroke="${ink}" stroke-width="${sw}"/>`;
   const holeFill = variant === 'outline' ? 'none' : paper;
-  const inside = [
-    // the ring sits behind the tag and shows again through the punched hole
-    ringEl,
-    `<path d="${FOB}" fill="${fobFill}" stroke="${ink}" stroke-width="${sw}" stroke-linejoin="round"/>`,
-    inner && !mono
-      ? `<path d="${FOB_INNER}" fill="none" stroke="${ink}" stroke-width="1.3" opacity="0.5"/>`
-      : '',
-    `<circle cx="${HOLE.cx}" cy="${HOLE.cy}" r="${HOLE.r}" fill="${holeFill}" stroke="${mono ? 'none' : ink}" stroke-width="1.8"/>`,
-    `<clipPath id="${id}"><circle cx="${HOLE.cx}" cy="${HOLE.cy}" r="${HOLE.r - (mono ? 0 : 0.9)}"/></clipPath>`,
-    `<g clip-path="url(#${id})">${ringEl}</g>`,
-    `<g fill="none" stroke="${detail}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${DIGITS.map((d) => `<path d="${d}"/>`).join('')}</g>`,
-  ];
+  const digits = (stroke) =>
+    `<g fill="none" stroke="${stroke}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${DIGITS.map((d) => `<path d="${d}"/>`).join('')}</g>`;
+  const inside = mono
+    ? [
+        // mono knocks the hole and the number out, so it works as an alpha mask (Android themed icons)
+        `<mask id="${id}" maskUnits="userSpaceOnUse" x="-40" y="-20" width="80" height="40"><rect x="-40" y="-20" width="80" height="40" fill="#fff"/><circle cx="${HOLE.cx}" cy="${HOLE.cy}" r="${HOLE.r}" fill="#000"/>${digits('#000')}</mask>`,
+        `<g mask="url(#${id})">${ringEl}<path d="${FOB}" fill="${ink}" stroke="${ink}" stroke-width="${sw}" stroke-linejoin="round"/></g>`,
+      ]
+    : [
+        // the ring sits behind the tag and shows again through the punched hole
+        ringEl,
+        `<path d="${FOB}" fill="${fobFill}" stroke="${ink}" stroke-width="${sw}" stroke-linejoin="round"/>`,
+        inner ? `<path d="${FOB_INNER}" fill="none" stroke="${ink}" stroke-width="1.3" opacity="0.5"/>` : '',
+        `<circle cx="${HOLE.cx}" cy="${HOLE.cy}" r="${HOLE.r}" fill="${holeFill}" stroke="${ink}" stroke-width="1.8"/>`,
+        `<clipPath id="${id}"><circle cx="${HOLE.cx}" cy="${HOLE.cy}" r="${HOLE.r - 0.9}"/></clipPath>`,
+        `<g clip-path="url(#${id})">${ringEl}</g>`,
+        digits(ink),
+      ];
   const c = 32;
   const g = `<g transform="translate(${c} ${c}) scale(${scale}) translate(${-c} ${-c})"><g transform="${TRANSFORM}">${inside.join('')}</g></g>`;
   const back = bg ? `<rect width="64" height="64" fill="${bg}"/>` : '';
