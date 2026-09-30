@@ -2,8 +2,8 @@
 // The React component (src/components/brand/KeyTagMark.tsx) mirrors these paths.
 // Usage: import { markSvg } from './mark.mjs'
 
-export const INK = '#1A1A1A';
-export const HONEY = '#FFC83D';
+export const INK = '#292935';
+export const HONEY = '#FFC536';
 export const PAPER = '#FFFFFF';
 
 // Local geometry is drawn along the x-axis, then rotated so the tag hangs off its ring.

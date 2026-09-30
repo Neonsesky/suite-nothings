@@ -9,12 +9,12 @@
  */
 
 export const PIN_COLORS = {
-  ink: '#1A1A1A',
+  ink: '#292935',
   paper: '#FFFFFF',
-  cream: '#FFF7E6',
-  honey: '#FFC83D',
-  ginger: '#FF6A3D',
-  gingerSoft: '#FFD9CC',
+  cream: '#FFF8E9',
+  honey: '#FFC536',
+  ginger: '#FC5E57',
+  gingerSoft: '#FFE1DC',
 } as const;
 
 export type PinArt = {

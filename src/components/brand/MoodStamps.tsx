@@ -49,7 +49,7 @@ const glyphs: Record<MoodId, Glyph> = {
     <>
       <path
         d="M11 20s-7-4.3-7-9.4A4 4 0 0 1 11 8.2a4 4 0 0 1 7 2.4C18 15.7 11 20 11 20z"
-        style={{ fill: 'var(--color-ginger, #FF6A3D)' }}
+        style={{ fill: 'var(--color-ginger, #FC5E57)' }}
       />
       <path d="M18.5 3v3.5M16.75 4.75h3.5" />
     </>
@@ -118,8 +118,8 @@ export function MoodStamp({
   const label = title ?? meta.label;
   const fill = selected
     ? meta.id === 'romantic'
-      ? 'var(--color-ginger-soft, #FFD9CC)'
-      : 'var(--color-honey-soft, #FFE9A8)'
+      ? 'var(--color-ginger-soft, #FFE1DC)'
+      : 'var(--color-honey-soft, #FFEAB0)'
     : 'var(--color-paper, #FFFFFF)';
   const long = meta.label.length > 8;
 
@@ -140,7 +140,7 @@ export function MoodStamp({
       </defs>
       <g
         transform={tilted ? `rotate(${meta.tilt} 36 36)` : undefined}
-        style={{ color: 'var(--color-ink, #1A1A1A)' }}
+        style={{ color: 'var(--color-ink, #292935)' }}
       >
         <circle cx="36" cy="36" r="33" style={{ fill }} stroke="currentColor" strokeWidth={2.5} />
         <circle

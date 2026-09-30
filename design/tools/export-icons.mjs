@@ -9,7 +9,7 @@ import { markSvg, INK, HONEY, PAPER } from './mark.mjs';
 const root = resolve(import.meta.dirname, '../..');
 const out = `${root}/public/icons`;
 mkdirSync(out, { recursive: true });
-const CREAM = '#FFF7E6';
+const CREAM = '#FFF8E9';
 
 const png = (svg, size, file) => {
   const r = new Resvg(svg, { fitTo: { mode: 'width', value: size } });
@@ -68,7 +68,7 @@ for (const [w, h, dpr, devices] of SPLASHES) {
     html,body{margin:0;height:100%;background:${CREAM};color:${INK};font-family:Manrope,sans-serif}
     main{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding-bottom:6%}
     h1{margin:6px 0 0;font-size:30px;font-weight:800;letter-spacing:-0.01em}
-    p{margin:0;font-size:15px;font-weight:500;color:#5C5C66}</style>
+    p{margin:0;font-size:15px;font-weight:500;color:#54545D}</style>
     <main>${mark}<h1>Suite Nothings</h1><p>Every room we've made ours.</p></main>`);
   await page.evaluate(() => document.fonts.ready);
   const file = `splash-${w * dpr}x${h * dpr}.png`;

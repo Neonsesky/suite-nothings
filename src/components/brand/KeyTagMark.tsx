@@ -25,8 +25,8 @@ const DIGITS =
 const HOLE = { cx: -17.4, cy: 0, r: 2.9 };
 const RING = { cx: -26.2, cy: 2.2, r: 9 };
 
-const INK = 'var(--color-ink, #1A1A1A)';
-const HONEY = 'var(--color-honey, #FFC83D)';
+const INK = 'var(--color-ink, #292935)';
+const HONEY = 'var(--color-honey, #FFC536)';
 const PAPER = 'var(--color-paper, #FFFFFF)';
 
 export function KeyTagMark({
