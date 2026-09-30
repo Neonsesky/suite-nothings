@@ -187,7 +187,6 @@ test.describe('map', () => {
         }),
     );
     testInfo.annotations.push({ type: 'fps', description: fps.toFixed(1) });
-    console.log(`map zoom fps (software GL): ${fps.toFixed(1)}`);
     expect(fps).toBeGreaterThan(10);
   });
 });
