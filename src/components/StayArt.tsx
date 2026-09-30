@@ -110,7 +110,7 @@ export function StayArt({ seed, motif, label, className, rounded }: StayArtProps
       <>
         <circle cx={sunX} cy={sunY} r={30} fill={p.sun} stroke={ink} strokeWidth={2.5} />
         <rect x={-5} y={170} width={410} height={140} fill={p.ground} stroke={ink} strokeWidth={2.5} />
-        <rect x={24} y={192} width={300} height={96} rx={18} fill="var(--color-focus)" opacity={0.28} stroke={ink} strokeWidth={2.5} />
+        <rect x={24} y={192} width={300} height={96} rx={18} fill="color-mix(in srgb, var(--color-focus) 22%, var(--color-paper))" stroke={ink} strokeWidth={2.5} />
         {waves}
         <path d={`M${palmX} 290 C ${palmX - 6} 240, ${palmX + 4} 200, ${palmX + 14} 150`} fill="none" stroke={ink} strokeWidth={4} strokeLinecap="round" />
         {[-60, -20, 20, 60, 110].map((a) => (
