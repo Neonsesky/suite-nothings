@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suite Nothings — Stay 12, and still checking in.</title>
+<link rel="stylesheet" href="../../src/styles/tokens.css">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="proto.css">
+</head>
+<body class="page-home has-tabbar">
+
+<div class="top-strip" id="top-strip">
+  <span data-mark="28"></span>
+  <span class="top-strip-copy">Put us on your home screen</span>
+  <button class="btn btn-primary btn-sm">Install</button>
+  <button class="top-strip-close" data-dismiss="#top-strip" aria-label="Not now">&times;</button>
+</div>
+
+<header class="site-header is-transparent" data-hero-header>
+  <div class="header-row">
+    <a class="brand" href="index.html"><span data-mark="32"></span><span>Suite Nothings</span></a>
+    <nav class="header-nav">
+      <a href="map.html">Map</a>
+      <a href="#journey">Journey</a>
+      <a href="#us">Us</a>
+    </nav>
+    <div class="header-search-pill"><svg class="icon" style="width:1rem;height:1rem"><use href="#i-search"></use></svg>Find a stay we've had</div>
+    <div class="header-actions">
+      <button class="btn btn-primary" data-open-add="0">+ Add a stay</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-art"><div class="stayart" style="width:100%;height:100%" data-story="hero"></div></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-inner">
+    <div class="hero-top">
+      <div class="search-pill hero-search-wrap">
+        <span class="search-pill-icon"><svg class="icon" style="width:1.1rem;height:1.1rem;stroke:#fff"><use href="#i-search"></use></svg></span>
+        <input class="search-pill-field" type="search" placeholder="Find a stay we've had">
+        <span class="search-pill-divider" style="display:none"></span>
+        <button class="btn btn-primary search-pill-btn" data-open-add="0">Find</button>
+      </div>
+      <a class="hero-around" href="#" data-open-add="0" onclick="document.querySelector('[data-open-add]').click();return false;">We're at a hotel right now</a>
+      <div class="hero-trust">
+        <span>Every room, remembered</span>
+        <span>12 stays and counting</span>
+      </div>
+    </div>
+    <div class="hero-spacer"></div>
+    <div>
+      <h1 class="hero-headline">Stay 12, and still checking in.</h1>
+      <p class="hero-sub">Every hotel we've made ours, in one diary.</p>
+    </div>
+  </div>
+</section>
+
+<main>
+  <div class="container splitflap-section">
+    <div class="splitflap">
+      <div class="splitflap-board" data-splitflap-count></div>
+      <span class="splitflap-caption" data-splitflap-caption>hotels together</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="stats-panel">
+      <div class="stat-item"><span class="stat-icon"><svg class="icon"><use href="#i-bed"></use></svg></span><div><div class="stat-value" data-stat="hotels"></div><div class="stat-label">Hotels</div></div></div>
+      <div class="stat-item"><span class="stat-icon"><svg class="icon"><use href="#i-key"></use></svg></span><div><div class="stat-value" data-stat="visits"></div><div class="stat-label">Visits</div></div></div>
+      <div class="stat-item"><span class="stat-icon"><svg class="icon"><use href="#i-clock"></use></svg></span><div><div class="stat-value" data-stat="hours"></div><div class="stat-label">Hours of hotel time together</div></div></div>
+      <div class="stat-item"><span class="stat-icon"><svg class="icon"><use href="#i-pin"></use></svg></span><div><div class="stat-value" data-stat="cities"></div><div class="stat-label">Cities</div></div></div>
+      <div class="stat-item"><span class="stat-icon"><svg class="icon"><use href="#i-globe"></use></svg></span><div><div class="stat-value" data-stat="countries"></div><div class="stat-label">Countries</div></div></div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2 class="section-title">Our stays</h2></div>
+      <div class="tabs-row">
+        <button class="tab-pill is-active" data-tab="all">All</button>
+        <button class="tab-pill" data-tab="dubai">Dubai</button>
+        <button class="tab-pill" data-tab="sharjah">Sharjah</button>
+        <button class="tab-pill" data-tab="abudhabi">Abu Dhabi</button>
+        <button class="tab-pill" data-tab="abroad">Abroad</button>
+      </div>
+      <div class="card-rail" data-card-rail></div>
+      <a class="btn-ghost see-all-link" href="map.html">See all our Dubai stays &rarr;</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2 class="section-title">Our story in three stays</h2></div>
+      <div class="story-three">
+        <div class="story-item" data-story="story-first">
+          <span class="story-number">1</span>
+          <div class="story-photo"></div>
+          <div class="story-body"><div class="story-label">First</div><div class="story-caption">Where it all started</div><div class="story-date"></div></div>
+        </div>
+        <div class="story-item" data-story="story-latest">
+          <span class="story-number">2</span>
+          <div class="story-photo"></div>
+          <div class="story-body"><div class="story-label">Latest</div><div class="story-caption">Most recent check-in</div><div class="story-date"></div></div>
+        </div>
+        <div class="story-item" data-story="story-fave">
+          <span class="story-number">3</span>
+          <div class="story-photo"></div>
+          <div class="story-body"><div class="story-label">Favourite</div><div class="story-caption">The one we keep talking about</div><div class="story-date"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="install-section">
+    <div class="container">
+      <div class="install-banner">
+        <span data-mark="40"></span>
+        <div class="install-banner-copy">
+          <div class="install-banner-title">Put us on your home screen</div>
+          <div class="install-banner-body">One tap and Suite Nothings lives right there, no browser bar.</div>
+        </div>
+        <button class="btn btn-primary">Add to home screen</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2 class="section-title">On this day</h2></div>
+      <div class="moment-card">
+        <div class="moment-photo"><div class="stayart" style="width:100%;height:100%" data-story="hero"></div></div>
+        <div>
+          <div class="moment-text">1 year ago today, we checked into Golden Tulip Al Barsha.</div>
+          <div class="moment-sub">Where it all started, Al Barsha, Dubai.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2 class="section-title">Next check-ins</h2><button class="btn btn-secondary btn-sm">Surprise me</button></div>
+      <div class="wishlist-row">
+        <div class="wish-card"><div class="wish-card-name">One&amp;Only Royal Mirage</div><div class="wish-card-area">Al Sufouh, Dubai</div></div>
+        <div class="wish-card"><div class="wish-card-name">Burj Al Arab</div><div class="wish-card-area">Jumeirah, Dubai</div></div>
+        <div class="wish-card"><div class="wish-card-name">Raffles Doha</div><div class="wish-card-area">West Bay, Doha — abroad</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2 class="section-title">Frequently asked by us</h2></div>
+      <div class="faq-list">
+        <details class="faq-item" open><summary>Where was our first stay?<span class="icon-chevron">&#8250;</span></summary><div class="faq-answer" id="faq-first"></div></details>
+        <details class="faq-item"><summary>Which hotel do we keep going back to?<span class="icon-chevron">&#8250;</span></summary><div class="faq-answer" id="faq-regular"></div></details>
+        <details class="faq-item"><summary>What's the farthest we've been from home?<span class="icon-chevron">&#8250;</span></summary><div class="faq-answer" id="faq-farthest"></div></details>
+        <details class="faq-item"><summary>What was our longest stay?<span class="icon-chevron">&#8250;</span></summary><div class="faq-answer" id="faq-longest"></div></details>
+        <details class="faq-item"><summary>How many hours have we spent in hotels together?<span class="icon-chevron">&#8250;</span></summary><div class="faq-answer" id="faq-hours"></div></details>
+        <details class="faq-item"><summary>Whose picks rate higher?<span class="icon-chevron">&#8250;</span></summary><div class="faq-answer" id="faq-picks"></div></details>
+        <details class="faq-item"><summary>When was our last check-in?<span class="icon-chevron">&#8250;</span></summary><div class="faq-answer" id="faq-lastcheckin"></div></details>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>JUMEIRAH &middot; ROVE &middot; ADDRESS &middot; ATLANTIS &middot; MANDARIN ORIENTAL &middot; WALDORF ASTORIA &middot; HILTON</span>
+      <span aria-hidden="true">JUMEIRAH &middot; ROVE &middot; ADDRESS &middot; ATLANTIS &middot; MANDARIN ORIENTAL &middot; WALDORF ASTORIA &middot; HILTON</span>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-row">
+    <div class="footer-brand"><span data-mark="24"></span>Suite Nothings</div>
+    <div class="footer-credit">Made by Nirsh for Shady &middot; <span class="footer-counter" data-together-counter></span></div>
+    <nav class="footer-nav">
+      <a href="index.html">Stays</a><a href="map.html">Map</a><a href="#journey">Journey</a><a href="#us">Us</a><a href="#settings">Settings</a><a href="#about">About</a>
+    </nav>
+  </div>
+</footer>
+
+<nav class="tab-bar">
+  <a class="tab-item is-active" href="index.html"><svg class="icon"><use href="#i-stays"></use></svg>Stays</a>
+  <a class="tab-item" href="map.html"><svg class="icon"><use href="#i-map"></use></svg>Map</a>
+  <button class="tab-add" data-open-add="0" aria-label="Add a stay"><svg class="icon"><use href="#i-plus"></use></svg></button>
+  <a class="tab-item" href="#journey"><svg class="icon"><use href="#i-journey"></use></svg>Journey</a>
+  <a class="tab-item" href="#us"><svg class="icon"><use href="#i-us"></use></svg>Us</a>
+</nav>
+
+<div class="demo-badge">Demo</div>
+
+<!-- Add a stay sheet -->
+<div class="scrim" id="add-scrim"></div>
+<section class="sheet" id="add-sheet" aria-label="Add a stay">
+  <div class="sheet-grabber"></div>
+  <div class="sheet-header">
+    <button class="btn-icon-circle" data-back style="visibility:hidden"><svg class="icon"><use href="#i-back"></use></svg></button>
+    <span class="sheet-header-title">Hotel 1/5</span>
+    <button class="btn-icon-circle" data-close-add><svg class="icon"><use href="#i-close"></use></svg></button>
+  </div>
+  <div class="sheet-progress"><div class="sheet-progress-bar" style="width:20%"></div></div>
+  <div class="sheet-body">
+
+    <div class="sheet-step is-active">
+      <p class="sheet-step-helper">Search, or pick somewhere we've stayed before.</p>
+      <div class="search-field"><svg class="icon"><use href="#i-search"></use></svg><input class="field-input" placeholder="Search hotels or areas"></div>
+      <button class="option-row"><span class="icon-circle"><svg class="icon"><use href="#i-locate"></use></svg></span><span class="option-title">We're here now</span></button>
+      <div class="section-label">Stayed here before</div>
+      <button class="option-row"><span class="option-thumb"><span class="stayart" style="width:100%;height:100%" data-story="hero"></span></span><span><span class="option-title">Rove Downtown</span><br><span class="option-sub">Visit 3 &middot; Downtown, Dubai</span></span></button>
+      <button class="option-row"><span class="option-thumb"><span class="stayart" style="width:100%;height:100%" data-story="hero"></span></span><span><span class="option-title">Atlantis The Palm</span><br><span class="option-sub">Palm Jumeirah, Dubai</span></span></button>
+    </div>
+
+    <div class="sheet-step">
+      <p class="sheet-step-helper">Today's fine, or pick another date.</p>
+      <div class="field-group"><label class="field-label">Date</label><input class="field-input" type="text" value="30 Sep 2026"></div>
+      <div class="field-row">
+        <div class="field-group"><label class="field-label">Check-in</label><input class="field-input" type="text" value="14:00"></div>
+        <div class="field-group"><label class="field-label">Check-out</label><input class="field-input" type="text" value="18:00"></div>
+      </div>
+      <div class="timestamp-preview">14:00 &rarr; 18:00 &middot; 4 h</div>
+      <label class="field-label">Nights</label>
+      <div class="stepper"><button class="stepper-btn" data-op="dec">&minus;</button><span class="stepper-value">0</span><button class="stepper-btn" data-op="inc">+</button></div>
+    </div>
+
+    <div class="sheet-step">
+      <p class="sheet-step-helper">Pick as many as fit.</p>
+      <div class="chip-grid">
+        <button class="chip is-selected">Day use</button><button class="chip">Overnight</button><button class="chip">Staycation</button>
+        <button class="chip">Date night</button><button class="chip">Pool day</button><button class="chip">Spa</button>
+        <button class="chip">Brunch</button><button class="chip">Work from hotel</button><button class="chip">Birthday</button><button class="chip">Anniversary</button>
+      </div>
+    </div>
+
+    <div class="sheet-step">
+      <p class="sheet-step-helper">Add a few, or skip for now.</p>
+      <div class="photo-grid">
+        <div class="photo-tile"><span class="stayart" style="width:100%;height:100%" data-story="hero"></span></div>
+        <div class="photo-tile"><span class="stayart" style="width:100%;height:100%" data-story="hero"></span></div>
+        <div class="photo-tile is-add"><svg class="icon"><use href="#i-camera"></use></svg></div>
+      </div>
+      <div class="exif-card">
+        <p>These photos say 28 Sep at Downtown. Use that?</p>
+        <div class="exif-actions"><button class="btn btn-secondary btn-sm">Use that</button><button class="btn-ghost">Keep what I entered</button></div>
+      </div>
+    </div>
+
+    <div class="sheet-step">
+      <p class="sheet-step-helper">The good part.</p>
+      <div class="field-group"><label class="field-label">What do we want to remember?</label><textarea class="field-input" placeholder="What do we want to remember?"></textarea></div>
+      <div class="field-group"><label class="field-label">Favourite moment</label><input class="field-input" placeholder="Favourite moment"></div>
+      <div class="field-group">
+        <label class="field-label">Mood</label>
+        <div class="mood-row">
+          <button class="mood-stamp is-selected"><svg class="icon"><use href="#i-sparkle"></use></svg>Blissful</button>
+          <button class="mood-stamp"><svg class="icon"><use href="#i-moon"></use></svg>Cosy</button>
+          <button class="mood-stamp"><svg class="icon"><use href="#i-heart"></use></svg>Romantic</button>
+          <button class="mood-stamp"><svg class="icon"><use href="#i-sun"></use></svg>Giggly</button>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">My rating</label>
+        <div class="star-row">
+          <button class="is-filled"><svg class="icon"><use href="#i-star"></use></svg></button>
+          <button class="is-filled"><svg class="icon"><use href="#i-star"></use></svg></button>
+          <button class="is-filled"><svg class="icon"><use href="#i-star"></use></svg></button>
+          <button class="is-filled"><svg class="icon"><use href="#i-star"></use></svg></button>
+          <button><svg class="icon"><use href="#i-star"></use></svg></button>
+        </div>
+      </div>
+      <div class="field-group"><label class="field-label">Who picked it</label><div class="who-row"><button class="chip is-selected">Nirsh</button><button class="chip">Shady</button></div></div>
+    </div>
+
+  </div>
+  <div class="sheet-footer">
+    <button class="btn-ghost" data-close-add>Skip</button>
+    <button class="btn btn-primary" data-next>Next</button>
+  </div>
+</section>
+
+<!-- Celebration -->
+<div class="celebration" id="celebration">
+  <div class="celebration-lock">
+    <div class="celebration-slot"></div>
+    <div class="celebration-key"></div>
+    <div class="celebration-light"></div>
+  </div>
+  <div class="splitflap-board" data-celebration-flap></div>
+  <p class="celebration-line">Checked in. Stay 13 is ours.</p>
+  <div class="celebration-actions">
+    <button class="btn btn-secondary" data-close-celebration>Done</button>
+    <button class="btn btn-primary" data-close-celebration>View stay</button>
+  </div>
+</div>
+
+<script src="proto.js"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stay — Suite Nothings</title>
+<link rel="stylesheet" href="../../src/styles/tokens.css">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="proto.css">
+</head>
+<body class="page-detail has-tabbar" data-detail-root>
+
+<header class="site-header is-solid">
+  <div class="header-row">
+    <a class="brand" href="index.html"><span data-mark="32"></span><span>Suite Nothings</span></a>
+    <nav class="header-nav"><a href="map.html">Map</a><a href="#journey">Journey</a><a href="#us">Us</a></nav>
+    <div class="header-actions"><button class="btn btn-primary" data-open-add="0">+ Add a stay</button></div>
+  </div>
+</header>
+
+<div class="detail-hero">
+  <div class="stayart" style="width:100%;height:100%" data-d-art></div>
+  <div class="detail-hero-actions">
+    <button class="btn-icon-circle" onclick="history.back()"><svg class="icon"><use href="#i-back"></use></svg></button>
+    <div class="right-actions">
+      <button class="btn-icon-circle" aria-label="Favourite"><svg class="icon"><use href="#i-heart"></use></svg></button>
+      <button class="btn-icon-circle" aria-label="Share"><svg class="icon"><use href="#i-share"></use></svg></button>
+    </div>
+  </div>
+</div>
+
+<main class="detail-main">
+  <div class="container">
+    <div class="detail-back-row"><svg class="icon"><use href="#i-back"></use></svg>Our stays</div>
+
+    <div class="gallery-patchwork">
+      <div><div class="stayart" style="width:100%;height:100%" data-d-art></div></div>
+      <div><div class="stayart" style="width:100%;height:100%" data-d-art></div></div>
+      <div><div class="stayart" style="width:100%;height:100%" data-d-art></div></div>
+      <div><div class="stayart" style="width:100%;height:100%" data-d-art></div></div>
+      <div><div class="stayart" style="width:100%;height:100%" data-d-art></div></div>
+    </div>
+
+    <div class="detail-grid">
+      <div>
+        <h1 class="detail-title" data-d-hotel></h1>
+        <p class="detail-area" data-d-area></p>
+        <div class="detail-badges">
+          <span class="pill-ink" data-d-badge></span>
+          <span class="pill-ink" data-d-visittype style="background:var(--color-honey);color:var(--color-ink)"></span>
+        </div>
+        <div class="detail-when">
+          <span data-d-date></span>
+          <span class="timestamp-chip" data-d-time></span>
+        </div>
+
+        <div class="photo-patchwork">
+          <div class="patch span-2"><div class="stayart" style="width:100%;height:100%" data-d-art></div></div>
+          <div class="patch"><div class="stayart" style="width:100%;height:100%" data-d-art></div></div>
+          <div class="patch"><div class="stayart" style="width:100%;height:100%" data-d-art></div></div>
+          <div class="patch span-2"><div class="stayart" style="width:100%;height:100%" data-d-art></div></div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Our notes</h2>
+          <p class="notes-quote" data-d-note></p>
+          <cite>Favourite moment: <span data-d-moment></span></cite>
+        </div>
+
+        <div class="detail-section">
+          <h2>Ratings</h2>
+          <div class="ratings-row">
+            <div class="rating-block"><span class="rating-name">Nirsh</span><span class="rating-stars" data-d-nirsh></span></div>
+            <div class="rating-block"><span class="rating-name">Shady</span><span class="rating-stars" data-d-shady></span></div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Our visits here</h2>
+          <div class="timeline" data-d-timeline></div>
+        </div>
+
+        <div class="detail-section hotel-info">
+          <h2>Hotel info</h2>
+          <dl>
+            <dt>Address</dt><dd data-d-area></dd>
+            <dt>Stars</dt><dd>&#9733;&#9733;&#9733;&#9733;</dd>
+            <dt>Price level</dt><dd>&curren;&curren;&curren; (estimate)</dd>
+          </dl>
+          <p class="ai-label">Written by AI from public info</p>
+        </div>
+
+        <div class="detail-section">
+          <h2>On the map</h2>
+          <div class="mini-map">
+            <svg viewBox="0 0 300 160" width="100%" height="100%">
+              <rect width="300" height="160" fill="var(--color-cream)"/>
+              <path d="M0 100 H300 M60 0 V160 M180 0 V160" stroke="#fff" stroke-width="10"/>
+              <path d="M0 100 H300 M60 0 V160 M180 0 V160" stroke="var(--color-line-strong)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="directions-row">
+            <button class="btn btn-secondary btn-sm">Google Maps</button>
+            <button class="btn btn-secondary btn-sm">Apple Maps</button>
+            <button class="btn btn-secondary btn-sm">Waze</button>
+          </div>
+        </div>
+
+        <div class="actions-row">
+          <button class="btn btn-secondary btn-sm"><svg class="icon" style="width:1rem;height:1rem"><use href="#i-edit"></use></svg>Edit</button>
+          <button class="link-danger btn-sm" style="background:none;border:none">Delete</button>
+        </div>
+      </div>
+
+      <aside class="summary-card">
+        <h3>This stay</h3>
+        <div class="detail-when"><span data-d-date></span><span class="timestamp-chip" data-d-time></span></div>
+        <div class="ratings-row">
+          <div class="rating-block"><span class="rating-name">Nirsh</span><span class="rating-stars" data-d-nirsh></span></div>
+          <div class="rating-block"><span class="rating-name">Shady</span><span class="rating-stars" data-d-shady></span></div>
+        </div>
+        <div class="directions-row">
+          <button class="btn btn-primary">Google Maps</button>
+          <button class="btn btn-secondary">Apple Maps</button>
+          <button class="btn btn-secondary">Waze</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<nav class="tab-bar">
+  <a class="tab-item" href="index.html"><svg class="icon"><use href="#i-stays"></use></svg>Stays</a>
+  <a class="tab-item" href="map.html"><svg class="icon"><use href="#i-map"></use></svg>Map</a>
+  <button class="tab-add" data-open-add="0" aria-label="Add a stay"><svg class="icon"><use href="#i-plus"></use></svg></button>
+  <a class="tab-item" href="#journey"><svg class="icon"><use href="#i-journey"></use></svg>Journey</a>
+  <a class="tab-item" href="#us"><svg class="icon"><use href="#i-us"></use></svg>Us</a>
+</nav>
+<div class="demo-badge">Demo</div>
+
+<div class="scrim" id="add-scrim"></div>
+<section class="sheet" id="add-sheet" aria-label="Add a stay">
+  <div class="sheet-grabber"></div>
+  <div class="sheet-header"><button class="btn-icon-circle" data-back style="visibility:hidden"><svg class="icon"><use href="#i-back"></use></svg></button><span class="sheet-header-title">Hotel 1/5</span><button class="btn-icon-circle" data-close-add><svg class="icon"><use href="#i-close"></use></svg></button></div>
+  <div class="sheet-progress"><div class="sheet-progress-bar" style="width:20%"></div></div>
+  <div class="sheet-body">
+    <div class="sheet-step is-active"><p class="sheet-step-helper">Search, or pick somewhere we've stayed before.</p><div class="search-field"><svg class="icon"><use href="#i-search"></use></svg><input class="field-input" placeholder="Search hotels or areas"></div></div>
+    <div class="sheet-step"><p class="sheet-step-helper">Today's fine, or pick another date.</p><div class="timestamp-preview">14:00 &rarr; 18:00 &middot; 4 h</div></div>
+    <div class="sheet-step"><p class="sheet-step-helper">Pick as many as fit.</p><div class="chip-grid"><button class="chip is-selected">Day use</button><button class="chip">Overnight</button></div></div>
+    <div class="sheet-step"><p class="sheet-step-helper">Add a few, or skip for now.</p><div class="photo-grid"><div class="photo-tile is-add"><svg class="icon"><use href="#i-camera"></use></svg></div></div></div>
+    <div class="sheet-step"><p class="sheet-step-helper">The good part.</p><div class="field-group"><textarea class="field-input" placeholder="What do we want to remember?"></textarea></div></div>
+  </div>
+  <div class="sheet-footer"><button class="btn-ghost" data-close-add>Skip</button><button class="btn btn-primary" data-next>Next</button></div>
+</section>
+<div class="celebration" id="celebration">
+  <div class="celebration-lock"><div class="celebration-slot"></div><div class="celebration-key"></div><div class="celebration-light"></div></div>
+  <div class="splitflap-board" data-celebration-flap></div>
+  <p class="celebration-line">Checked in. Stay 13 is ours.</p>
+  <div class="celebration-actions"><button class="btn btn-secondary" data-close-celebration>Done</button><button class="btn btn-primary" data-close-celebration>View stay</button></div>
+</div>
+
+<script src="proto.js"></script>
+</body>
+</html>

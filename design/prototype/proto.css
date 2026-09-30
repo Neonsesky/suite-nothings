@@ -640,7 +640,7 @@ body.has-tabbar { padding-bottom: var(--tabbar-h); }
 /* ================= ADD A STAY SHEET ================= */
 .scrim {
   position: fixed; inset: 0; background: var(--color-scrim);
-  z-index: var(--z-overlay);
+  z-index: calc(var(--z-sheet) - 1);
   opacity: 0; pointer-events: none;
   transition: opacity var(--dur-base) var(--ease-standard);
 }
@@ -929,7 +929,7 @@ textarea.field-input { height: auto; min-height: 5rem; padding: var(--space-3) v
 }
 .map-pin-btn svg { width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.25)); }
 .map-pin-btn.is-selected svg { transform: scale(1.15); transform-origin: bottom center; }
-.map-home-pin { position: absolute; width: 2.5rem; height: 2.5rem; transform: translate(-50%, -50%); }
+.map-home-pin { position: absolute; width: 2.5rem; height: 2.5rem; transform: translate(-50%, -50%); pointer-events: none; }
 
 .map-attribution {
   position: absolute; left: var(--gutter); bottom: calc(var(--tabbar-h) + var(--space-2)); z-index: 5;
@@ -960,8 +960,9 @@ textarea.field-input { height: auto; min-height: 5rem; padding: var(--space-3) v
   position: fixed; inset: 0; z-index: 15; background: var(--color-paper);
   transform: translateX(100%); transition: transform var(--dur-base) var(--ease-standard);
   overflow-y: auto; padding: calc(var(--header-h) + var(--space-4)) var(--gutter) calc(var(--tabbar-h) + var(--space-6));
+  pointer-events: none;
 }
-.map-list.is-open { transform: translateX(0); }
+.map-list.is-open { transform: translateX(0); pointer-events: auto; }
 @media (min-width: 1024px) { .map-list { width: 25rem; inset: auto; top: var(--header-h); bottom: 0; left: 0; box-shadow: var(--shadow-pop); } }
 .map-list-group { margin-bottom: var(--space-5); }
 .map-list-group h3 { font-size: var(--text-sm); text-transform: uppercase; letter-spacing: var(--tracking-caps); color: var(--color-subtle); margin-bottom: var(--space-2); }
