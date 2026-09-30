@@ -43,12 +43,20 @@ tests/unit, tests/e2e          Vitest, Playwright
 
 ## Waves
 - **Wave 0:** w0-foundation (this), w0-design (tokens, mark, icons, prototype). Merge.
-- **Wave 1 (parallel):** w1-stays, w1-add-stay, w1-map, w1-shell, w1-backend.
+- **Wave 1 (parallel):** w1-stays, w1-add-stay, w1-map, w1-shell, w1-backend. **Merged by int-1 (2026-10-01).**
 - **Later waves:** journey, us/stats, milestones, wishlist, share, moments, enrichment.
 
 ## Phases (SPEC §19)
 0 design → 1 demo-mode app → 2 live Sheet → 3 journey & delight → 4 enrichment.
 Checkpoint artifacts go in `design/checkpoints/<task>/` without pausing.
+
+| Phase | Status (after int-1, 2026-10-01) |
+|---|---|
+| 0 Design | Done (w0-design). Checkpoint 1 evidence is in `design/checkpoints/cp1/`. |
+| 1 Demo-mode app | **Accepted.** Every §19 item is checked in `design/checkpoints/cp2/ACCEPTANCE.md`. Only a real-device install is left for the owner. |
+| 2 Live Sheet | Built and green against the local mock (`npm run e2e:live`, 6/6). The owner still has to deploy Apps Script and run a real Google check by following `SETUP.md`. |
+| 3 Journey and delight | Not started. The engine hooks (`createSuiteMap`, `addLine`, `addMarker`), `MomentsSlot`, the milestones no-op, `shareStay` and the wishlist teaser are ready for wave 2. |
+| 4 Enrichment | Not started. `requestEnrichment` is a no-op, and hotels are saved as `pending`. |
 
 ## Open risks
 - TypeScript 7 (native) not supported by typescript-eslint yet → pinned TS 6.0.3.

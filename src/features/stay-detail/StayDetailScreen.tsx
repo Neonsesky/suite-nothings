@@ -153,9 +153,10 @@ function HotelInfo({ stay }: { stay: Stay }) {
   const { hotel } = stay;
   const status = useEnrichmentStatus(hotel.hotel_id);
   useEffect(() => {
-    if (hotel.enrichment_status === 'none') void requestEnrichment(hotel.hotel_id);
+    if (hotel.enrichment_status === 'none' || hotel.enrichment_status === 'pending') void requestEnrichment(hotel.hotel_id);
   }, [hotel.hotel_id, hotel.enrichment_status]);
-  const running = status === 'running' || hotel.enrichment_status === 'pending';
+  // 'pending' only counts until this session's run settles; otherwise the skeleton never ends.
+  const running = status === 'running' || (hotel.enrichment_status === 'pending' && status === 'idle');
   const amenities = parseJsonArray(hotel.amenities_json);
   const src = hotel.description_source;
   const rows: [string, React.ReactNode][] = [];
