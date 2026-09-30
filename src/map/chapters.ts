@@ -98,10 +98,10 @@ export function chapterForZoom(zoom: number, bp: Breakpoints): Chapter {
   return 'world';
 }
 
-/** Zoom that shows the whole globe at ~85% of the shorter side. */
+/** Zoom that shows the whole globe at ~95% of the shorter side. */
 export function globeZoom(vp: Viewport): number {
   const m = Math.max(200, Math.min(vp.width, vp.height));
-  return Math.log2((0.85 * m * Math.PI) / TILE);
+  return Math.log2((0.95 * m * Math.PI) / TILE);
 }
 
 /** The camera for a chapter (what the chips fly to). */
@@ -109,7 +109,7 @@ export function framingFor(chapter: Chapter, home: HomeBase, bp: Breakpoints, vp
   if (chapter === 'city') {
     const b = cityBBox(home);
     // Pitched cameras see further, so frame a little tighter than the fit.
-    const zoom = clamp(fitZoom(b, vp) + 0.9, bp.city + 0.9, bp.city + 3);
+    const zoom = clamp(fitZoom(b, vp) + 0.9, bp.city + 0.5, bp.city + 3);
     return { center: [home.lng, home.lat], zoom: round2(zoom), pitch: CHAPTER_PITCH.city, bearing: CITY_BEARING };
   }
   if (chapter === 'country') {

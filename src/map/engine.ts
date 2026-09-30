@@ -21,6 +21,7 @@ import { BASE_URL } from '@/config/env';
 import { pinDataUrl, stayPin } from '@/components/brand/pins';
 import baseStyle from './style.json';
 import {
+  cityBBox,
   chapterForZoom,
   computeBreakpoints,
   fadeStops,
@@ -76,6 +77,8 @@ export interface SuiteMapOptions {
   chapter?: Chapter;
   /** Gestures and keyboard (default true). */
   interactive?: boolean;
+  /** Initial pins (also centres the City framing on our stays). */
+  data?: MapData;
   /** Pins, bubbles, wishes, home and arcs (default true). MiniMap turns them off. */
   overlays?: boolean;
   reducedMotion?: boolean;
@@ -210,7 +213,7 @@ function overlayLayers(bp: Breakpoints): LayerSpecification[] {
       type: 'symbol',
       source: SOURCES.countries,
       maxzoom: c1 + 0.05,
-      layout: { ...common, 'icon-image': ['get', 'icon'], 'icon-anchor': 'center', 'icon-size': zoomExpr(0, 0.9, c1, 1) },
+      layout: { ...common, 'icon-image': ['get', 'icon'], 'icon-anchor': 'center', 'icon-size': zoomExpr(0, 0.9, c1, 1), 'symbol-sort-key': ['get', 'count'] },
       paint: { 'icon-opacity': zoomExpr(c0, 1, c1, 0) },
     },
     {
@@ -219,7 +222,7 @@ function overlayLayers(bp: Breakpoints): LayerSpecification[] {
       source: SOURCES.cities,
       minzoom: c0 - 0.05,
       maxzoom: k1 + 0.05,
-      layout: { ...common, 'icon-image': ['get', 'icon'], 'icon-anchor': 'center' },
+      layout: { ...common, 'icon-image': ['get', 'icon'], 'icon-anchor': 'center', 'symbol-sort-key': ['get', 'count'] },
       paint: { 'icon-opacity': zoomExpr(c0, 0, c1, 1, k0, 1, k1, 0) },
     },
     {
@@ -314,7 +317,20 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
     return style;
   };
 
-  const start = { ...framingFor(opts.chapter ?? 'city', home, bp, vp()), ...opts.camera };
+  let data: MapData = { stays: [], wishes: [], home, ...opts.data };
+  let agg: PinAggregates = aggregate(data.stays, data.wishes ?? [], home);
+  /** City framing centres on our home-city stays (not the city's geographic centre). */
+  const framing = (c: Chapter): Framing => {
+    const f = framingFor(c, home, bp, vp());
+    if (c !== 'city') return f;
+    const box = cityBBox(home);
+    const pts = agg.pins.features.map((x) => x.geometry.coordinates).filter(([lng, lat]) => lng >= box[0] && lng <= box[2] && lat >= box[1] && lat <= box[3]);
+    if (!pts.length) return f;
+    const lng = pts.reduce((a, p) => a + p[0], 0) / pts.length;
+    const lat = pts.reduce((a, p) => a + p[1], 0) / pts.length;
+    return { ...f, center: [lng, lat] };
+  };
+  const start = { ...framing(opts.chapter ?? 'city'), ...opts.camera };
   const map = new lib.Map({
     container,
     style: buildStyle(),
@@ -332,14 +348,14 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
   if (interactive) map.getCanvas().setAttribute('aria-label', 'Map of our stays. Use the arrow keys to pan, plus and minus to zoom.');
 
   // ---- state ----------------------------------------------------------------------------
-  let data: MapData = { stays: [], wishes: [], home };
-  let agg: PinAggregates = aggregate([], [], home);
   let arcsVisible = false;
   let selected: string | null = null;
   let htmlMarkers: Marker[] = [];
   let tilesLoaded = false;
   let tileErrors = 0;
   let destroyed = false;
+  let styleReady = false;
+  let overlaysReady = false;
   const lines = new Map<string, { coords: readonly [number, number][]; style: LineStyle; progress: number; opacity: number }>();
   const chapterCbs = new Set<(c: Chapter, prev: Chapter) => void>();
   const viewCbs = new Set<(v: ViewInfo) => void>();
@@ -367,6 +383,7 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
 
   const installOverlays = async () => {
     if (!overlays) return;
+    overlaysReady = false;
     for (const [key, id] of Object.entries(SOURCES)) {
       if (!map.getSource(id)) map.addSource(id, { type: 'geojson', data: (agg as unknown as Record<string, unknown>)[key] as never });
     }
@@ -375,7 +392,12 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
     for (const layer of overlayLayers(bp)) if (!map.getLayer(layer.id)) map.addLayer(layer);
     map.setLayoutProperty('sn-arcs', 'visibility', arcsVisible ? 'visible' : 'none');
     map.setLayoutProperty('sn-arcs-casing', 'visibility', arcsVisible ? 'visible' : 'none');
-    map.setFilter('sn-pins', pinFilter());
+    // Data may have changed while the images were rasterising.
+    await ensurePinImages(map, agg);
+    if (destroyed) return;
+    for (const [key, id] of Object.entries(SOURCES)) setSourceData(id, (agg as unknown as Record<string, unknown>)[key]);
+    overlaysReady = true;
+    renderHtmlMarkers();
   };
 
   const installLines = () => {
@@ -406,6 +428,7 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
   };
 
   map.on('style.load', () => {
+    styleReady = true;
     originals.clear();
     void installOverlays().then(() => {
       if (destroyed) return;
@@ -420,6 +443,8 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
     if (next === fallback || destroyed) return;
     fallback = next;
     tileErrors = 0;
+    styleReady = false;
+    overlaysReady = false;
     map.setStyle(buildStyle(), { diff: false });
     for (const cb of fallbackCbs) cb(fallback);
   };
@@ -541,7 +566,7 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
     const next = computeLook();
     if (next.phase !== look.phase || JSON.stringify(next.light) !== JSON.stringify(look.light)) {
       look = next;
-      if (map.isStyleLoaded()) applyLook();
+      if (styleReady) applyLook();
     }
   }, LIGHTING_REFRESH_MS);
 
@@ -677,10 +702,10 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
     breakpoints: bp,
     home,
     chapter: () => chapter,
-    framing: (c) => framingFor(c, home, bp, vp()),
+    framing,
     setChapter(c, o) {
       stopSpin();
-      const f = framingFor(c, home, bp, vp());
+      const f = framing(c);
       const camera = { center: f.center, zoom: f.zoom, pitch: f.pitch, bearing: f.bearing };
       if (reduced || o?.animate === false) map.jumpTo(camera);
       else map.flyTo({ ...camera, duration: 2200, curve: 1.3, essential: true });
@@ -689,13 +714,13 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
     setLighting(mode) {
       lightingMode = mode;
       look = computeLook();
-      if (map.isStyleLoaded()) applyLook();
+      if (styleReady) applyLook();
     },
     look: () => look,
     async setData(d) {
       data = { ...data, ...d };
       agg = aggregate(data.stays, data.wishes ?? [], data.home ?? home);
-      if (!overlays || !map.isStyleLoaded()) return;
+      if (!overlays || !overlaysReady) return;
       await ensurePinImages(map, agg);
       if (destroyed) return;
       for (const [key, id] of Object.entries(SOURCES)) setSourceData(id, (agg as unknown as Record<string, unknown>)[key]);
@@ -739,7 +764,7 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
       const entry = { coords, style, progress: 1, opacity: style.opacity ?? 1 };
       lines.set(id, entry);
       const src = `sn-line-${id}`;
-      if (map.isStyleLoaded()) addLineLayers(id, coords, style, 1, entry.opacity);
+      if (styleReady) addLineLayers(id, coords, style, 1, entry.opacity);
       const setGradient = () => {
         if (!map.getLayer(src)) return;
         map.setPaintProperty(src, 'line-gradient', progressGradient(style.color ?? GINGER, entry.progress));
