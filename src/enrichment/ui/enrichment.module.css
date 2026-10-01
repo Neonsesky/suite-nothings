@@ -47,3 +47,7 @@
   .picker button:hover { color: var(--color-muted); }
   .picker button[data-on]:hover { color: var(--color-ink); }
 }
+
+.settings { display: flex; flex-direction: column; gap: var(--space-2); }
+.settingsTitle { margin: var(--space-2) 0 0; font-size: var(--text-sm); font-weight: 600; color: var(--color-ink); }
+.hint { margin: 0 0 var(--space-2); color: var(--color-muted); font-size: var(--text-sm); line-height: var(--leading-normal); }
