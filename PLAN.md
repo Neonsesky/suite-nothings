@@ -56,7 +56,7 @@ Checkpoint artifacts go in `design/checkpoints/<task>/` without pausing.
 | 1 Demo-mode app | **Accepted.** Every §19 item is checked in `design/checkpoints/cp2/ACCEPTANCE.md`. Only a real-device install is left for the owner. |
 | 2 Live Sheet | Built and green against the local mock (`npm run e2e:live`, 6/6). The owner still has to deploy Apps Script and run a real Google check by following `SETUP.md`. |
 | 3 Journey and delight | Not started. The engine hooks (`createSuiteMap`, `addLine`, `addMarker`), `MomentsSlot`, the milestones no-op, `shareStay` and the wishlist teaser are ready for wave 2. |
-| 4 Enrichment | Not started. `requestEnrichment` is a no-op, and hotels are saved as `pending`. |
+| 4 Enrichment | **Built (w2-enrich, 2026-10-01).** Place data (OSM/Overpass) and Wikidata/Wikipedia/Commons providers are live and on by default; AI description (Apps Script, Ollama, WebLLM-detection-only) and Google Places are wired behind off-by-default Settings toggles. See `docs/handoff/w2-enrich.md`. |
 
 ## Open risks
 - TypeScript 7 (native) not supported by typescript-eslint yet → pinned TS 6.0.3.
