@@ -191,6 +191,7 @@ test('a hotel added offline stays pending, then enriches when we are back online
   // search finds no confident match — the point is that the run still ends on a final status
   // instead of leaving the skeleton stuck forever (the int-1 bug this orchestrator note calls out).
   await context.setOffline(false);
+  await page.waitForTimeout(300); // WebKit needs a beat before a reload sees the network is back
   await page.reload();
   await expect(page.getByRole('status', { name: 'Fetching hotel info…' })).toHaveCount(0, { timeout: 10_000 });
   await expect(info(page).getByText("Couldn't fetch hotel info.")).toHaveCount(0);
