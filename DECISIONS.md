@@ -123,3 +123,13 @@
 - [qa-final-2] Added `tests/e2e/pwa.spec.ts`'s "offers the fresh version is ready toast" test: bumps the built `dist/sw.js`'s bytes on disk mid-test (real file write, not a mock) and calls `registration.update()`, exercising the real workbox-window "waiting" → `onNeedRefresh` → toast path end to end, restoring the original file in a `finally`. This was the one PWA requirement (SPEC §7.6's update toast) with no prior automated coverage.
 - [qa-final-2] `design/checkpoints/qa/`: fresh release-QA evidence — intro timing frames, a per-viewport screens folder + stitched contact sheet (stitched by loading the screenshots as `<img>`s into a blank page and re-screenshotting, not a PNG-compositing dependency, to avoid adding `pngjs`/`sharp` as a real dependency for one test file), card→detail morph frames, and the price-level glyph crop. See `docs/handoff/qa-final.md` for what was looked at and fixed.
 - [qa-final-2] Dropped the stitched per-viewport contact-sheet PNGs (10–96 MB each at retina resolution — stitching full-page screenshots loses nothing visually but multiplies committed weight) in favor of the individual per-state PNGs in `design/checkpoints/qa/screens/`; kept the full 390px set and a representative subset at 412px/1440px (home, map, stay detail, settings, onboarding) rather than the full 3×17 matrix, to keep the folder's committed weight reasonable — re-run `tests/e2e/qa-final-2.spec.ts` with `CHECKPOINTS=1` for the complete set if ever needed.
+- [polish-2] Re-examined the Lighthouse Performance 61 gap (manualChunks consolidation) and made
+  the same call as qa-final/qa-final-2: declined to attempt it. Mapped the ~17 modulepreloaded
+  eager chunks to source files (couple.ts, device.ts, toast.ts, geo.ts, stats.ts, unlock.ts,
+  stays.ts, db.ts, seed.ts, sound.ts, store.ts, plus Vite/rolldown's own runtime helpers) and
+  confirmed a safe merge is possible in principle, but doing it correctly — without accidentally
+  pulling lazy-screen-only code onto the eager path — needs careful per-module verification this
+  slice's remaining budget (shared with required visual/motion polish) didn't leave room to re-run
+  fully (size budget, PWA precache, full e2e). Spent polish-2's budget on guaranteed, testable wins
+  instead (Dayuse fidelity, motion tuning). Reverse: none needed, nothing changed. Next agent: the
+  source-file mapping above is a head start if attempted again.
