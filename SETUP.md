@@ -12,8 +12,10 @@ Pages that we add to our home screens.
 
 ## 0. What you need
 
-- A Google account that will stay active for years. The Sheet, the script and the photos all
-  live in it, so use one we won't close.
+- A **personal Gmail account** that will stay active for years. The Sheet, the script and the
+  photos all live in it, so use one we won't close. Use a personal `@gmail.com` account rather
+  than a work or school Google Workspace account: Workspace admins often turn off **Anyone** under
+  **Who has access** in step 5, and without it Shady's phone can't connect.
 - A GitHub account (free).
 - About 20 minutes.
 - Both phones: Nirsh's and Shady's.
@@ -132,6 +134,10 @@ This gives the script a web address (a link) that the phones talk to.
 "Anyone" sounds scary, but the script refuses every request that doesn't carry our passphrase.
 "Anyone" simply lets our phones reach it without signing in to Google.
 
+If **Anyone** isn't offered (only "Anyone within [a company or school]"), the Google account is a
+work or school Workspace account and its admin has switched this off. There's no setting on our
+side to fix this: deploy from a personal `@gmail.com` account instead (step 0).
+
 Keep this link. It looks like `https://script.google.com/macros/s/AKfy…/exec` and it must end in
 `/exec`. Don't use the **Test deployments** link that ends in `/dev`: that one only works for
 the script's owner, inside their own browser.
@@ -176,6 +182,11 @@ the address above with the intro animation.
 
 ## 7. Nirsh's phone
 
+Testing on Nirsh's own phone or computer? **Don't tap Shady** on **Who's checking in?**, even just
+to look around. Shady's letter unlocks the moment someone checking in as her opens Letters, and
+that marks it as read — which spoils the surprise before she ever sees it herself. Always test as
+Nirsh.
+
 1. Open the site address from step 6 in the phone's browser (Chrome on Android, Safari on
    iPhone).
 2. After the intro, the app asks **Who's checking in?** Tap **Nirsh**.
@@ -213,8 +224,9 @@ passphrase again.
 
 No camera handy? On Nirsh's phone tap **Share link** under the QR code and send it to Shady in
 a private chat. Or, on Shady's phone, pick **Shady** on **Who's checking in?** and paste the
-link and passphrase by hand, exactly like step 7. The invite link contains our passphrase, so
-only ever send it to each other.
+link and passphrase by hand, exactly like step 7. The invite QR code and link both contain our
+passphrase: share them only with Shady, in a private chat, never anywhere public (a group chat,
+a shared album, social media).
 
 **Now the fun part.** Add a stay on one phone (the **+** in the middle of the tab bar). Within
 about 20 seconds it appears on the other phone, with a small note like
@@ -375,3 +387,4 @@ It only fills empty fields (website, phone, address, price level). It never repl
 | The app shows old data after installing | The home-screen app hasn't synced yet | **Us → Settings → Connection → Sync now** |
 | The iPhone app is empty after weeks without opening it | iOS can clear a home-screen app's storage after long disuse | Reconnect with the invite link from the other phone (step 8). The Sheet is our backup, so every stay comes back |
 | `selfTest` doesn't say "selfTest passed" | `setup()` hasn't run yet, or a tab header was renamed | Run `setup()`, then `selfTest()` again |
+| Only "Anyone within [a company or school]" is offered under **Who has access**, no plain **Anyone** | The Google account is a work or school Workspace account; its admin has restricted sharing | Deploy from a personal `@gmail.com` account instead (step 0), where **Anyone** is available |
