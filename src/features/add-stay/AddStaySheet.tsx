@@ -14,10 +14,11 @@ import { ClockLoader } from '@/components/ClockLoader';
 import { EmptyState } from '@/components/EmptyState';
 import { IconBack } from '@/components/icons';
 import { getLastScreen, goBack, navigate, useQueryParam } from '@/app/router';
-import { deleteDraft, getState, loadDraft, saveDraft, setPhotoProcessor, useHotel, useMe, useStay, useStoreReady, useSyncState } from '@/data/store';
+import { deleteDraft, getState, loadDraft, saveDraft, setPhotoProcessor, useHotel, useMe, useStay, useStore, useStoreReady, useSyncState } from '@/data/store';
 import { parseJsonArray } from '@/data/stays';
 import type { Photo } from '@/data/types';
-import { checkMilestones, showMilestoneUnlock } from '@/features/milestones';
+import { checkMilestones, notifyNewLetters, showMilestoneUnlock } from '@/features/milestones';
+import { fulfilWish, hotelChoiceForWish } from '@/features/wishlist/convert';
 import { useMarkBusy } from '@/lib/busy';
 import { today } from '@/lib/dates';
 import { photoProcessor } from '@/lib/image';
@@ -61,6 +62,9 @@ export default function AddStaySheet() {
   const sync = useSyncState();
   const editStay = useStay(editId);
   const presetHotel = useHotel(presetHotelId);
+  // w2-delight: `?wish=<id>` turns a Next check-in into this stay (hotel prefilled, wish fulfilled on save).
+  const wishId = useQueryParam('wish');
+  const wish = useStore((st) => (wishId ? st.wishes.get(wishId) ?? null : null));
   const draftId = editId ? editDraftId(editId) : NEW_DRAFT_ID;
   const [background] = useState(() => getLastScreen().path);
 
@@ -90,6 +94,10 @@ export default function AddStaySheet() {
         return draftFromVisit(editStay.visit, photos, me);
       }
       const d = emptyDraft(today());
+      if (wish && !wish.deleted) {
+        const choice = hotelChoiceForWish(wish, [...getState().hotels.values()], getState().settings.home_base);
+        if (choice) return { ...d, hotel: choice, step: 1, reached: 1 };
+      }
       if (presetHotel) {
         const last = [...getState().visits.values()].filter((v) => v.hotel_id === presetHotel.hotel_id && !v.deleted).sort((a, b) => (a.date < b.date ? 1 : -1))[0] ?? null;
         return { ...d, ...revisitDefaults(last), hotel: { kind: 'existing', hotel_id: presetHotel.hotel_id } as HotelChoice, step: 1, reached: 1 };
@@ -113,7 +121,7 @@ export default function AddStaySheet() {
     return () => {
       alive = false;
     };
-  }, [ready, draft, missingEdit, editId, editStay, presetHotel, draftId, me]);
+  }, [ready, draft, missingEdit, editId, editStay, presetHotel, wish, draftId, me]);
 
   const dirty = !!draft && !!base && isDirty(draft, base);
 
@@ -197,6 +205,7 @@ export default function AddStaySheet() {
         close(false);
         return;
       }
+      if (wish && !wish.deleted) await fulfilWish(wish, res.visit.visit_id).catch(() => undefined);
       const prev = checkMilestones(res.before, []);
       const reached = checkMilestones(res.after, prev);
       const stay = res.after.find((x) => x.visit.visit_id === res.visit.visit_id);
@@ -214,6 +223,7 @@ export default function AddStaySheet() {
         finish: () => {
           toast.show({ message, tone: 'success' });
           if (reached.length) showMilestoneUnlock(reached);
+          notifyNewLetters(res.before, res.after);
           if (background === '/') goBack('/');
           else navigate(`/stay/${encodeURIComponent(visitId)}`, { replace: true });
         },

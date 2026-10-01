@@ -10,7 +10,7 @@ import { IconPlus } from '@/components/icons';
 import { Skeleton, StayCardSkeleton } from '@/components/Skeleton';
 import { useStays, useStoreReady } from '@/data/store';
 import { Hero } from './Hero';
-import { MomentsSlot } from './MomentsSlot';
+import { Moments } from '@/features/moments/Moments';
 import { OurStays } from './OurStays';
 import { ChainMarquee, Faq, Footer, InstallBanner, StatsRow, StoryThree, WishTeaser } from './Sections';
 import s from './Sections.module.css';
@@ -80,7 +80,7 @@ export default function StaysScreen() {
         <OurStays stays={stays} />
         <StoryThree stays={stays} />
         <InstallBanner />
-        <MomentsSlot stays={stays} />
+        <Moments stays={stays} />
         <WishTeaser />
         <Faq stays={stays} />
       </div>
