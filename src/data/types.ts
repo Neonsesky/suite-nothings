@@ -61,6 +61,11 @@ export interface Hotel {
   cover_photo_id: string | null;
   enrichment_status: EnrichmentStatus;
   enriched_at: string | null;
+  /** Optional (w2-enrich): a Wikimedia Commons image and its licence/attribution line. */
+  image_url?: string | null;
+  image_credit?: string | null;
+  /** Optional (w2-enrich): JSON string[] of the fields enrichment filled (only those may be refreshed). */
+  enriched_fields_json?: string | null;
   created_at: string;
   updated_at: string;
   deleted: boolean;

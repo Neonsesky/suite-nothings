@@ -105,3 +105,27 @@
 - Onboarding: Who's checking in → Connect (Try demo or ConnectionForm; skipped after an invite) → Home base (mini map plus a Photon city picker) → Install (Android prompt, iOS illustrated steps, Maybe later) → Check-in complete.
 - The letter: "A note on your pillow" slides in on the reader's first launch, lifts and flips in CSS 3D, and reveals line by line with a mask sweep. It's signed, with "Written in Dubai, September 2026" beneath. The markdown is rendered safely and `read_at` is written on open. Nirsh gets a one-time "Shady read your note" toast. The Letters list shows sealed envelopes with hints, and "Write a future note" saves through `upsertLetter`.
 - Settings, export/import, PWA manifest, service worker and install wiring (see the helper commits).
+
+## [w2-enrich] Hotel info enrichment (SPEC §11)
+- `src/enrichment/`: a real `EnrichmentProvider` pipeline behind the stubbed API — place data from
+  stored Photon/OSM tags with one cached Overpass lookup by `osm_id` (`osm.ts`); Wikidata/Wikipedia
+  summaries and a careful name+coordinates match when there's no `wikidata_id` (`wikidata.ts`);
+  Wikimedia Commons images with licence and author stored as `image_url`/`image_credit` (new Hotel
+  columns, additive); price level from OSM tags or by hand. Enriches once, merges only into empty
+  fields (tracked in `enriched_fields_json`), and "Refresh info" (`force`) may only replace a field
+  enrichment itself filled — never a hand edit (`merge.ts`, `handEdit`). Offline-aware: queues
+  `pending` hotels and drains them on the `online` event and at boot (`startEnrichmentQueue`).
+- Optional `AIProvider`s (off by default): `appsScriptAI` (new `aiDescribe` action in
+  `apps-script/Code.gs`, hosted model key in Script Properties, `not_configured` when unset),
+  `ollamaAI` (probes `localhost:11434`), `webllmAI` (detection only, hidden — see DECISIONS.md).
+  Optional Google Places provider (`placesLookup` action), off by default, cost-flagged in SETUP.md.
+  Settings → Hotel info has the toggles; About lists every open-data attribution.
+- `src/enrichment/ui/`: `PricePicker`/`PriceLevel` render the price as four `¤` glyphs (ink vs
+  `--color-line`, `aria-label="Price level N of 4"`) instead of a repeated-character string;
+  `HotelImage` shows the Commons picture with its credit linking back to the file page.
+- Tests: `tests/unit/enrichment.test.ts` (22 cases, fixture-replayed, no live network) covers OSM
+  tag mapping, Wikidata entity parsing and name matching, the merge-only-empty rule, enrich-once,
+  the provider fallback chain and the AI prompt builder (facts only, never contact details or a
+  prior AI description). `tests/e2e/enrichment.spec.ts` covers skeleton → filled → Refresh info →
+  offline across all three viewports. A live smoke run against 3 real seed hotels is recorded in
+  `design/checkpoints/cp4/enrichment.md`.

@@ -32,6 +32,7 @@ import { formatDate } from '@/lib/dates';
 import { toast } from '@/lib/toast';
 import { downloadExport, ImportError, parseImport } from './exportData';
 import { HomeBasePicker } from './HomeBasePicker';
+import { HotelInfoSettings } from '@/enrichment/ui/HotelInfoSettings';
 import s from './Settings.module.css';
 
 export default function SettingsScreen() {
@@ -158,6 +159,11 @@ function SettingsBody() {
           value={settings.units}
           onChange={(v) => v && void updateSettings({ units: v as typeof settings.units })}
         />
+      </section>
+
+      <section className={s.card} aria-labelledby="hotel-info-label">
+        <p id="hotel-info-label" className={s.label}>Hotel info</p>
+        <HotelInfoSettings />
       </section>
 
       <section className={s.card} aria-labelledby="reduce-motion-label">
@@ -389,8 +395,10 @@ function AboutSection() {
         <li><a href="https://photon.komoot.io" {...linkProps}>Hotel search by Photon, from Komoot</a></li>
         <li><a href="https://www.naturalearthdata.com" {...linkProps}>Natural Earth (public domain) for the offline world outline</a></li>
         <li>
-          Hotel facts from <a href="https://www.wikidata.org" {...linkProps}>Wikidata</a> and{' '}
-          <a href="https://commons.wikimedia.org" {...linkProps}>Wikimedia Commons</a>
+          Hotel facts from <a href="https://www.wikidata.org" {...linkProps}>Wikidata</a> (CC0),{' '}
+          <a href="https://en.wikipedia.org" {...linkProps}>Wikipedia</a> summaries (CC BY-SA 4.0),{' '}
+          <a href="https://overpass-api.de" {...linkProps}>Overpass API</a> over OpenStreetMap (ODbL) and pictures from{' '}
+          <a href="https://commons.wikimedia.org" {...linkProps}>Wikimedia Commons</a>, each credited with its author and licence
         </li>
         <li>
           Fonts <a href="https://fonts.google.com/specimen/Manrope" {...linkProps}>Manrope</a> and{' '}

@@ -1,0 +1,1231 @@
+[
+ {
+  "url": "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A10%5D%3Bway(1465036747)%3Bout%20tags%3B",
+  "status": 200,
+  "body": {
+   "version": 0.6,
+   "generator": "Overpass API 0.7.62.11 87bfad18",
+   "osm3s": {
+    "timestamp_osm_base": "2026-10-01T06:03:51Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+   },
+   "elements": [
+    {
+     "type": "way",
+     "id": 1465036747,
+     "tags": {
+      "name": "Atlantis The Royal",
+      "self_service": "no",
+      "tourism": "hotel",
+      "website": "https://www.atlantis.com/atlantis-the-royal"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://www.wikidata.org/w/api.php?format=json&origin=*&action=wbsearchentities&search=Atlantis+The+Royal&language=en&type=item&limit=5",
+  "status": 200,
+  "body": {
+   "searchinfo": {
+    "search": "Atlantis The Royal"
+   },
+   "search": [
+    {
+     "id": "Q116730005",
+     "title": "Q116730005",
+     "pageid": 111494521,
+     "concepturi": "http://www.wikidata.org/entity/Q116730005",
+     "repository": "wikidata",
+     "url": "//www.wikidata.org/wiki/Q116730005",
+     "display": {
+      "label": {
+       "value": "Atlantis The Royal, Dubai",
+       "language": "en"
+      },
+      "description": {
+       "value": "luxury hotel resort in Dubai",
+       "language": "en"
+      }
+     },
+     "label": "Atlantis The Royal, Dubai",
+     "description": "luxury hotel resort in Dubai",
+     "match": {
+      "type": "label",
+      "language": "en",
+      "text": "Atlantis The Royal, Dubai"
+     }
+    },
+    {
+     "id": "Q129424308",
+     "title": "Q129424308",
+     "pageid": 123395539,
+     "concepturi": "http://www.wikidata.org/entity/Q129424308",
+     "repository": "wikidata",
+     "url": "//www.wikidata.org/wiki/Q129424308",
+     "display": {
+      "label": {
+       "value": "Atlantis The Royal hotel – designing multiperformance glass features",
+       "language": "en"
+      },
+      "description": {
+       "value": "scholarly article",
+       "language": "en"
+      }
+     },
+     "label": "Atlantis The Royal hotel – designing multiperformance glass features",
+     "description": "scholarly article",
+     "match": {
+      "type": "label",
+      "language": "en",
+      "text": "Atlantis The Royal hotel – designing multiperformance glass features"
+     }
+    }
+   ],
+   "success": 1
+  }
+ },
+ {
+  "url": "https://www.wikidata.org/w/api.php?format=json&origin=*&action=wbgetentities&ids=Q116730005%7CQ129424308&props=labels%7Cclaims%7Csitelinks&languages=en&sitefilter=enwiki",
+  "status": 200,
+  "body": {
+   "entities": {
+    "Q116730005": {
+     "type": "item",
+     "id": "Q116730005",
+     "labels": {
+      "en": {
+       "language": "en",
+       "value": "Atlantis The Royal, Dubai"
+      }
+     },
+     "claims": {
+      "P1004": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P1004",
+         "hash": "01d5a512bb4792788ca4d92032827b6958e497a4",
+         "datavalue": {
+          "value": "d54338c2-a195-44bf-8691-32597b38d0a9",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "qualifiers": {
+         "P1810": [
+          {
+           "snaktype": "value",
+           "property": "P1810",
+           "hash": "e9f26e053345ca69e2242278544185ed3fc04e13",
+           "datavalue": {
+            "value": "Atlantis The Royal",
+            "type": "string"
+           },
+           "datatype": "string"
+          }
+         ]
+        },
+        "qualifiers-order": [
+         "P1810"
+        ],
+        "id": "Q116730005$f4a77be3-267e-4e1b-b6a6-1a7cc7f0f86c",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "65075b44289787abfb485caa4fc60fe7c9529aa8",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "623cc8f0e2f65afe4d66b91962d354a2f3aa9a27",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 14005,
+               "id": "Q14005"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ],
+           "P813": [
+            {
+             "snaktype": "value",
+             "property": "P813",
+             "hash": "628ab3fa190f2eff226979d98dc6da348e950b81",
+             "datavalue": {
+              "value": {
+               "time": "+2023-09-12T00:00:00Z",
+               "timezone": 0,
+               "before": 0,
+               "after": 0,
+               "precision": 11,
+               "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+              },
+              "type": "time"
+             },
+             "datatype": "time"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248",
+           "P813"
+          ]
+         }
+        ]
+       }
+      ],
+      "P625": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P625",
+         "hash": "daf1c7a23922e18dae4df15cc8dcd0e702b0ebe1",
+         "datavalue": {
+          "value": {
+           "latitude": 25.138136111111113,
+           "longitude": 55.12778888888889,
+           "altitude": null,
+           "precision": 0.000002777777777777778,
+           "globe": "http://www.wikidata.org/entity/Q2"
+          },
+          "type": "globecoordinate"
+         },
+         "datatype": "globe-coordinate"
+        },
+        "type": "statement",
+        "id": "Q116730005$98772428-4c4d-4e9b-62c6-8b282ed051b8",
+        "rank": "normal"
+       }
+      ],
+      "P18": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P18",
+         "hash": "8aa38c0f1ee0679ab36dd2c6fe115f0958bf3efe",
+         "datavalue": {
+          "value": "Atlantis The Royal, Dubai 1.jpg",
+          "type": "string"
+         },
+         "datatype": "commonsMedia"
+        },
+        "type": "statement",
+        "id": "Q116730005$b7667505-4dc8-99c7-6170-4dc694730743",
+        "rank": "normal"
+       }
+      ],
+      "P856": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P856",
+         "hash": "e5bd39112cf0433e82409e32e8293f9c69cafb7e",
+         "datavalue": {
+          "value": "https://www.atlantis.com/atlantis-the-royal",
+          "type": "string"
+         },
+         "datatype": "url"
+        },
+        "type": "statement",
+        "id": "Q116730005$acc618c5-4cd5-2b23-fcf6-386a8751a713",
+        "rank": "normal"
+       }
+      ],
+      "P373": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P373",
+         "hash": "5c3b8d552d60506aed3e435ff9234b78850fed39",
+         "datavalue": {
+          "value": "Atlantis The Royal, Dubai",
+          "type": "string"
+         },
+         "datatype": "string"
+        },
+        "type": "statement",
+        "id": "Q116730005$c5edbc75-9484-4b2c-b52b-dcaeac4026ee",
+        "rank": "normal"
+       }
+      ],
+      "P31": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P31",
+         "hash": "26649b92d6c661851f2cb4def40d14ea9177ce68",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 41176,
+           "id": "Q41176"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q116730005$370e89d1-49a5-cf4c-3c6b-d1a1f786e8d5",
+        "rank": "normal"
+       }
+      ],
+      "P131": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P131",
+         "hash": "1f4222a6024afd8063dd55fa2e3ae14b8a1703c6",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 612,
+           "id": "Q612"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q116730005$cdb8f1e1-4aa2-9118-d408-68257822b00c",
+        "rank": "normal"
+       }
+      ],
+      "P17": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P17",
+         "hash": "7de83bc3075bd3c57ead8c4d42073df5e85412a6",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 878,
+           "id": "Q878"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q116730005$55bf181a-453d-6581-70ea-8886d493499d",
+        "rank": "normal"
+       }
+      ],
+      "P361": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P361",
+         "hash": "5d8e925b1476503d7bfa14993a0c5b037a4d5ca0",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 277294,
+           "id": "Q277294"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q116730005$b850f83f-4424-e570-f8b6-36fbc18d3ae8",
+        "rank": "normal"
+       }
+      ],
+      "P366": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P366",
+         "hash": "a506bc6947a1b9f056ab09bd997f91ba4bd46647",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 27686,
+           "id": "Q27686"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q116730005$dd3e8350-477e-0535-0f62-6f56b972c89c",
+        "rank": "normal"
+       }
+      ],
+      "P2003": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P2003",
+         "hash": "b674b671222ceb33c743d8d5c97a38e694fd25ed",
+         "datavalue": {
+          "value": "atlantistheroyal",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "id": "Q116730005$bdfddd35-4509-3313-5d41-48b150894e29",
+        "rank": "normal"
+       }
+      ],
+      "P3134": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P3134",
+         "hash": "76d0e62091a80e65f1323c9f6d9f020b9904d557",
+         "datavalue": {
+          "value": "25249570",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "id": "Q116730005$d21e9929-4732-52de-ce59-85c242f12126",
+        "rank": "normal"
+       }
+      ]
+     },
+     "sitelinks": {
+      "enwiki": {
+       "site": "enwiki",
+       "title": "Atlantis The Royal, Dubai",
+       "badges": []
+      }
+     }
+    },
+    "Q129424308": {
+     "type": "item",
+     "id": "Q129424308",
+     "labels": {
+      "en": {
+       "language": "en",
+       "value": "Atlantis The Royal hotel – designing multiperformance glass features"
+      }
+     },
+     "claims": {
+      "P478": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P478",
+         "hash": "be4fba43a4f3f25f236716be9b7a08e785799df4",
+         "datavalue": {
+          "value": "102",
+          "type": "string"
+         },
+         "datatype": "string"
+        },
+        "type": "statement",
+        "id": "Q129424308$9761C3BA-FE93-4A07-943E-8C814F49CDC7",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       }
+      ],
+      "P973": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P973",
+         "hash": "3789fda853817d0fe3987b9c8009fff26177ebc0",
+         "datavalue": {
+          "value": "https://www.istructe.org/journal/volumes/volume-102-(2024)/issue-1/atlantis-the-royal-hotel-multiperformance-glass/",
+          "type": "string"
+         },
+         "datatype": "url"
+        },
+        "type": "statement",
+        "id": "Q129424308$ECBED654-D6F6-4108-9EDB-3BEAD359DA92",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       }
+      ],
+      "P577": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P577",
+         "hash": "a8a2a9d9a0818fea3620e1f3aba58d2f52583f36",
+         "datavalue": {
+          "value": {
+           "time": "+2024-01-02T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        },
+        "type": "statement",
+        "id": "Q129424308$29B32CA5-23B3-4330-A1B1-C7547D2CD078",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       }
+      ],
+      "P356": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P356",
+         "hash": "8044f3e8bfd452311dce07ef37372577e2acbfc4",
+         "datavalue": {
+          "value": "10.56330/XGHN1856",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "id": "Q129424308$9EAAF855-617A-456C-9BE8-9BD92D818CE4",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       }
+      ],
+      "P433": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P433",
+         "hash": "962ed10012ef254020e2a8c8a6c8ba7647d35a12",
+         "datavalue": {
+          "value": "1",
+          "type": "string"
+         },
+         "datatype": "string"
+        },
+        "type": "statement",
+        "id": "Q129424308$FD0E254B-5B05-487F-96B6-8F5014CD2433",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       }
+      ],
+      "P304": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P304",
+         "hash": "8cd59a4b833d2616bdad1d7354bf1ee65f9b776d",
+         "datavalue": {
+          "value": "33-39",
+          "type": "string"
+         },
+         "datatype": "string"
+        },
+        "type": "statement",
+        "id": "Q129424308$1E661349-E991-42EF-A14F-B4F2BCE21602",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       }
+      ],
+      "P2093": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P2093",
+         "hash": "b3bd506e7ab9fa27de7fe639d636ed693dd5f632",
+         "datavalue": {
+          "value": "Peter Lenk",
+          "type": "string"
+         },
+         "datatype": "string"
+        },
+        "type": "statement",
+        "qualifiers": {
+         "P1545": [
+          {
+           "snaktype": "value",
+           "property": "P1545",
+           "hash": "2a1ced1dca90648ea7e306acbadd74fc81a10722",
+           "datavalue": {
+            "value": "1",
+            "type": "string"
+           },
+           "datatype": "string"
+          }
+         ]
+        },
+        "qualifiers-order": [
+         "P1545"
+        ],
+        "id": "Q129424308$628BBBEE-9C2C-44E4-9556-B37DA644A792",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       },
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P2093",
+         "hash": "5733ffdda81426dbb8d83400aeb2596cceca0f4c",
+         "datavalue": {
+          "value": "Mercedes Gargallo",
+          "type": "string"
+         },
+         "datatype": "string"
+        },
+        "type": "statement",
+        "qualifiers": {
+         "P1545": [
+          {
+           "snaktype": "value",
+           "property": "P1545",
+           "hash": "7241753c62a310cf84895620ea82250dcea65835",
+           "datavalue": {
+            "value": "2",
+            "type": "string"
+           },
+           "datatype": "string"
+          }
+         ]
+        },
+        "qualifiers-order": [
+         "P1545"
+        ],
+        "id": "Q129424308$2FEE6BF3-26BC-416E-959F-3EF68E3B64E1",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       },
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P2093",
+         "hash": "8f8bbd9a9af23e83d40cd0e806ca6d7b7889c9df",
+         "datavalue": {
+          "value": "Eva Babic",
+          "type": "string"
+         },
+         "datatype": "string"
+        },
+        "type": "statement",
+        "qualifiers": {
+         "P1545": [
+          {
+           "snaktype": "value",
+           "property": "P1545",
+           "hash": "0e979f28bf306fefdcd352b4eb8dee5da2153a6d",
+           "datavalue": {
+            "value": "3",
+            "type": "string"
+           },
+           "datatype": "string"
+          }
+         ]
+        },
+        "qualifiers-order": [
+         "P1545"
+        ],
+        "id": "Q129424308$40874044-365F-4E30-B8D4-78F8EC234BCE",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       },
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P2093",
+         "hash": "42aa9861a1b5516486ec6c07a108d0d7afc53537",
+         "datavalue": {
+          "value": "Jordi Alcaine",
+          "type": "string"
+         },
+         "datatype": "string"
+        },
+        "type": "statement",
+        "qualifiers": {
+         "P1545": [
+          {
+           "snaktype": "value",
+           "property": "P1545",
+           "hash": "cbff8d4b3b7b35f905ef3147a7a6cb88845a774f",
+           "datavalue": {
+            "value": "4",
+            "type": "string"
+           },
+           "datatype": "string"
+          }
+         ]
+        },
+        "qualifiers-order": [
+         "P1545"
+        ],
+        "id": "Q129424308$ECA48971-A38A-494D-BFD9-4A1179B2A9B8",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       }
+      ],
+      "P1476": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P1476",
+         "hash": "1b94ae132be5b962b8fd38e191740b03177337f3",
+         "datavalue": {
+          "value": {
+           "text": "Atlantis The Royal hotel – designing multiperformance glass features",
+           "language": "en"
+          },
+          "type": "monolingualtext"
+         },
+         "datatype": "monolingualtext"
+        },
+        "type": "statement",
+        "id": "Q129424308$9534AA70-F732-4015-AD5D-D935BD32C14B",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       }
+      ],
+      "P1433": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P1433",
+         "hash": "77a28944df1e62e2a26a416813d0caa46c7fd33a",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 15758343,
+           "id": "Q15758343"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q129424308$1D35E480-C951-489C-81E9-7ED1A963ECCB",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       }
+      ],
+      "P31": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P31",
+         "hash": "29465f78f13add11b617f0de4ade56cd1122c19c",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 13442814,
+           "id": "Q13442814"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q129424308$183CDB9B-FBBA-445D-B3C9-49E55396AC33",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "76dbb601d91e9f1443c9d6f52d818bd289d8f5cc",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "6ae541e85a9f6a17fa69b4a2397b684f76fdf9ac",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 126285607,
+               "id": "Q126285607"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     "sitelinks": {}
+    }
+   },
+   "success": 1
+  }
+ },
+ {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Atlantis_The_Royal%2C_Dubai",
+  "status": 200,
+  "body": {
+   "type": "standard",
+   "title": "Atlantis The Royal, Dubai",
+   "displaytitle": "<span lang=\"en\" dir=\"ltr\"><span class=\"mw-page-title-main\">Atlantis The Royal, Dubai</span></span>",
+   "namespace": {
+    "id": 0,
+    "text": ""
+   },
+   "wikibase_item": "Q116730005",
+   "titles": {
+    "canonical": "Atlantis_The_Royal,_Dubai",
+    "normalized": "Atlantis The Royal, Dubai",
+    "display": "<span lang=\"en\" dir=\"ltr\"><span class=\"mw-page-title-main\">Atlantis The Royal, Dubai</span></span>"
+   },
+   "pageid": 72844744,
+   "thumbnail": {
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Atlantis_The_Royal%2C_Dubai_1.jpg/330px-Atlantis_The_Royal%2C_Dubai_1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "width": 330,
+    "height": 248
+   },
+   "originalimage": {
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Atlantis_The_Royal%2C_Dubai_1.jpg/3840px-Atlantis_The_Royal%2C_Dubai_1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "width": 4000,
+    "height": 3000
+   },
+   "lang": "en",
+   "dir": "ltr",
+   "revision": "1376737334",
+   "tid": "bff66181-b93b-11f1-9bd0-5a20935fe676",
+   "timestamp": "2026-09-25T23:49:30Z",
+   "description": "Luxury hotel resort in Dubai",
+   "description_source": "local",
+   "coordinates": {
+    "lat": 25.13813611,
+    "lon": 55.12778889
+   },
+   "content_urls": {
+    "desktop": {
+     "page": "https://en.wikipedia.org/wiki/Atlantis_The_Royal%2C_Dubai",
+     "revisions": "https://en.wikipedia.org/wiki/Atlantis_The_Royal%2C_Dubai?action=history",
+     "edit": "https://en.wikipedia.org/wiki/Atlantis_The_Royal%2C_Dubai?action=edit",
+     "talk": "https://en.wikipedia.org/wiki/Talk:Atlantis_The_Royal%2C_Dubai"
+    },
+    "mobile": {
+     "page": "https://en.wikipedia.org/wiki/Atlantis_The_Royal%2C_Dubai",
+     "revisions": "https://en.wikipedia.org/wiki/Special:History/Atlantis_The_Royal%2C_Dubai",
+     "edit": "https://en.wikipedia.org/wiki/Atlantis_The_Royal%2C_Dubai?action=edit",
+     "talk": "https://en.wikipedia.org/wiki/Talk:Atlantis_The_Royal%2C_Dubai"
+    }
+   },
+   "extract": "Atlantis The Royal, Dubai is a hotel resort at the Palm Jumeirah, Dubai in the United Arab Emirates. The 760 room, 16 restaurant resort has the world's largest jellyfish aquarium. Out of the 102 VIP suites, 44 have their own private pools. Outdoor areas remain cooled 10 months out of the year using shades, pools, plants, and ornamental fountains. Atlantis the Royal is one of the most expensive hotels in the world, where the price of the \"Royal Mansion\" suite exceeds $100,000 per night.",
+   "extract_html": "<p><b>Atlantis The Royal, Dubai</b> is a hotel resort at the Palm Jumeirah, Dubai in the United Arab Emirates. The 760 room, 16 restaurant resort has the world's largest jellyfish aquarium. Out of the 102 VIP suites, 44 have their own private pools. Outdoor areas remain cooled 10 months out of the year using shades, pools, plants, and ornamental fountains. Atlantis the Royal is one of the most expensive hotels in the world, where the price of the \"Royal Mansion\" suite exceeds $100,000 per night.</p>"
+  }
+ },
+ {
+  "url": "https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=url%7Cextmetadata&iiurlwidth=960&titles=File%3AAtlantis+The+Royal%2C+Dubai+1.jpg",
+  "status": 200,
+  "body": {
+   "batchcomplete": "",
+   "query": {
+    "pages": {
+     "140470617": {
+      "pageid": 140470617,
+      "ns": 6,
+      "title": "File:Atlantis The Royal, Dubai 1.jpg",
+      "imagerepository": "local",
+      "imageinfo": [
+       {
+        "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Atlantis_The_Royal%2C_Dubai_1.jpg/960px-Atlantis_The_Royal%2C_Dubai_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "thumbwidth": 960,
+        "thumbheight": 720,
+        "responsiveUrls": {
+         "2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Atlantis_The_Royal%2C_Dubai_1.jpg/1920px-Atlantis_The_Royal%2C_Dubai_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+        },
+        "thumbattribs": {
+         "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Atlantis_The_Royal%2C_Dubai_1.jpg/960px-Atlantis_The_Royal%2C_Dubai_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+         "decoding": "async",
+         "loading": "lazy",
+         "width": 960,
+         "height": 720,
+         "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Atlantis_The_Royal%2C_Dubai_1.jpg/1920px-Atlantis_The_Royal%2C_Dubai_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail 2x"
+        },
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/56/Atlantis_The_Royal%2C_Dubai_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "descriptionurl": "https://commons.wikimedia.org/wiki/File:Atlantis_The_Royal,_Dubai_1.jpg",
+        "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=140470617",
+        "extmetadata": {
+         "DateTime": {
+          "value": "2023-11-09 09:55:20",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+         },
+         "ObjectName": {
+          "value": "Atlantis The Royal, Dubai 1",
+          "source": "mediawiki-metadata"
+         },
+         "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+         },
+         "Categories": {
+          "value": "CC-Zero|Self-published work|Atlantis The Royal, Dubai",
+          "source": "commons-categories",
+          "hidden": ""
+         },
+         "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+         },
+         "ImageDescription": {
+          "value": "Atlantis The Royal, Dubai",
+          "source": "commons-desc-page"
+         },
+         "DateTimeOriginal": {
+          "value": "2023-10-30",
+          "source": "commons-desc-page"
+         },
+         "Credit": {
+          "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+          "source": "commons-desc-page"
+         },
+         "Artist": {
+          "value": "<a href=\"//commons.wikimedia.org/wiki/User:EditQ\" class=\"mw-redirect\" title=\"User:EditQ\">EditQ</a>",
+          "source": "commons-desc-page"
+         },
+         "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+         },
+         "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+         },
+         "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+         },
+         "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+         },
+         "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+         },
+         "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+         },
+         "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+         }
+        }
+       }
+      ]
+     }
+    }
+   }
+  }
+ }
+]

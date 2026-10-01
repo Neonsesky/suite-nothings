@@ -15,9 +15,13 @@ import { StayArt } from '@/components/StayArt';
 import { KeyTagMark } from '@/components/brand/KeyTagMark';
 import { personName, PEOPLE, type PersonId } from '@/config/couple';
 import { parseJsonArray } from '@/data/stays';
-import { softDeleteVisit, undoDeleteVisit, upsertVisit, useMe, usePhotoUrl, useStay, useStoreReady, useVisitsForHotel } from '@/data/store';
+import { softDeleteVisit, undoDeleteVisit, upsertHotel, upsertVisit, useMe, usePhotoUrl, useStay, useStoreReady, useVisitsForHotel } from '@/data/store';
 import type { Photo, Stay } from '@/data/types';
 import { requestEnrichment, useEnrichmentStatus } from '@/enrichment';
+import { HotelImage } from '@/enrichment/ui/HotelImage';
+import { PricePicker } from '@/enrichment/ui/PriceLevel';
+import { sourceLabel } from '@/enrichment/sources';
+import { handEdit } from '@/enrichment/merge';
 import { shareStay } from '@/features/share';
 import { formatDate, formatTimeRange } from '@/lib/dates';
 import { toast } from '@/lib/toast';
@@ -162,7 +166,7 @@ function HotelInfo({ stay }: { stay: Stay }) {
   const rows: [string, React.ReactNode][] = [];
   if (hotel.address) rows.push(['Address', hotel.address]);
   if (hotel.stars) rows.push(['Stars', <Stars key="s" value={hotel.stars} label={`${hotel.stars} stars`} />]);
-  if (hotel.price_level) rows.push(['Price level', '¤'.repeat(hotel.price_level)]);
+  rows.push(['Price level', <PricePicker key="pl" value={hotel.price_level} onChange={(price_level) => void upsertHotel(handEdit(hotel, { price_level }))} />]);
   if (hotel.website)
     rows.push([
       'Website',
@@ -196,9 +200,8 @@ function HotelInfo({ stay }: { stay: Stay }) {
           {status === 'failed' || hotel.enrichment_status === 'failed' ? <p className={s.muted}>Couldn't fetch hotel info.</p> : null}
           {hotel.description ? <p className={s.description}>{hotel.description}</p> : null}
           {hotel.description && src === 'ai' ? <p className={s.attribution}>Written by AI from public info</p> : null}
-          {hotel.description && (src === 'wikipedia' || src === 'wikidata') ? (
-            <p className={s.attribution}>From {src === 'wikipedia' ? 'Wikipedia' : 'Wikidata'}, CC BY-SA</p>
-          ) : null}
+          {hotel.description && src && src !== 'ai' && sourceLabel(src) ? <p className={s.attribution}>{sourceLabel(src)}</p> : null}
+          {hotel.image_url ? <HotelImage url={hotel.image_url} credit={hotel.image_credit} name={hotel.name} /> : null}
           {rows.length ? (
             <dl className={s.facts}>
               {rows.map(([k, v]) => (

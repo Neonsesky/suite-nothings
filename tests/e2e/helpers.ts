@@ -9,6 +9,7 @@ export type Person = 'nirsh' | 'shady';
  * optionally sets who is on this device, and loads `hash`.
  */
 export async function resetApp(page: Page, opts: { me?: Person | null; hash?: string; intro?: boolean } = {}): Promise<void> {
+  await routeOpenData(page);
   // A static same-origin file, so the app never boots (and never preloads) during the wipe.
   await page.goto('./favicon.svg');
   await page.evaluate(async () => {
@@ -83,4 +84,16 @@ export async function checkpointTo(page: Page, testInfo: TestInfo, folder: strin
   const path = `design/checkpoints/${folder}/${name}-${testInfo.project.name}.png`;
   mkdirSync(dirname(path), { recursive: true });
   await page.screenshot({ path, fullPage: opts.fullPage ?? false });
+}
+
+const OPEN_DATA = /^https:\/\/(overpass-api\.de|www\.wikidata\.org|en\.wikipedia\.org|commons\.wikimedia\.org)\//;
+const routed = new WeakSet<Page>();
+/**
+ * Hotel enrichment (w2-enrich) calls open APIs in the background. By default every spec gets empty
+ * answers so no run touches the live network; register your own route *after* `resetApp` to override.
+ */
+export async function routeOpenData(page: Page): Promise<void> {
+  if (routed.has(page)) return;
+  routed.add(page);
+  await page.route(OPEN_DATA, (route) => route.fulfill({ contentType: 'application/json', body: '{}' }));
 }

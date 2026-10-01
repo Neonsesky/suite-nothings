@@ -1,0 +1,1469 @@
+[
+ {
+  "url": "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A10%5D%3Bway(532836513)%3Bout%20tags%3B",
+  "status": 504,
+  "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head>\n  <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" lang=\"en\"/>\n  <title>OSM3S Response</title>\n</head>\n<body>\n\n<p>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</p>\n<p><strong style=\"color:#FF0000\">Error</strong>: runtime error: open64: 0 Success /osm3s_osm_base Dispatcher_Client::request_read_and_idx::timeout. The server is probably too busy to handle your request. </p>\n\n</body>\n</html>\n"
+ },
+ {
+  "url": "https://www.wikidata.org/w/api.php?format=json&origin=*&action=wbsearchentities&search=Address+Downtown&language=en&type=item&limit=5",
+  "status": 200,
+  "body": {
+   "searchinfo": {
+    "search": "Address Downtown"
+   },
+   "search": [
+    {
+     "id": "Q677823",
+     "title": "Q677823",
+     "pageid": 638521,
+     "concepturi": "http://www.wikidata.org/entity/Q677823",
+     "repository": "wikidata",
+     "url": "//www.wikidata.org/wiki/Q677823",
+     "display": {
+      "label": {
+       "value": "Address Downtown",
+       "language": "en"
+      },
+      "description": {
+       "value": "tower block",
+       "language": "en"
+      }
+     },
+     "label": "Address Downtown",
+     "description": "tower block",
+     "match": {
+      "type": "label",
+      "language": "en",
+      "text": "Address Downtown"
+     }
+    },
+    {
+     "id": "Q111150315",
+     "title": "Q111150315",
+     "pageid": 106142534,
+     "concepturi": "http://www.wikidata.org/entity/Q111150315",
+     "repository": "wikidata",
+     "url": "//www.wikidata.org/wiki/Q111150315",
+     "display": {
+      "label": {
+       "value": "Address Downtown",
+       "language": "en"
+      },
+      "description": {
+       "value": "hotel in Dubai, United Arab Emirates",
+       "language": "en"
+      }
+     },
+     "label": "Address Downtown",
+     "description": "hotel in Dubai, United Arab Emirates",
+     "match": {
+      "type": "label",
+      "language": "en",
+      "text": "Address Downtown"
+     }
+    }
+   ],
+   "success": 1
+  }
+ },
+ {
+  "url": "https://www.wikidata.org/w/api.php?format=json&origin=*&action=wbgetentities&ids=Q677823%7CQ111150315&props=labels%7Cclaims%7Csitelinks&languages=en&sitefilter=enwiki",
+  "status": 200,
+  "body": {
+   "entities": {
+    "Q677823": {
+     "type": "item",
+     "id": "Q677823",
+     "labels": {
+      "en": {
+       "language": "en",
+       "value": "Address Downtown"
+      }
+     },
+     "claims": {
+      "P373": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P373",
+         "hash": "b4c327d7ba974126fee780db7588078b920a3509",
+         "datavalue": {
+          "value": "The Address Downtown Dubai",
+          "type": "string"
+         },
+         "datatype": "string"
+        },
+        "type": "statement",
+        "id": "q677823$79047B44-2397-4166-ABBA-B764C02BC2FF",
+        "rank": "normal"
+       }
+      ],
+      "P17": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P17",
+         "hash": "7de83bc3075bd3c57ead8c4d42073df5e85412a6",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 878,
+           "id": "Q878"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "q677823$2D61CFA1-D06B-4336-BCA5-07D0F9FE5E11",
+        "rank": "normal"
+       }
+      ],
+      "P131": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P131",
+         "hash": "8d7b7ed4c168755d0fbe6e53fc2ebbdcc23699ee",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 613,
+           "id": "Q613"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "q677823$360812D7-44AA-48D3-B209-BBD72472F2AF",
+        "rank": "normal"
+       }
+      ],
+      "P625": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P625",
+         "hash": "72e8d4475e15b1a6dd15a16e3f3af482403700cb",
+         "datavalue": {
+          "value": {
+           "latitude": 25.194006,
+           "longitude": 55.27905,
+           "altitude": null,
+           "precision": 0.00001,
+           "globe": "http://www.wikidata.org/entity/Q2"
+          },
+          "type": "globecoordinate"
+         },
+         "datatype": "globe-coordinate"
+        },
+        "type": "statement",
+        "id": "q677823$CBD99D30-824B-4F45-82FB-C132C351196D",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "732ec1c90a6f0694c7db9a71bf09fe7f2b674172",
+          "snaks": {
+           "P143": [
+            {
+             "snaktype": "value",
+             "property": "P143",
+             "hash": "9123b0de1cc9c3954366ba797d598e4e1ea4146f",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 10000,
+               "id": "Q10000"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P143"
+          ]
+         }
+        ]
+       }
+      ],
+      "P646": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P646",
+         "hash": "d8d102ca629cd5d0097042175dc0fe3c3d8f716e",
+         "datavalue": {
+          "value": "/m/0h3h85",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "id": "Q677823$4E885F33-2099-45FB-B633-4972B7142CFF",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "2b00cb481cddcac7623114367489b5c194901c4a",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "a94b740202b097dd33355e0e6c00e54b9395e5e0",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 15241312,
+               "id": "Q15241312"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ],
+           "P577": [
+            {
+             "snaktype": "value",
+             "property": "P577",
+             "hash": "fde79ecb015112d2f29229ccc1ec514ed3e71fa2",
+             "datavalue": {
+              "value": {
+               "time": "+2013-10-28T00:00:00Z",
+               "timezone": 0,
+               "before": 0,
+               "after": 0,
+               "precision": 11,
+               "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+              },
+              "type": "time"
+             },
+             "datatype": "time"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248",
+           "P577"
+          ]
+         }
+        ]
+       }
+      ],
+      "P31": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P31",
+         "hash": "1e35db554cf8bd1085b49b4bc500bf59631951cf",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 18142,
+           "id": "Q18142"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q677823$FA49F413-EEAB-4CB9-8634-700E4513327E",
+        "rank": "normal"
+       }
+      ],
+      "P1566": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P1566",
+         "hash": "0c66f919e1f67511693ddda44be5a8a3a751a044",
+         "datavalue": {
+          "value": "6949505",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "id": "Q677823$D5C87C54-5ECA-4CEC-A319-BE8BE9FB5501",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "88694a0f4d1486770c269f7db16a1982f74da69d",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "1b3ef912a2bd61e18dd43abd184337eb010b2e96",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 830106,
+               "id": "Q830106"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       }
+      ],
+      "P84": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P84",
+         "hash": "1a4880d56dc11c7fe8f2c1822e0ab931bb0085d7",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 1510450,
+           "id": "Q1510450"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q677823$D4C86A0F-97F1-4EE6-82EC-C0A91ADB63E2",
+        "rank": "normal"
+       }
+      ],
+      "P631": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P631",
+         "hash": "8f0926054a377c785fd63148ed24da7e73f15ca2",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 1510450,
+           "id": "Q1510450"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q677823$DE28B268-8D3F-453F-B8AE-5C01491443AE",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "fa278ebfc458360e5aed63d5058cca83c46134f1",
+          "snaks": {
+           "P143": [
+            {
+             "snaktype": "value",
+             "property": "P143",
+             "hash": "e4f6d9441d0600513c4533c672b5ab472dc73694",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 328,
+               "id": "Q328"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P143"
+          ]
+         }
+        ]
+       }
+      ],
+      "P193": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P193",
+         "hash": "5aca51716f6d260e8edd7229ddddc34565c03f18",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 2749540,
+           "id": "Q2749540"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q677823$BD97235D-54BF-4C5A-A4EB-06B11CE27ADD",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "fa278ebfc458360e5aed63d5058cca83c46134f1",
+          "snaks": {
+           "P143": [
+            {
+             "snaktype": "value",
+             "property": "P143",
+             "hash": "e4f6d9441d0600513c4533c672b5ab472dc73694",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 328,
+               "id": "Q328"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P143"
+          ]
+         }
+        ]
+       }
+      ],
+      "P1305": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P1305",
+         "hash": "75be2bb8eca17340c6fd8e08a8b8fcb13c700dea",
+         "datavalue": {
+          "value": "468",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "id": "Q677823$FC0210F9-3E1F-479A-8CC1-3A5EBCE3E33E",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "cfc3fc925ddc31f71c67244753346f9fca7ab7d7",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "a94b740202b097dd33355e0e6c00e54b9395e5e0",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 15241312,
+               "id": "Q15241312"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248"
+          ]
+         }
+        ]
+       }
+      ],
+      "P2048": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P2048",
+         "hash": "ffe52ec5cc0a7ee105f667ff0b80666a8630b065",
+         "datavalue": {
+          "value": {
+           "amount": "+302.2",
+           "unit": "http://www.wikidata.org/entity/Q11573"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        },
+        "type": "statement",
+        "id": "Q677823$34b768b0-49ed-50f0-8345-f324548ae115",
+        "rank": "normal"
+       }
+      ],
+      "P856": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P856",
+         "hash": "0dcdf6df191af8dd7c0bbcd66e3ea6414afc8f44",
+         "datavalue": {
+          "value": "http://www.theaddress.com/",
+          "type": "string"
+         },
+         "datatype": "url"
+        },
+        "type": "statement",
+        "id": "Q677823$08c53a92-45ea-0062-4101-1559d8cd7a96",
+        "rank": "normal"
+       }
+      ],
+      "P793": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P793",
+         "hash": "6613679847e9950ca1f79d39d8ba780dd80d2c05",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 168983,
+           "id": "Q168983"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "qualifiers": {
+         "P585": [
+          {
+           "snaktype": "value",
+           "property": "P585",
+           "hash": "dec5f9078af35f77b6f7ea179623d4552bbb6ce1",
+           "datavalue": {
+            "value": {
+             "time": "+2015-12-31T00:00:00Z",
+             "timezone": 0,
+             "before": 0,
+             "after": 0,
+             "precision": 11,
+             "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+            },
+            "type": "time"
+           },
+           "datatype": "time"
+          }
+         ]
+        },
+        "qualifiers-order": [
+         "P585"
+        ],
+        "id": "Q677823$57e5d8e9-4dae-e98b-a783-7ea4a0895464",
+        "rank": "normal"
+       },
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P793",
+         "hash": "23db98c2dae78eaf160e2008602eed7c73f16ef8",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 385378,
+           "id": "Q385378"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "qualifiers": {
+         "P580": [
+          {
+           "snaktype": "value",
+           "property": "P580",
+           "hash": "9ef7f99b41c28cf258cbce173bea2317c62abaf2",
+           "datavalue": {
+            "value": {
+             "time": "+2005-00-00T00:00:00Z",
+             "timezone": 0,
+             "before": 0,
+             "after": 0,
+             "precision": 9,
+             "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+            },
+            "type": "time"
+           },
+           "datatype": "time"
+          }
+         ],
+         "P582": [
+          {
+           "snaktype": "value",
+           "property": "P582",
+           "hash": "589721f17742af52d011102719f2cf276ae0f6d4",
+           "datavalue": {
+            "value": {
+             "time": "+2008-00-00T00:00:00Z",
+             "timezone": 0,
+             "before": 0,
+             "after": 0,
+             "precision": 9,
+             "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+            },
+            "type": "time"
+           },
+           "datatype": "time"
+          }
+         ]
+        },
+        "qualifiers-order": [
+         "P580",
+         "P582"
+        ],
+        "id": "Q677823$1f0ac8b9-4341-b92b-7c7f-2cd529c78e21",
+        "rank": "normal"
+       }
+      ],
+      "P669": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P669",
+         "hash": "b52d60d98246250232860c42c0bd80941a954170",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 18066085,
+           "id": "Q18066085"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q677823$efecc79d-435f-a811-f2ba-8f40bec3e316",
+        "rank": "normal"
+       }
+      ],
+      "P1101": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P1101",
+         "hash": "e3a71203d09d05059709e877d3de01bfb8ccdef1",
+         "datavalue": {
+          "value": {
+           "amount": "+64",
+           "unit": "1"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        },
+        "type": "statement",
+        "id": "Q677823$9F9AF9AF-687D-4422-B87C-21E8806E84CB",
+        "rank": "normal"
+       }
+      ],
+      "P455": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P455",
+         "hash": "90a05fe19947726dbe6efbc2e0c0d929277f54aa",
+         "datavalue": {
+          "value": "220605",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "id": "Q677823$5a37f298-4848-e598-f7b6-e759d702578a",
+        "rank": "normal"
+       }
+      ],
+      "P1699": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P1699",
+         "hash": "8021b96599abb39dea49f261943e0f3846b5805e",
+         "datavalue": {
+          "value": "34602",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "id": "Q677823$8cb35cb2-412f-c6d5-9d39-9933d7e8564d",
+        "rank": "normal"
+       }
+      ],
+      "P1139": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P1139",
+         "hash": "348b7eb5eca006c627e419999563932b75e3e910",
+         "datavalue": {
+          "value": {
+           "amount": "+4",
+           "unit": "1"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        },
+        "type": "statement",
+        "id": "Q677823$eabd1a06-494c-0bf4-5e6f-4aba47a8ac17",
+        "rank": "normal"
+       }
+      ],
+      "P178": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P178",
+         "hash": "db6ba167c4047c088f42a44bb362e0209b7ed3e4",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 1153463,
+           "id": "Q1153463"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q677823$4965e681-45dd-6598-82ca-26c9ac2e46eb",
+        "rank": "normal"
+       }
+      ],
+      "P2046": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P2046",
+         "hash": "05911defebd11af579b253e21f33ae29cf3d3b56",
+         "datavalue": {
+          "value": {
+           "amount": "+178000",
+           "unit": "http://www.wikidata.org/entity/Q25343"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        },
+        "type": "statement",
+        "id": "Q677823$070fa0d5-40a8-4b26-2e79-c04524127332",
+        "rank": "normal"
+       }
+      ],
+      "P149": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P149",
+         "hash": "978501fb3765073f505f38386678d3d5ae4b16d5",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 173782,
+           "id": "Q173782"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q677823$7A04EDDF-53A5-4E63-981F-2AF49E2B8EF8",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "fa278ebfc458360e5aed63d5058cca83c46134f1",
+          "snaks": {
+           "P143": [
+            {
+             "snaktype": "value",
+             "property": "P143",
+             "hash": "e4f6d9441d0600513c4533c672b5ab472dc73694",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 328,
+               "id": "Q328"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P143"
+          ]
+         }
+        ]
+       }
+      ],
+      "P18": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P18",
+         "hash": "b0976b767e2a0ced5a28dae6666150dcebe55ec2",
+         "datavalue": {
+          "value": "View from Burj Khalifa (8667329327).jpg",
+          "type": "string"
+         },
+         "datatype": "commonsMedia"
+        },
+        "type": "statement",
+        "id": "Q677823$B20C3D52-E84E-4763-A45C-D02179D95EE9",
+        "rank": "normal"
+       }
+      ],
+      "P571": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P571",
+         "hash": "0148446b01349f86471adfd0ba419c0fb53da186",
+         "datavalue": {
+          "value": {
+           "time": "+2008-00-00T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 9,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        },
+        "type": "statement",
+        "id": "Q677823$2D2B7763-C35A-42C3-8CC0-0014E16C59CA",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "ff058293f2626bd0c4055ff3889f6276207f7fca",
+          "snaks": {
+           "P143": [
+            {
+             "snaktype": "value",
+             "property": "P143",
+             "hash": "e4f6d9441d0600513c4533c672b5ab472dc73694",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 328,
+               "id": "Q328"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ],
+           "P4656": [
+            {
+             "snaktype": "value",
+             "property": "P4656",
+             "hash": "fae121aa709cc2ab098c5faa4f80fe0d20740266",
+             "datavalue": {
+              "value": "https://en.wikipedia.org/w/index.php?title=The_Address_Downtown_Dubai&oldid=845682467",
+              "type": "string"
+             },
+             "datatype": "url"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P143",
+           "P4656"
+          ]
+         }
+        ]
+       }
+      ],
+      "P454": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P454",
+         "hash": "6199957043b4b728ec0bf897f500d8c62e36ca2b",
+         "datavalue": {
+          "value": "20046354",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "id": "Q677823$98a9103d-4308-ba84-db52-4c945c828e6c",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "fd3a60be409ba183cfcd206ef46d190532aeae7b",
+          "snaks": {
+           "P854": [
+            {
+             "snaktype": "value",
+             "property": "P854",
+             "hash": "c8e624b07fb869d5292ed045b176ad37556a3abf",
+             "datavalue": {
+              "value": "https://structurae.net/en/structures/the-address-downtown-dubai",
+              "type": "string"
+             },
+             "datatype": "url"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P854"
+          ]
+         }
+        ]
+       }
+      ],
+      "P127": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P127",
+         "hash": "da3d6d07c4cc108b03a58f4635bb052b2a3a8f1c",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 1153463,
+           "id": "Q1153463"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q677823$038DE569-D2C0-406F-A86F-FE3635C39EB3",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "e00397c6772a29af68f0365422888a8c154fd8e1",
+          "snaks": {
+           "P143": [
+            {
+             "snaktype": "value",
+             "property": "P143",
+             "hash": "d38375ffe6fe142663ff55cd783aa4df4301d83d",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 48183,
+               "id": "Q48183"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ],
+           "P4656": [
+            {
+             "snaktype": "value",
+             "property": "P4656",
+             "hash": "297f2452e87f0bdbec8699272b8855017bbd0692",
+             "datavalue": {
+              "value": "https://de.wikipedia.org/w/index.php?title=The_Address_Downtown_Dubai&oldid=193135574",
+              "type": "string"
+             },
+             "datatype": "url"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P143",
+           "P4656"
+          ]
+         }
+        ]
+       }
+      ],
+      "P5008": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P5008",
+         "hash": "db4de88e10e72af509c0bb398ecb29c67ab1bfcc",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 134412769,
+           "id": "Q134412769"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q677823$C3AFB407-8DC0-43C6-B413-0A922BA08AC3",
+        "rank": "normal"
+       }
+      ],
+      "P4839": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P4839",
+         "hash": "a25d87b21efa01b836f45472f075b7e6e18f727d",
+         "datavalue": {
+          "value": "Entity[\"Building\", \"TheAddressDowntownDubai::28x68\"]",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "id": "Q677823$2ED6CC8E-317F-4A8A-9725-4721DC1575E8",
+        "rank": "normal"
+       }
+      ]
+     },
+     "sitelinks": {
+      "enwiki": {
+       "site": "enwiki",
+       "title": "Address Downtown",
+       "badges": []
+      }
+     }
+    },
+    "Q111150315": {
+     "type": "item",
+     "id": "Q111150315",
+     "labels": {
+      "en": {
+       "language": "en",
+       "value": "Address Downtown"
+      }
+     },
+     "claims": {
+      "P10290": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P10290",
+         "hash": "887639564f136d059e845c3d74a5ed6f3709db69",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 109248725,
+           "id": "Q109248725"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q111150315$B81EB88B-5AC8-4AC0-AC23-EFBF595B8A7C",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "ab054e9d51be996b5875a91517e341aa755e7c84",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "afd8bf352ab88a7fd87f57b9d3665a9f58999a13",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 1319169,
+               "id": "Q1319169"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ],
+           "P10487": [
+            {
+             "snaktype": "value",
+             "property": "P10487",
+             "hash": "c3e2fb52e15d6f877e74ef4d002f264547f2593b",
+             "datavalue": {
+              "value": "158829983",
+              "type": "string"
+             },
+             "datatype": "external-id"
+            }
+           ],
+           "P813": [
+            {
+             "snaktype": "value",
+             "property": "P813",
+             "hash": "528f685c7d0bcc4df231bed6037cb11811b3d6a4",
+             "datavalue": {
+              "value": {
+               "time": "+2022-03-00T00:00:00Z",
+               "timezone": 0,
+               "before": 0,
+               "after": 0,
+               "precision": 10,
+               "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+              },
+              "type": "time"
+             },
+             "datatype": "time"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248",
+           "P10487",
+           "P813"
+          ]
+         }
+        ]
+       }
+      ],
+      "P17": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P17",
+         "hash": "7de83bc3075bd3c57ead8c4d42073df5e85412a6",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 878,
+           "id": "Q878"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q111150315$D0BE0308-46C9-47FC-B6E1-4A99048517B8",
+        "rank": "normal"
+       }
+      ],
+      "P625": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P625",
+         "hash": "1a54fde0342412ff818586c5abf09fef65aeca15",
+         "datavalue": {
+          "value": {
+           "latitude": 25.19333,
+           "longitude": 55.27966,
+           "altitude": null,
+           "precision": 0.00001,
+           "globe": "http://www.wikidata.org/entity/Q2"
+          },
+          "type": "globecoordinate"
+         },
+         "datatype": "globe-coordinate"
+        },
+        "type": "statement",
+        "id": "Q111150315$A61C7FBA-995D-4033-8EB3-BA69C47023EA",
+        "rank": "normal",
+        "references": [
+         {
+          "hash": "ab054e9d51be996b5875a91517e341aa755e7c84",
+          "snaks": {
+           "P248": [
+            {
+             "snaktype": "value",
+             "property": "P248",
+             "hash": "afd8bf352ab88a7fd87f57b9d3665a9f58999a13",
+             "datavalue": {
+              "value": {
+               "entity-type": "item",
+               "numeric-id": 1319169,
+               "id": "Q1319169"
+              },
+              "type": "wikibase-entityid"
+             },
+             "datatype": "wikibase-item"
+            }
+           ],
+           "P10487": [
+            {
+             "snaktype": "value",
+             "property": "P10487",
+             "hash": "c3e2fb52e15d6f877e74ef4d002f264547f2593b",
+             "datavalue": {
+              "value": "158829983",
+              "type": "string"
+             },
+             "datatype": "external-id"
+            }
+           ],
+           "P813": [
+            {
+             "snaktype": "value",
+             "property": "P813",
+             "hash": "528f685c7d0bcc4df231bed6037cb11811b3d6a4",
+             "datavalue": {
+              "value": {
+               "time": "+2022-03-00T00:00:00Z",
+               "timezone": 0,
+               "before": 0,
+               "after": 0,
+               "precision": 10,
+               "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+              },
+              "type": "time"
+             },
+             "datatype": "time"
+            }
+           ]
+          },
+          "snaks-order": [
+           "P248",
+           "P10487",
+           "P813"
+          ]
+         }
+        ]
+       }
+      ],
+      "P31": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P31",
+         "hash": "07ca53d09e08208b99129c939590fc4b162e26ac",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 27686,
+           "id": "Q27686"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        "type": "statement",
+        "id": "Q111150315$C1331B3C-43D0-48BC-AAF9-F8A44A70F4F2",
+        "rank": "normal"
+       }
+      ],
+      "P10533": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P10533",
+         "hash": "f42917664c9f33b211466b2edade51a6ea3417ea",
+         "datavalue": {
+          "value": "4916405",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "id": "Q111150315$0657EF55-DD86-4C1B-9CE3-13A5999670D3",
+        "rank": "normal"
+       }
+      ],
+      "P10487": [
+       {
+        "mainsnak": {
+         "snaktype": "value",
+         "property": "P10487",
+         "hash": "c3e2fb52e15d6f877e74ef4d002f264547f2593b",
+         "datavalue": {
+          "value": "158829983",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        },
+        "type": "statement",
+        "id": "Q111150315$AE2300F9-6213-48B8-A847-BC8B130C6FB1",
+        "rank": "normal"
+       }
+      ]
+     },
+     "sitelinks": {}
+    }
+   },
+   "success": 1
+  }
+ },
+ {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Address_Downtown",
+  "status": 200,
+  "body": {
+   "type": "standard",
+   "title": "Address Downtown",
+   "displaytitle": "<span lang=\"en\" dir=\"ltr\"><span class=\"mw-page-title-main\">Address Downtown</span></span>",
+   "namespace": {
+    "id": 0,
+    "text": ""
+   },
+   "wikibase_item": "Q677823",
+   "titles": {
+    "canonical": "Address_Downtown",
+    "normalized": "Address Downtown",
+    "display": "<span lang=\"en\" dir=\"ltr\"><span class=\"mw-page-title-main\">Address Downtown</span></span>"
+   },
+   "pageid": 7085933,
+   "thumbnail": {
+    "source": "https://thumb.wikimedia.org/wikipedia/en/thumb/2/2f/The_Address_Downtown_Dubai.jpg/330px-The_Address_Downtown_Dubai.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "width": 330,
+    "height": 525
+   },
+   "originalimage": {
+    "source": "https://upload.wikimedia.org/wikipedia/en/2/2f/The_Address_Downtown_Dubai.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "width": 3038,
+    "height": 4832
+   },
+   "lang": "en",
+   "dir": "ltr",
+   "revision": "1357820770",
+   "tid": "170abb07-605d-11f1-a959-90859065e115",
+   "timestamp": "2026-06-04T21:33:56Z",
+   "description": "Hotel tower in Dubai, United Arab Emirates",
+   "description_source": "local",
+   "coordinates": {
+    "lat": 25.1936,
+    "lon": 55.2768
+   },
+   "content_urls": {
+    "desktop": {
+     "page": "https://en.wikipedia.org/wiki/Address_Downtown",
+     "revisions": "https://en.wikipedia.org/wiki/Address_Downtown?action=history",
+     "edit": "https://en.wikipedia.org/wiki/Address_Downtown?action=edit",
+     "talk": "https://en.wikipedia.org/wiki/Talk:Address_Downtown"
+    },
+    "mobile": {
+     "page": "https://en.wikipedia.org/wiki/Address_Downtown",
+     "revisions": "https://en.wikipedia.org/wiki/Special:History/Address_Downtown",
+     "edit": "https://en.wikipedia.org/wiki/Address_Downtown?action=edit",
+     "talk": "https://en.wikipedia.org/wiki/Talk:Address_Downtown"
+    }
+   },
+   "extract": "The Address Downtown, formerly The Address Downtown Dubai, is a 63-story, 302.2 m (991 ft) supertall hotel and residential skyscraper in the Downtown Dubai Area of Dubai, United Arab Emirates. It was built by Emaar Properties.",
+   "extract_html": "<p>The <b>Address Downtown</b>, formerly <b>The Address Downtown Dubai</b>, is a 63-story, 302.2 m (991 ft) supertall hotel and residential skyscraper in the Downtown Dubai Area of Dubai, United Arab Emirates. It was built by Emaar Properties.</p>"
+  }
+ },
+ {
+  "url": "https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=url%7Cextmetadata&iiurlwidth=960&titles=File%3AView+from+Burj+Khalifa+%288667329327%29.jpg",
+  "status": 200,
+  "body": {
+   "batchcomplete": "",
+   "query": {
+    "pages": {
+     "32241322": {
+      "pageid": 32241322,
+      "ns": 6,
+      "title": "File:View from Burj Khalifa (8667329327).jpg",
+      "imagerepository": "local",
+      "imageinfo": [
+       {
+        "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/View_from_Burj_Khalifa_%288667329327%29.jpg/960px-View_from_Burj_Khalifa_%288667329327%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "thumbwidth": 960,
+        "thumbheight": 720,
+        "responsiveUrls": {
+         "2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/View_from_Burj_Khalifa_%288667329327%29.jpg/1920px-View_from_Burj_Khalifa_%288667329327%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+        },
+        "thumbattribs": {
+         "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/View_from_Burj_Khalifa_%288667329327%29.jpg/960px-View_from_Burj_Khalifa_%288667329327%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+         "decoding": "async",
+         "loading": "lazy",
+         "width": 960,
+         "height": 720,
+         "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/View_from_Burj_Khalifa_%288667329327%29.jpg/1920px-View_from_Burj_Khalifa_%288667329327%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail 2x"
+        },
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/55/View_from_Burj_Khalifa_%288667329327%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "descriptionurl": "https://commons.wikimedia.org/wiki/File:View_from_Burj_Khalifa_(8667329327).jpg",
+        "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=32241322",
+        "extmetadata": {
+         "DateTime": {
+          "value": "2014-04-18 13:14:19",
+          "source": "mediawiki-metadata",
+          "hidden": ""
+         },
+         "ObjectName": {
+          "value": "View from Burj Khalifa (8667329327)",
+          "source": "mediawiki-metadata"
+         },
+         "CommonsMetadataExtension": {
+          "value": 1.2,
+          "source": "extension",
+          "hidden": ""
+         },
+         "Categories": {
+          "value": "Views from Burj Khalifa|Taken with Panasonic Lumix DMC-TZ10|The Address Downtown Dubai|The Dubai Fountain|Flickr images reviewed by FlickreviewR|Files with coordinates missing SDC location of creation|Flickr images missing SDC Flickr photo ID|Flickr images missing SDC published in",
+          "source": "commons-categories",
+          "hidden": ""
+         },
+         "Assessments": {
+          "value": "",
+          "source": "commons-categories",
+          "hidden": ""
+         },
+         "GPSLatitude": {
+          "value": "25.197369",
+          "source": "commons-desc-page"
+         },
+         "GPSLongitude": {
+          "value": "55.274190",
+          "source": "commons-desc-page"
+         },
+         "GPSMapDatum": {
+          "value": "WGS-84",
+          "source": "commons-desc-page",
+          "hidden": ""
+         },
+         "ImageDescription": {
+          "value": "View from Burj Khalifa",
+          "source": "commons-desc-page"
+         },
+         "DateTimeOriginal": {
+          "value": "2013-04-17 08:51",
+          "source": "commons-desc-page"
+         },
+         "Credit": {
+          "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/rob-young/8667329327/\">View from Burj Khalifa</a>",
+          "source": "commons-desc-page"
+         },
+         "Artist": {
+          "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/76562640@N00\">Rob Young</a> from United Kingdom",
+          "source": "commons-desc-page"
+         },
+         "LicenseShortName": {
+          "value": "CC BY 2.0",
+          "source": "commons-desc-page",
+          "hidden": ""
+         },
+         "UsageTerms": {
+          "value": "Creative Commons Attribution 2.0",
+          "source": "commons-desc-page"
+         },
+         "AttributionRequired": {
+          "value": "true",
+          "source": "commons-desc-page",
+          "hidden": ""
+         },
+         "LicenseUrl": {
+          "value": "https://creativecommons.org/licenses/by/2.0",
+          "source": "commons-desc-page"
+         },
+         "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+         },
+         "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+         },
+         "License": {
+          "value": "cc-by-2.0",
+          "source": "commons-templates",
+          "hidden": ""
+         }
+        }
+       }
+      ]
+     }
+    }
+   }
+  }
+ }
+]

@@ -1,0 +1,38 @@
+[
+ {
+  "url": "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A10%5D%3Bway(91402276)%3Bout%20tags%3B",
+  "status": 200,
+  "body": {
+   "version": 0.6,
+   "generator": "Overpass API 0.7.62.11 87bfad18",
+   "osm3s": {
+    "timestamp_osm_base": "2026-10-01T06:03:51Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+   },
+   "elements": [
+    {
+     "type": "way",
+     "id": 91402276,
+     "tags": {
+      "building": "yes",
+      "building:levels": "7",
+      "name": "Golden Tulip",
+      "name:en": "Golden Tulip",
+      "tourism": "hotel"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://www.wikidata.org/w/api.php?format=json&origin=*&action=wbsearchentities&search=Golden+Tulip+Al+Barsha&language=en&type=item&limit=5",
+  "status": 200,
+  "body": {
+   "searchinfo": {
+    "search": "Golden Tulip Al Barsha"
+   },
+   "search": [],
+   "success": 1
+  }
+ }
+]

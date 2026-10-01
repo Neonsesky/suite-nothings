@@ -94,7 +94,7 @@ describe('buildExport CSV escaping', () => {
     expect(hotelsCsv).toContain('"Café, ""Sur la Mer""\nSeaside"');
     const lines = hotelsCsv.trim().split('\r\n');
     expect(lines[0]).toBe(
-      'hotel_id,name,brand,address,area,city,region,country,country_code,lat,lng,source,osm_id,wikidata_id,website,phone,stars,price_level,description,description_source,amenities_json,cover_photo_id,enrichment_status,enriched_at,created_at,updated_at,deleted',
+      'hotel_id,name,brand,address,area,city,region,country,country_code,lat,lng,source,osm_id,wikidata_id,website,phone,stars,price_level,description,description_source,amenities_json,cover_photo_id,enrichment_status,enriched_at,created_at,updated_at,deleted,image_url,image_credit,enriched_fields_json',
     );
   });
 });
