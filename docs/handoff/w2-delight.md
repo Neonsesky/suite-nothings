@@ -13,3 +13,16 @@
 - `showMilestoneUnlock(ms)`: own React root on `<body>`; skips already-awarded ids, records the rest. `data-testid="milestone-unlock"`, `data-milestone-id`.
 - `notifyNewLetters(before, after)`.
 - Evidence: design/checkpoints/cp3/delight/milestone-*.png (6 frames at 390, one at 1440, reduced motion).
+
+## Us, wishlist, moments (lead)
+Edits outside owned paths:
+- `src/data/store.ts`: added `readMeta(key)` / `writeMeta(key, value)` (per-namespace IndexedDB meta), used by milestones persistence.
+- `src/features/add-stay/AddStaySheet.tsx`: `?wish=<id>` handler. Prefills the hotel through `hotelChoiceForWish()` (starts at step 2/5), and on save calls `fulfilWish(wish, visitId)` before the milestone check.
+- `src/features/stays/StaysScreen.tsx`: renders `features/moments/Moments` instead of `MomentsSlot`. `stays/MomentsSlot.tsx` and `stays/logic/moments.ts` are now unused (left for stays/QA to delete along with their tests).
+
+Notes for QA:
+- `src/features/stubs.module.css` has no importers now and can be deleted (contracts.md says so).
+- Haptics audit: only `Celebration` (save), `MapScreen` (chapter) and `MilestoneUnlock` (milestone) call `haptic()`, so it complies with SPEC §12.
+- The map's dashed wish pins already skip fulfilled and deleted wishes (`map/pins.ts`).
+- Year in review isn't built (stretch goal).
+- Run e2e with `--output .tmp/<name>`. Parallel runs wipe the shared `test-results/`, which shows up as false ENOENT failures.

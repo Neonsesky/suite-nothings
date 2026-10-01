@@ -88,3 +88,10 @@
 - [w2-delight milestones] "Outside the home city" compares hotel city to home city case-insensitively; a blank city falls back to > 40 km from home, and another country always counts — reverse/tune `isOutsideHomeCity()` / `OUTSIDE_HOME_KM` in engine.ts.
 - [w2-delight milestones] Awarded milestones are stored per namespace in meta `milestones.awarded`; on a namespace's first load everything already reached is backfilled silently, and stays synced from the other phone are never animated (only local saves are) — the Us grid reads truth from the stays, so nothing is lost — reverse by calling `showMilestoneUnlock` from a store subscription.
 - [w2-delight milestones] The unlock overlay sits above toasts (z-toast + 1) and the "new note" toast waits until the stamps are dismissed — reverse in MilestoneUnlock.module.css `.root` and letters.ts `setLetterToastGate`.
+- w2-delight: Us drops the header gear (Settings is a row in the links card) — the Demo badge sits in the same top-right corner on phones — re-add `.gear` link in `UsScreen.tsx`.
+- w2-delight: count stamps (first stay, N hotels) render honey; the other milestones keep ginger — §3.2 keeps ginger for love/celebration, and twelve red stamps read as an alarm — `toneFor()` in `us/StampGrid.tsx`.
+- w2-delight: "Surprise me" weights top-priority wishes ×2 and skips the previous pick — a respin should feel new — `pickSurprise()` in `wishlist/logic.ts`.
+- w2-delight: a wish converts to an existing hotel when name (and city) match, else a new hotel from its pin; wishes without a pin open add-stay at search — avoids duplicate hotels — `hotelChoiceForWish()` in `wishlist/convert.ts`.
+- w2-delight: wish removal is a soft delete (`deleted: true`) with an Undo toast; no confirm sheet — SPEC soft-delete+undo rule — `removeWish()` in `WishlistScreen.tsx`.
+- w2-delight: on-this-day includes the same day-of-month in earlier months (not only years); years rank first, up to 3 cards; the last anniversary card shows only when there's no memory — SPEC §12 wording — `features/moments/logic.ts`.
+- w2-delight: year in review (stretch) not built — budget went to the core screens — build on `moments/logic.ts`.
