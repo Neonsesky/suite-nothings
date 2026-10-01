@@ -265,6 +265,12 @@ describe('writes', () => {
     expect(post(env, 'updateSettings', { units: 'mi' }).error?.code).toBe('bad_request');
   });
 
+  it('aiDescribe and placesLookup answer not_configured without a key (w2-enrich)', () => {
+    const env = ready();
+    expect(post(env, 'aiDescribe', { prompt: 'Facts: {}' }).data).toEqual({ ok: false, code: 'not_configured' });
+    expect(post(env, 'placesLookup', { name: 'Atlantis The Royal', lat: 25.13, lng: 55.12 }).data).toEqual({ ok: false, code: 'not_configured' });
+  });
+
   it('geocode maps Maps.newGeocoder results and biases near a point', () => {
     const env = ready();
     const res = post(env, 'geocode', { query: 'Burj Al Arab', near: { lat: 25.2, lng: 55.27 } });

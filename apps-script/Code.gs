@@ -140,7 +140,7 @@ function doPost(e) {
       throw apiError_('bad_request', 'The request needs a payload object.');
     }
     var data = handler(payload);
-    if (action !== 'geocode') log_(actorOf_(payload), action, describeWrite_(action, payload, data));
+    if (READ_ONLY_POSTS[action] !== true) log_(actorOf_(payload), action, describeWrite_(action, payload, data));
     return ok_(data);
   });
 }
@@ -156,7 +156,12 @@ var POST_HANDLERS = {
   markLetterRead: function (p) { return apiMarkLetterRead_(p); },
   updateSettings: function (p) { return apiUpdateSettings_(p); },
   geocode: function (p) { return apiGeocode_(p); },
+  aiDescribe: function (p) { return apiAiDescribe_(p); },
+  placesLookup: function (p) { return apiPlacesLookup_(p); },
 };
+
+/** POST actions that only read or compute; they don't go in the Log tab. */
+var READ_ONLY_POSTS = { geocode: true, aiDescribe: true, placesLookup: true };
 
 // ---------------------------------------------------------------------------------------------
 // Answers, errors, passphrase
@@ -1191,4 +1196,81 @@ function removeTestRows_(sheetName, idField, prefix) {
     }).map(function (r) { return r.rowNumber; });
     rows.sort(function (a, b) { return b - a; }).forEach(function (n) { t.sheet.deleteRow(n); });
   });
+}
+
+// ---------------------------------------------------------------------------------------------
+// Optional hotel-info helpers (SPEC §11.4–11.5, w2-enrich). Both are off until a key is set in
+// Script Properties, and both answer { ok: false, code: 'not_configured' } until then.
+// ---------------------------------------------------------------------------------------------
+
+/**
+ * Rewrites already-fetched facts into a short description with a hosted model. The app builds the
+ * prompt from facts only. Script Properties: AI_API_KEY, AI_PROVIDER ('gemini' or 'claude'),
+ * optional AI_MODEL.
+ */
+function apiAiDescribe_(p) {
+  var props = PropertiesService.getScriptProperties();
+  var key = props.getProperty('AI_API_KEY');
+  var provider = String(props.getProperty('AI_PROVIDER') || 'gemini').toLowerCase();
+  if (!key) return { ok: false, code: 'not_configured' };
+  var prompt = toText_(p.prompt).slice(0, 4000);
+  if (!prompt) throw apiError_('bad_request', 'aiDescribe needs a prompt.');
+  var model = props.getProperty('AI_MODEL');
+  var res;
+  if (provider === 'claude') {
+    res = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
+      method: 'post',
+      contentType: 'application/json',
+      headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+      payload: JSON.stringify({ model: model || 'claude-haiku-4-5-20251001', max_tokens: 400, messages: [{ role: 'user', content: prompt }] }),
+      muteHttpExceptions: true,
+    });
+    if (res.getResponseCode() !== 200) return { ok: false, code: 'ai_failed', status: res.getResponseCode() };
+    var body = JSON.parse(res.getContentText());
+    var text = (body.content || []).filter(function (c) { return c.type === 'text'; }).map(function (c) { return c.text; }).join('');
+    return { ok: true, text: text };
+  }
+  res = UrlFetchApp.fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model || 'gemini-2.0-flash') + ':generateContent', {
+    method: 'post',
+    contentType: 'application/json',
+    headers: { 'x-goog-api-key': key },
+    payload: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 400 } }),
+    muteHttpExceptions: true,
+  });
+  if (res.getResponseCode() !== 200) return { ok: false, code: 'ai_failed', status: res.getResponseCode() };
+  var g = JSON.parse(res.getContentText());
+  var parts = (((g.candidates || [])[0] || {}).content || {}).parts || [];
+  return { ok: true, text: parts.map(function (x) { return x.text || ''; }).join('') };
+}
+
+/**
+ * Google Places (New) text search for one hotel near its pin. Needs PLACES_API_KEY with billing
+ * enabled on its Google Cloud project — every call can cost money (see SETUP.md).
+ */
+function apiPlacesLookup_(p) {
+  var key = PropertiesService.getScriptProperties().getProperty('PLACES_API_KEY');
+  if (!key) return { ok: false, code: 'not_configured' };
+  var name = toText_(p.name);
+  var lat = Number(p.lat), lng = Number(p.lng);
+  if (!name || !isFinite(lat) || !isFinite(lng)) throw apiError_('bad_request', 'placesLookup needs a name, lat and lng.');
+  var res = UrlFetchApp.fetch('https://places.googleapis.com/v1/places:searchText', {
+    method: 'post',
+    contentType: 'application/json',
+    headers: {
+      'X-Goog-Api-Key': key,
+      'X-Goog-FieldMask': 'places.formattedAddress,places.websiteUri,places.internationalPhoneNumber,places.priceLevel',
+    },
+    payload: JSON.stringify({ textQuery: name, maxResultCount: 1, locationBias: { circle: { center: { latitude: lat, longitude: lng }, radius: 300 } } }),
+    muteHttpExceptions: true,
+  });
+  if (res.getResponseCode() !== 200) return { ok: false, code: 'places_failed', status: res.getResponseCode() };
+  var place = (JSON.parse(res.getContentText()).places || [])[0];
+  if (!place) return { ok: true };
+  return {
+    ok: true,
+    address: place.formattedAddress || null,
+    website: place.websiteUri || null,
+    phone: place.internationalPhoneNumber || null,
+    price_level: place.priceLevel || null,
+  };
 }
