@@ -2,7 +2,7 @@
  * "Save our stay": hotel (if new) → visit → photos, all through the store so every write lands in
  * IndexedDB and the outbox first and syncs later (works offline).
  */
-import { addPhoto, getState, upsertHotel, upsertVisit } from '@/data/store';
+import { addPhoto, getState, updatePhotoCaption, upsertHotel, upsertVisit } from '@/data/store';
 import { buildStays } from '@/data/stays';
 import type { PersonId } from '@/config/couple';
 import type { Stay, Visit } from '@/data/types';
@@ -34,6 +34,14 @@ export async function saveStay(draft: AddStayDraft, me: PersonId | null, existin
     void requestEnrichment(hotel.hotel_id).catch(() => undefined);
   }
   let visit = await upsertVisit(plan.visit);
+  // Edit mode (SPEC §8.4 "edit in place"): captions on already-saved photos are editable there,
+  // so push through any that changed. New photos get their caption at `addPhoto` time below.
+  for (const p of draft.photos) {
+    if (!p.photo_id) continue;
+    const current = getState().photos.get(p.photo_id);
+    const trimmed = p.caption.trim();
+    if (current && (current.caption ?? '') !== trimmed) await updatePhotoCaption(p.photo_id, trimmed);
+  }
   const created: string[] = [];
   for (const p of plan.newPhotos) {
     if (!p.full || !p.thumb) continue;

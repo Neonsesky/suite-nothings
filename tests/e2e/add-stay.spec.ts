@@ -222,6 +222,51 @@ test.describe('add a stay', () => {
     await expect(page.getByLabel('Favourite moment')).toHaveValue('Room service at midnight');
   });
 
+  test('edit mode makes a saved photo caption editable', async ({ page }) => {
+    await openAdd(page);
+    await page.getByRole('option').first().click();
+    await expect(stepCount(page)).toHaveText('2/5');
+    await next(page).click();
+    await next(page).click();
+    await expect(stepCount(page)).toHaveText('4/5');
+    await page.getByTestId('photo-input').setInputFiles(PHOTO);
+    await expect(page.getByTestId('photo-cell')).toHaveCount(1);
+    await page.getByRole('button', { name: 'Keep what I entered' }).click();
+    await page.getByLabel('Caption for photo 1').fill('Original caption');
+    await next(page).click();
+    await page.getByTestId('save-stay').click();
+    await skipCelebration(page);
+    await expect(page.getByText('Stay saved')).toBeVisible();
+    await expect(page).toHaveURL(/#\/$/);
+
+    // New (unsaved-in-sheet) photos are editable already; the bug was that reopening the stay
+    // in edit mode froze the caption on an already-saved photo. Find the stay we just made.
+    const card = page.locator('[data-visit-id]').first();
+    await card.click();
+    await expect(page).toHaveURL(/#\/stay\//);
+    const visitId = page.url().split('#/stay/')[1];
+    expect(visitId).toBeTruthy();
+
+    await page.goto(`./#/add?edit=${visitId}`);
+    await expect(sheet(page)).toBeVisible();
+    await expect(stepCount(page)).toBeVisible();
+    await page.getByRole('button', { name: /Photos, step 4/ }).click();
+    const captionInput = page.getByLabel('Caption for photo 1');
+    await expect(captionInput).toBeEditable();
+    await expect(captionInput).toHaveValue('Original caption');
+    await captionInput.fill('Edited caption');
+    await next(page).click();
+    await page.getByTestId('save-stay').click();
+    await expect(page.getByText('Stay saved').last()).toBeVisible();
+    await expect(page).not.toHaveURL(/#\/add/);
+
+    await page.goto(`./#/add?edit=${visitId}`);
+    await expect(sheet(page)).toBeVisible();
+    await expect(stepCount(page)).toBeVisible();
+    await page.getByRole('button', { name: /Photos, step 4/ }).click();
+    await expect(page.getByLabel('Caption for photo 1')).toHaveValue('Edited caption');
+  });
+
   test('opening add over a stay detail keeps the stay behind it', async ({ page }) => {
     await resetApp(page, { hash: '#/' });
     const visitId = await page.locator('[data-visit-id]').first().getAttribute('data-visit-id');

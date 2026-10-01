@@ -255,7 +255,7 @@ export default function AddStaySheet() {
         {stepId === 'hotel' ? <HotelStep choice={draft.hotel} onPick={pickHotel} onClear={() => update({ hotel: null })} autoHere={here && !draft.hotel} onManualChange={setHotelManual} /> : null}
         {stepId === 'when' ? <WhenStep d={draft} update={update} problem={problem} /> : null}
         {stepId === 'what' ? <WhatStep d={draft} update={update} /> : null}
-        {stepId === 'photos' ? <PhotosStep d={draft} update={update} /> : null}
+        {stepId === 'photos' ? <PhotosStep d={draft} update={update} editing={!!editId} /> : null}
         {stepId === 'good' ? <GoodPartStep d={draft} update={update} me={me} /> : null}
         {problem && stepId !== 'when' ? (
           <p className={s.problem} role="alert">

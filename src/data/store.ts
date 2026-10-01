@@ -574,6 +574,20 @@ export async function addPhoto(visitId: string, file: Blob, opts: { caption?: st
 }
 
 /**
+ * Edit the caption on a photo that was already saved (e.g. revisiting it in `?edit=` mode).
+ * Queues the same idempotent `uploadPhoto` upsert `addPhoto` uses: the server replaces only the
+ * row's fields and never re-uploads bytes once `thumb_file_id`/`full_file_id` are already set.
+ */
+export async function updatePhotoCaption(photoId: string, caption: string): Promise<Photo | undefined> {
+  const photo = state.photos.get(photoId);
+  if (!photo) return undefined;
+  const next: Photo = { ...photo, caption: caption.trim() || null, updated_at: nowIso() };
+  setState({ photos: new Map(state.photos).set(photoId, next) });
+  await write('photos', next, 'uploadPhoto', { photo: next, thumb_key: `${photoId}:thumb`, full_key: `${photoId}:full` });
+  return next;
+}
+
+/**
  * Some WebKit builds (private tabs, test runners) refuse Blobs in IndexedDB; store the bytes then.
  */
 async function putPhotoBlobs(d: ReturnType<typeof requireDb>, blobs: PhotoBlob[]): Promise<void> {

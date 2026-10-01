@@ -19,7 +19,7 @@ import s from './AddStay.module.css';
 
 type Update = (patch: Partial<AddStayDraft> | ((d: AddStayDraft) => Partial<AddStayDraft>)) => void;
 
-export function PhotosStep({ d, update }: { d: AddStayDraft; update: Update }) {
+export function PhotosStep({ d, update, editing = false }: { d: AddStayDraft; update: Update; editing?: boolean }) {
   const [pending, setPending] = useState<string[]>([]);
   const existingHotel = useHotel(d.hotel?.kind === 'existing' ? d.hotel.hotel_id : null);
   const hotelAt = d.hotel?.kind === 'new' ? d.hotel.hotel : existingHotel;
@@ -112,7 +112,7 @@ export function PhotosStep({ d, update }: { d: AddStayDraft; update: Update }) {
                 </button>
               </div>
             </div>
-            <input className={`${s.input} ${s.caption}`} placeholder="Caption" aria-label={`Caption for photo ${i + 1}`} value={p.caption} onChange={(e) => caption(p.key, e.target.value)} readOnly={!!p.photo_id} />
+            <input className={`${s.input} ${s.caption}`} placeholder="Caption" aria-label={`Caption for photo ${i + 1}`} value={p.caption} onChange={(e) => caption(p.key, e.target.value)} readOnly={!!p.photo_id && !editing} />
           </div>
         ))}
         {pending.map((k) => (
