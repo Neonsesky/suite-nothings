@@ -31,15 +31,23 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 1500,
       rollupOptions: {
         output: {
-          // Heavy libraries get their own chunks; they are only ever imported lazily.
-          manualChunks(id: string) {
-            if (id.includes('node_modules/maplibre-gl')) return 'maplibre';
-            if (id.includes('node_modules/three')) return 'three';
-            if (id.includes('node_modules/gsap')) return 'gsap';
-            // exifr: no manual chunk. Its own dynamic import() already splits it, and a manual chunk
-            // would capture Vite's preload helper and get modulepreloaded on the initial path.
-            if (id.includes('node_modules/qrcode')) return 'qrcode';
-            return undefined;
+          codeSplitting: {
+            groups: [
+              // Heavy libraries get their own chunks; they are only ever imported lazily.
+              // exifr gets no group: its own dynamic import() already splits it, and a group
+              // here would capture Vite's preload helper and get modulepreloaded on the
+              // initial path.
+              { name: 'maplibre', test: /node_modules[\\/]maplibre-gl/, priority: 3 },
+              { name: 'three', test: /node_modules[\\/]three/, priority: 3 },
+              { name: 'gsap', test: /node_modules[\\/]gsap/, priority: 3 },
+              { name: 'qrcode', test: /node_modules[\\/]qrcode/, priority: 3 },
+              // Everything else statically reachable from the entry (react, the store, seed
+              // data, small utils) is one chunk instead of ~15 tiny ones — same modules, same
+              // eager/lazy boundary (rolldown's own `$initial` reachability tag decides
+              // membership, not a hand-picked file list), just fewer requests on the
+              // simulated-RTT-heavy Lighthouse mobile profile.
+              { name: 'app-initial', tags: ['$initial'], priority: 1 },
+            ],
           },
         },
       },

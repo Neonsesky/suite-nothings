@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!-- The body and heading faces used above the fold on every route (Lighthouse perf-1):
+         preloaded so the browser fetches them alongside the JS/CSS instead of discovering them
+         only after the stylesheet is parsed. -->
+    <link rel="preload" as="font" type="font/woff2" href="%BASE_URL%fonts/manrope-latin-wght-normal.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="%BASE_URL%fonts/archivo-latin-wdth-normal.woff2" crossorigin />
     <!--
       The app has no dark theme, so both schemes point at the same paper header colour (#FFFFFF).
       Two metas (rather than one) so a future dark surface only needs a new hex here, not a

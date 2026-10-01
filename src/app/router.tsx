@@ -3,6 +3,11 @@
  * each lazy-loads a component from its feature folder. URLs look like `#/map?city=Dubai`.
  */
 import { createContext, createElement, lazy, useContext, useSyncExternalStore, type ComponentType, type LazyExoticComponent, type MouseEvent, type ReactNode } from 'react';
+// Statically imported (not a dynamic import() like every other route below): '/' is the only
+// screen guaranteed to render on first launch, so bundling it avoids a second fetch-then-render
+// round trip after the main chunk executes — that round trip was costing Lighthouse mobile LCP
+// (perf-1). `lazy()` still wraps it so `RouteDef.Component` keeps one type for every route.
+import StaysScreen from '@/features/stays/StaysScreen';
 
 export type RouteName =
   | 'stays'
@@ -30,7 +35,7 @@ export interface RouteDef {
 }
 
 export const ROUTES: readonly RouteDef[] = [
-  { name: 'stays', pattern: '/', kind: 'screen', tab: 'stays', Component: lazy(() => import('@/features/stays/StaysScreen')) },
+  { name: 'stays', pattern: '/', kind: 'screen', tab: 'stays', Component: lazy(() => Promise.resolve({ default: StaysScreen })) },
   { name: 'stay', pattern: '/stay/:visitId', kind: 'screen', tab: 'stays', Component: lazy(() => import('@/features/stay-detail/StayDetailScreen')) },
   { name: 'add', pattern: '/add', kind: 'sheet', Component: lazy(() => import('@/features/add-stay/AddStaySheet')) },
   { name: 'map', pattern: '/map', kind: 'screen', tab: 'map', Component: lazy(() => import('@/features/map/MapScreen')) },
