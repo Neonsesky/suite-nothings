@@ -346,9 +346,10 @@ export class JourneyPlayer {
   }
 
   // ---- per frame ----------------------------------------------------------------------------
+  /** A small epsilon absorbs GSAP's `.time()` read-back precision (see `stopIndexAt`). */
   private segmentAt(time: number): number {
     const segs = this.schedule.segments;
-    for (let i = segs.length - 1; i >= 0; i--) if (time >= segs[i].start) return i;
+    for (let i = segs.length - 1; i >= 0; i--) if (time + 1e-4 >= segs[i].start) return i;
     return segs.length ? 0 : -1;
   }
 

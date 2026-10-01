@@ -480,9 +480,14 @@ export function buildSchedule(plan: ReturnType<typeof planJourney>): Schedule {
   return { segments, total: time, stopTimes };
 }
 
-/** Index of the last stop reached at `time` (-1 before the first arrival). */
+/**
+ * Index of the last stop reached at `time` (-1 before the first arrival). A small epsilon
+ * absorbs GSAP's own time-reading precision (its `.time()` getter rounds, so a seek to an exact
+ * stop time can read back a hair below it).
+ */
+const STOP_EPS = 1e-4;
 export function stopIndexAt(schedule: Schedule, time: number): number {
   let idx = -1;
-  for (let i = 0; i < schedule.stopTimes.length && schedule.stopTimes[i] <= time; i++) idx = i;
+  for (let i = 0; i < schedule.stopTimes.length && schedule.stopTimes[i] <= time + STOP_EPS; i++) idx = i;
   return idx;
 }
