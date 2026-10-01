@@ -1,0 +1,222 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-toast) + 1); /* above toasts: this moment has the stage to itself */
+  display: grid;
+  place-items: center;
+  padding: var(--space-6) var(--gutter) calc(var(--space-6) + env(safe-area-inset-bottom));
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(20 20 28 / 0.62);
+  animation: fade var(--dur-base) var(--ease-standard) both;
+}
+
+.panel {
+  position: relative;
+  width: min(100%, 22rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  background: var(--color-cream);
+  color: var(--color-ink);
+  border: 0.125rem solid var(--color-ink);
+  border-radius: var(--radius-lg);
+  box-shadow: 0.375rem 0.375rem 0 var(--color-ink);
+  cursor: default;
+  animation: panelIn 320ms var(--ease-standard) both;
+}
+
+.stage {
+  position: relative;
+  width: 13.5rem;
+  height: 13.5rem;
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--space-2);
+}
+
+/* Honey wash that soaks outwards as the stamp lands. */
+.blot {
+  position: absolute;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  background: var(--color-honey-soft);
+  animation: blot 600ms var(--ease-standard) 260ms both;
+}
+
+/* Ink ring spreading from the stamp's edge. */
+.ring {
+  position: absolute;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  border: 0.125rem solid var(--color-ink);
+  opacity: 0;
+  animation: ring 720ms cubic-bezier(0.1, 0.6, 0.2, 1) 280ms both;
+}
+
+.stamp {
+  position: relative;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-ginger);
+  border: 0.1875rem solid var(--color-ink);
+  color: var(--color-ink);
+  box-shadow: 0.25rem 0.25rem 0 var(--color-ink);
+  transform: rotate(-4deg);
+  animation: slam 420ms cubic-bezier(0.55, 0, 0.3, 1) both;
+}
+.stampRing {
+  position: absolute;
+  inset: 0.5rem;
+  border-radius: 50%;
+  border: 0.09375rem dashed var(--color-ink);
+}
+.short {
+  font-family: var(--font-display);
+  font-stretch: var(--font-display-stretch);
+  font-weight: var(--weight-extrabold);
+  font-size: 3rem;
+  line-height: 1;
+  letter-spacing: var(--tracking-tight);
+}
+.small {
+  margin-top: var(--space-1);
+  max-width: 7rem;
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: var(--leading-tight);
+}
+
+.speck {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.5rem;
+  height: 0.875rem;
+  margin: -0.4375rem 0 0 -0.25rem;
+  border: 0.0625rem solid var(--color-ink);
+  border-radius: 0.125rem;
+  opacity: 0;
+  animation: speck 1100ms cubic-bezier(0.15, 0.7, 0.3, 1) both;
+}
+.round {
+  width: 0.5625rem;
+  height: 0.5625rem;
+  margin: -0.28rem 0 0 -0.28rem;
+  border-radius: 50%;
+}
+.ginger { background: var(--color-ginger); }
+.honey { background: var(--color-honey); }
+.honeyDeep { background: var(--color-honey-deep); }
+
+.eyebrow {
+  margin: 0;
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-ginger-ink);
+  animation: rise 360ms var(--ease-standard) 380ms both;
+}
+.title {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-display);
+  font-stretch: var(--font-display-stretch);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  animation: rise 360ms var(--ease-standard) 430ms both;
+}
+.caption {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+  color: var(--color-muted);
+  max-width: 18rem;
+  animation: rise 360ms var(--ease-standard) 480ms both;
+}
+.cta {
+  margin-top: var(--space-6);
+  min-width: 10rem;
+  animation: rise 360ms var(--ease-standard) 540ms both;
+}
+
+@media (min-width: 768px) {
+  .panel {
+    width: 26rem;
+    padding: var(--space-6) var(--space-8) var(--space-8);
+  }
+  .stage {
+    width: 15rem;
+    height: 15rem;
+  }
+  .stamp,
+  .ring,
+  .blot {
+    width: 11.5rem;
+    height: 11.5rem;
+  }
+  .short { font-size: 3.5rem; }
+  .title { font-size: var(--text-3xl); }
+}
+
+/* Reduced motion: a calm fade of the whole panel, nothing slams or flies. */
+.reduced .panel { animation: fade var(--dur-slow) var(--ease-standard) both; }
+.reduced .stamp,
+.reduced .eyebrow,
+.reduced .title,
+.reduced .caption,
+.reduced .cta,
+.reduced .blot { animation: none; }
+.reduced .ring { display: none; }
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(0.75rem) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes slam {
+  0% { opacity: 0; transform: scale(1.6) rotate(-8deg); box-shadow: 1.25rem 1.25rem 0 rgb(41 41 53 / 0); }
+  45% { opacity: 1; }
+  71% { transform: scale(0.94) rotate(-4deg); box-shadow: 0 0 0 var(--color-ink); }
+  86% { transform: scale(1.03) rotate(-4deg); }
+  100% { opacity: 1; transform: scale(1) rotate(-4deg); box-shadow: 0.25rem 0.25rem 0 var(--color-ink); }
+}
+@keyframes ring {
+  0% { opacity: 0.7; transform: scale(0.95); }
+  100% { opacity: 0; transform: scale(1.75); border-width: 0.03rem; }
+}
+@keyframes blot {
+  0% { opacity: 0; transform: scale(0.9); }
+  40% { opacity: 1; }
+  100% { opacity: 1; transform: scale(1.32); }
+}
+@keyframes speck {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(0.6); }
+  65% { opacity: 1; transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + var(--fall))) rotate(calc(var(--rot) * 1.4)) scale(0.9); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to { opacity: 1; transform: none; }
+}
