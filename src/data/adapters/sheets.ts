@@ -223,6 +223,9 @@ export function parseHotel(row: Raw): Hotel | null {
     cover_photo_id: str(field(row, 'cover_photo_id')),
     enrichment_status: oneOf(field(row, 'enrichment_status'), ENRICH) ?? 'none',
     enriched_at: parseTimestamp(field(row, 'enriched_at')),
+    image_url: str(field(row, 'image_url')),
+    image_credit: str(field(row, 'image_credit')),
+    enriched_fields_json: jsonArray(field(row, 'enriched_fields_json')),
     ...stamps(row),
     deleted: bool(field(row, 'deleted')),
   };
@@ -589,6 +592,9 @@ export function createSheetsAdapter(config: ConnectionConfig, opts: SheetsAdapte
     async geocode(query: string, near?: { lat: number; lng: number }) {
       const data = (await post('geocode', { query, ...(near ? { near } : {}) })) as Raw;
       return rows(data.results, toPlace);
+    },
+    async invoke(action: string, payload: unknown) {
+      return post(action, payload);
     },
     async upsertLetter(letter: Letter) {
       const res = rowResult(await post('upsertLetter', letter), 'letters', parseLetter);

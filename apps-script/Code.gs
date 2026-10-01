@@ -31,7 +31,8 @@ var TABS = {
     columns: ['hotel_id', 'name', 'brand', 'address', 'area', 'city', 'region', 'country', 'country_code',
       'lat', 'lng', 'source', 'osm_id', 'wikidata_id', 'website', 'phone', 'stars', 'price_level',
       'description', 'description_source', 'amenities_json', 'cover_photo_id', 'enrichment_status',
-      'enriched_at', 'created_at', 'updated_at', 'deleted', 'server_updated_at'],
+      'enriched_at', 'created_at', 'updated_at', 'deleted', 'server_updated_at',
+      'image_url', 'image_credit', 'enriched_fields_json'],
   },
   Visits: {
     id: 'visit_id', key: 'visits',

@@ -62,4 +62,6 @@ export interface DataAdapter {
   getPhoto(id: string): Promise<Blob>;
   /** Server-side geocode fallback. Demo returns []. */
   geocode(query: string, near?: { lat: number; lng: number }): Promise<PlaceResult[]>;
+  /** Optional extra Apps Script actions (w2-enrich: `aiDescribe`, `placesLookup`). Demo has none. */
+  invoke?(action: string, payload: unknown): Promise<unknown>;
 }
