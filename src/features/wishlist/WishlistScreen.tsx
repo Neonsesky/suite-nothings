@@ -1,5 +1,5 @@
 /** Next check-ins (SPEC §12): our wishlist with dashed pins, "Surprise me" and one-tap → stay. */
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { href, navigate, useQueryParam } from '@/app/router';
 import { Button, ButtonLink } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
@@ -77,13 +77,19 @@ export default function WishlistScreen() {
   const done = useMemo(() => fulfilledWishes(all), [all]);
   const surpriseParam = useQueryParam('surprise') === '1';
   const [adding, setAdding] = useState(false);
-  const [surprise, setSurprise] = useState(false);
-
-  useEffect(() => {
-    if (ready && surpriseParam && wishes.length) setSurprise(true);
-    // Open once on arrival from the home teaser's "Surprise me".
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, surpriseParam]);
+  // Arriving from the home teaser's "Surprise me" (`?surprise=1`) opens the board straight away.
+  const [surprise, setSurprise] = useState(surpriseParam);
+  // Fresh keys remount the sheets' contents, so each open starts clean (and spins anew).
+  const [addKey, setAddKey] = useState(0);
+  const [spinKey, setSpinKey] = useState(0);
+  const openAdd = () => {
+    setAddKey((k) => k + 1);
+    setAdding(true);
+  };
+  const openSurprise = () => {
+    setSpinKey((k) => k + 1);
+    setSurprise(true);
+  };
 
   const closeSurprise = () => {
     setSurprise(false);
@@ -109,11 +115,11 @@ export default function WishlistScreen() {
         </div>
         <div className={s.headActions}>
           {wishes.length ? (
-            <Button variant="secondary" icon={<IconDice size={18} />} onClick={() => setSurprise(true)} data-testid="surprise-me">
+            <Button variant="secondary" icon={<IconDice size={18} />} onClick={openSurprise} data-testid="surprise-me">
               Surprise me
             </Button>
           ) : null}
-          <Button icon={<IconPlus size={18} />} onClick={() => setAdding(true)} data-testid="add-wish">
+          <Button icon={<IconPlus size={18} />} onClick={openAdd} data-testid="add-wish">
             Add a wish
           </Button>
         </div>
@@ -132,7 +138,7 @@ export default function WishlistScreen() {
           title={done.length ? 'Every wish came true' : 'No wishes yet'}
           body={done.length ? 'Time to dream up the next one.' : 'Add a hotel we’re dreaming about.'}
           action={
-            <Button icon={<IconPlus size={18} />} onClick={() => setAdding(true)}>
+            <Button icon={<IconPlus size={18} />} onClick={openAdd}>
               Add a wish
             </Button>
           }
@@ -160,8 +166,8 @@ export default function WishlistScreen() {
         </section>
       ) : null}
 
-      <AddWishSheet open={adding} onClose={() => setAdding(false)} />
-      <SurpriseSheet open={surprise} wishes={wishes} onClose={closeSurprise} />
+      <AddWishSheet key={`add-${addKey}`} open={adding} onClose={() => setAdding(false)} />
+      <SurpriseSheet key={`spin-${spinKey}`} open={surprise && wishes.length > 0} wishes={wishes} onClose={closeSurprise} />
     </div>
   );
 }

@@ -15,18 +15,9 @@ const BOARD = 14;
 
 export function SurpriseSheet({ open, wishes, onClose }: { open: boolean; wishes: readonly Wish[]; onClose(): void }) {
   const reduced = useReducedMotion();
-  const [pick, setPick] = useState<Wish | null>(null);
+  const [pick, setPick] = useState<Wish | null>(() => pickSurprise(wishes));
   const [spin, setSpin] = useState(0);
   const [settled, setSettled] = useState(false);
-
-  useEffect(() => {
-    if (!open) return;
-    setPick((prev) => pickSurprise(wishes, prev?.wish_id ?? null));
-    setSettled(false);
-    setSpin((n) => n + 1);
-    // Only re-pick when the sheet opens; wishes changing underneath shouldn't re-spin it.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
 
   // Safety net: reveal the card even if a flap never reports back.
   useEffect(() => {

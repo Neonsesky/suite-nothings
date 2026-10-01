@@ -32,29 +32,9 @@ export function AddWishSheet({ open, onClose }: { open: boolean; onClose(): void
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!open) return;
-    setQ('');
-    setResults([]);
-    setStatus('idle');
-    setPlace(null);
-    setManual(false);
-    setName('');
-    setCity('');
-    setCountry('');
-    setNote('');
-    setPriority(2);
-    setBy(me);
-    setTried(false);
-  }, [open, me]);
-
-  useEffect(() => {
     if (!open || manual || place) return;
     const term = q.trim();
-    if (term.length < 2) {
-      setStatus('idle');
-      setResults([]);
-      return;
-    }
+    if (term.length < 2) return;
     const ctrl = new AbortController();
     const t = window.setTimeout(async () => {
       setStatus('loading');
@@ -75,6 +55,7 @@ export function AddWishSheet({ open, onClose }: { open: boolean; onClose(): void
     };
   }, [q, open, manual, place, home]);
 
+  const searching = q.trim().length >= 2;
   const finalName = place ? place.name : name.trim();
   const canSave = finalName.length > 0;
 
@@ -166,7 +147,7 @@ export function AddWishSheet({ open, onClose }: { open: boolean; onClose(): void
               </span>
             </label>
             {tried && !canSave ? <p className={s.problem}>Pick a hotel from the list, or add it by hand.</p> : null}
-            <div className={s.results} aria-live="polite" aria-busy={status === 'loading'}>
+            <div className={s.results} aria-live="polite" aria-busy={status === 'loading'} hidden={!searching}>
               {status === 'loading' ? <p className={s.hint}>Looking around…</p> : null}
               {status === 'offline' ? <p className={s.hint}>We're offline, so search is napping. Add it by hand and we'll keep it.</p> : null}
               {status === 'error' ? <p className={s.hint}>Hotel search didn't answer. Try again in a moment, or add it by hand.</p> : null}
