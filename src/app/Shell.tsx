@@ -23,6 +23,15 @@ import { useShortcuts } from './shortcuts';
 import s from './Shell.module.css';
 
 type Tab = NonNullable<RouteDef['tab']>;
+
+/** QA-only: `#/…&__crash=1` with `localStorage['sn:e2e']==='1'` throws, so the error boundary's
+ * fallback can be screenshotted without a real bug. Inert in production. */
+function CrashProbe() {
+  if (typeof window !== 'undefined' && localStorage.getItem('sn:e2e') === '1' && location.hash.includes('__crash=1')) {
+    throw new Error('QA crash probe');
+  }
+  return null;
+}
 const TABS: { tab: Tab; href: string; label: string; Icon: typeof IconStays }[] = [
   { tab: 'stays', href: '#/', label: 'Stays', Icon: IconStays },
   { tab: 'map', href: '#/map', label: 'Map', Icon: IconMap },
@@ -216,7 +225,10 @@ export function Shell() {
       {chrome ? <MobileTopBar /> : null}
       <main id="main" className={chrome ? s.main : undefined}>
         <ErrorBoundary resetKey={location.path}>
-          <Suspense fallback={<Loading />}>{content}</Suspense>
+          <Suspense fallback={<Loading />}>
+            <CrashProbe />
+            {content}
+          </Suspense>
         </ErrorBoundary>
       </main>
       {chrome ? <TabBar active={active} /> : null}

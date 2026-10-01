@@ -1,5 +1,12 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { expect, test } from '@playwright/test';
 import { checkpointTo, resetApp, waitForStays, watchConsole } from './helpers';
+
+// generateSW emits a fixed `sw.js` filename; bumping its bytes on disk is how we simulate a
+// deployed update without a second build, so the real workbox-window "waiting" → onNeedRefresh
+// path fires exactly as it would for a real new release.
+const SW_PATH = fileURLToPath(new URL('../../dist/sw.js', import.meta.url));
 
 // The SW is blocked globally (playwright.config.ts) so other specs never see stale caches.
 // This spec is the one place that needs it.
@@ -100,6 +107,32 @@ test.describe('Service worker', () => {
       (e) => !/tiles\.openfreemap\.org|photon\.komoot\.io|ERR_INTERNET_DISCONNECTED|Failed to fetch|cross-world service worker resource mismatch/i.test(e),
     );
     expect(realErrors).toEqual([]);
+  });
+
+  test('offers the "fresh version is ready" toast when a new sw.js is deployed', async ({ page }, testInfo) => {
+    test.skip(!isChromiumProject(testInfo.project.name), 'WebKit SW registration under Playwright is flaky; Chromium projects cover this.');
+    await resetApp(page);
+    await waitForStays(page);
+    await page.evaluate(async () => {
+      await navigator.serviceWorker.ready;
+    });
+    if (!(await page.evaluate(() => navigator.serviceWorker.controller != null))) {
+      await page.reload();
+      await waitForStays(page);
+    }
+
+    const original = readFileSync(SW_PATH, 'utf8');
+    writeFileSync(SW_PATH, `${original}\n// e2e update bump ${Date.now()}\n`);
+    try {
+      await page.evaluate(async () => {
+        const reg = await navigator.serviceWorker.getRegistration();
+        await reg?.update();
+      });
+      await expect(page.getByText('A fresh version is ready')).toBeVisible({ timeout: 15_000 });
+      await expect(page.getByRole('button', { name: 'Refresh' })).toBeVisible();
+    } finally {
+      writeFileSync(SW_PATH, original);
+    }
   });
 });
 

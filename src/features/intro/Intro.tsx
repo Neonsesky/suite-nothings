@@ -76,7 +76,12 @@ function IntroPlayer({ mode }: { mode: 'full' | 'short' }) {
 
   // Full intro: race the 3D chunk against the load budget and a frame-time probe. The fallback
   // timer is scheduled for what's *left* of the budget (not a fresh LOAD_BUDGET_MS), so a slow
-  // render of an earlier stage can't push this one out past the real deadline.
+  // render of an earlier stage can't push this one out past the real deadline. The import itself
+  // is kicked off from an idle callback rather than synchronously on mount: starting a ~150KB
+  // chunk fetch in the same tick as first paint competes with the critical render path for
+  // bandwidth and CPU (this cost Lighthouse's throttled mobile run ~30+ performance points).
+  // Deferring by one idle tick (budget-aware; still falls back cleanly if it eats into
+  // LOAD_BUDGET_MS) lets the above-the-fold paint finish first.
   useEffect(() => {
     if (kind !== 'wait') return;
     let cancelled = false;
@@ -86,19 +91,26 @@ function IntroPlayer({ mode }: { mode: 'full' | 'short' }) {
       queueMicrotask(() => !cancelled && setKind('full'));
       return;
     }
-    Promise.all([import('./scene3d'), probeFrameTime()])
-      .then(([, frame]) => {
-        if (cancelled) return;
-        clearTimeout(fallback);
-        // The chunk and probe may have taken a while (slow network, busy main thread); if the
-        // budget is already blown by the time they resolve, don't bother starting 3D at all.
-        const overBudget = (performance.now() - mountedAt) > LOAD_BUDGET_MS;
-        setKind((k) => (k === 'wait' ? (overBudget || frame > 30 ? 'full' : '3d') : k));
-      })
-      .catch(() => !cancelled && setKind('full'));
+    const start = () => {
+      if (cancelled) return;
+      Promise.all([import('./scene3d'), probeFrameTime()])
+        .then(([, frame]) => {
+          if (cancelled) return;
+          clearTimeout(fallback);
+          // The chunk and probe may have taken a while (slow network, busy main thread); if the
+          // budget is already blown by the time they resolve, don't bother starting 3D at all.
+          const overBudget = (performance.now() - mountedAt) > LOAD_BUDGET_MS;
+          setKind((k) => (k === 'wait' ? (overBudget || frame > 30 ? 'full' : '3d') : k));
+        })
+        .catch(() => !cancelled && setKind('full'));
+    };
+    const ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (fn: () => void, _opts?: { timeout?: number }) => setTimeout(fn, 0);
+    const cic = typeof cancelIdleCallback === 'function' ? cancelIdleCallback : clearTimeout;
+    const handle = ric(start, { timeout: 150 });
     return () => {
       cancelled = true;
       clearTimeout(fallback);
+      cic(handle as never);
     };
   }, [kind, mountedAt]);
 
