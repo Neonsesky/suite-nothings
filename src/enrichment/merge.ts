@@ -50,3 +50,9 @@ export function applyPatch(hotel: Hotel, patch: EnrichmentPatch, opts: { force?:
   const { changes, filled } = mergePatch(hotel, patch, opts);
   return { hotel: { ...hotel, ...changes, enriched_fields_json: JSON.stringify(filled) }, filled };
 }
+
+/** A hand edit: the fields become ours, so a later "Refresh info" never replaces them. */
+export function handEdit(hotel: Hotel, changes: Partial<Hotel>): Hotel {
+  const filled = filledFields(hotel).filter((f) => !(f in changes));
+  return { ...hotel, ...changes, enriched_fields_json: JSON.stringify(filled) };
+}
