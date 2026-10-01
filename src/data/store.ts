@@ -642,6 +642,14 @@ export async function deleteDraft(id: string): Promise<void> {
   await requireDb().delete('drafts', id);
 }
 
+/** Per-namespace local key/value (e.g. awarded milestones). Returns undefined before boot. */
+export async function readMeta<T>(key: string): Promise<T | undefined> {
+  return db ? getMeta<T>(db, key) : undefined;
+}
+export async function writeMeta(key: string, value: unknown): Promise<void> {
+  if (db) await setMeta(db, key, value);
+}
+
 // ───────────────────────────── modes & device ─────────────────────────────
 
 export function setMe(me: PersonId | null): void {
