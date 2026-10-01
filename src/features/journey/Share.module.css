@@ -1,0 +1,68 @@
+/* Share our journey: the sheet and the recording pill. */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-bottom: var(--space-2);
+}
+.lead {
+  margin: 0 0 var(--space-1);
+  color: var(--color-muted);
+}
+.hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-subtle);
+}
+.recording {
+  position: fixed;
+  z-index: calc(var(--z-header) + 60);
+  left: 50%;
+  bottom: calc(var(--space-5) + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  box-shadow: var(--shadow-pop);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-ginger);
+  animation: blink 1.2s ease-in-out infinite;
+}
+.cancel {
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.14);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.cancel:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+@keyframes blink {
+  50% {
+    opacity: 0.3;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: none;
+  }
+}
