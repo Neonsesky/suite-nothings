@@ -24,6 +24,9 @@ export interface HotelStepProps {
   onClear(): void;
   /** Start the "We're here now" search on mount (`#/add?here=1`). */
   autoHere: boolean;
+  /** The manual pin editor has its own "Use this hotel" / "Back to search" actions, so the
+   * sheet hides its own Next/Back footer while it's open (otherwise they duplicate and clip). */
+  onManualChange?(manual: boolean): void;
 }
 
 type SearchStatus = 'idle' | 'loading' | 'done' | 'error' | 'offline';
@@ -40,7 +43,7 @@ interface Row {
   pick(): void;
 }
 
-export function HotelStep({ choice, onPick, onClear, autoHere }: HotelStepProps) {
+export function HotelStep({ choice, onPick, onClear, autoHere, onManualChange }: HotelStepProps) {
   const settings = useSettings();
   const home = settings.home_base;
   const stays = useAllStays();
@@ -49,6 +52,7 @@ export function HotelStep({ choice, onPick, onClear, autoHere }: HotelStepProps)
   const [results, setResults] = useState<PlaceResult[]>([]);
   const [here, setHere] = useState<{ status: HereStatus; at: LatLng | null; results: PlaceResult[] }>({ status: 'idle', at: null, results: [] });
   const [manual, setManual] = useState(false);
+  useEffect(() => onManualChange?.(manual), [manual, onManualChange]);
   const [active, setActive] = useState(-1);
   const listId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -156,7 +160,10 @@ export function HotelStep({ choice, onPick, onClear, autoHere }: HotelStepProps)
         at={here.at ?? (results[0] ? { lat: results[0].lat, lng: results[0].lng } : { lat: home.lat, lng: home.lng })}
         defaults={fallback}
         onCancel={() => setManual(false)}
-        onDone={(h) => onPick({ kind: 'new', hotel: h })}
+        onDone={(h) => {
+          setManual(false);
+          onPick({ kind: 'new', hotel: h });
+        }}
       />
     );
   }

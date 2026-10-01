@@ -34,8 +34,10 @@ writeFileSync(`${root}/public/favicon.svg`, fav);
 
 png(tile({ scale: 0.92, radius: 14 }), 192, 'icon-192.png');
 png(tile({ scale: 0.92, radius: 14 }), 512, 'icon-512.png');
-png(tile({ scale: 0.72 }), 512, 'icon-maskable-512.png');
-png(tile({ scale: 0.72 }), 192, 'icon-maskable-192.png');
+// 0.62: measured against Android's maskable safe zone (an 80%-diameter centred circle) with
+// design/tools/mask-check.mjs — 0.72 let the key ring's outer edge cross outside that circle.
+png(tile({ scale: 0.62 }), 512, 'icon-maskable-512.png');
+png(tile({ scale: 0.62 }), 192, 'icon-maskable-192.png');
 png(tile({ scale: 0.84 }), 180, 'apple-touch-icon-180.png');
 // Monochrome (Android themed icons): white silhouette on transparent, inside the safe zone.
 png(markSvg({ variant: 'mono', ink: '#FFFFFF', scale: 0.72, id: 'm' }), 512, 'icon-monochrome-512.png');

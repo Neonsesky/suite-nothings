@@ -20,7 +20,17 @@ import { ToastHost } from '@/components/Toast';
 import * as Icons from '@/components/icons';
 import { useStays } from '@/data/store';
 import { toast } from '@/lib/toast';
+import { PillowNote } from '@/features/letters/PillowNote';
+import type { Letter } from '@/data/types';
 import s from './Gallery.module.css';
+
+// Placeholder only — never real letter content, this demo is safe to screenshot into
+// design/checkpoints (which is public).
+const DEMO_LETTER: Letter = {
+  letter_id: 'demo', title: 'Gallery demo', body_md: 'Placeholder text for visual QA only.',
+  from: 'nirsh', to: 'shady', unlock_rule: 'always',
+  written_at: '2026-01-01', read_at: null, created_at: '2026-01-01', updated_at: '2026-01-01',
+};
 
 const BOARD_WORDS = ['DUBAI', 'UNITED ARAB EMIRATES', 'THE WORLD'];
 
@@ -30,6 +40,7 @@ export default function Gallery() {
   const [word, setWord] = useState(0);
   const [sheet, setSheet] = useState(false);
   const [chips, setChips] = useState<string | null>('Dubai');
+  const [pillow, setPillow] = useState(false);
   return (
     <main className={s.root}>
       <h1 className={s.h1}>Component gallery</h1>
@@ -145,8 +156,12 @@ export default function Gallery() {
           >
             Show a toast
           </Button>
+          <Button variant="secondary" data-testid="open-pillow" onClick={() => setPillow(true)}>
+            Show the pillow note
+          </Button>
         </div>
       </section>
+      {pillow ? <PillowNote letter={DEMO_LETTER} onClose={() => setPillow(false)} /> : null}
 
       <BottomSheet open={sheet} onClose={() => setSheet(false)} title="Somewhere we've been" snapPoints={[0.5, 0.9]} initialSnap={0} footer={<Button block onClick={() => setSheet(false)}>Done</Button>}>
         <div className={s.sheetBody}>

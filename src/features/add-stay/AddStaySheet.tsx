@@ -234,6 +234,7 @@ export default function AddStaySheet() {
     }
   };
 
+  const [hotelManual, setHotelManual] = useState(false);
   const step = draft?.step ?? 0;
   const stepId = STEPS[step];
   const title = editId ? 'Edit our stay' : 'Add a stay';
@@ -251,7 +252,7 @@ export default function AddStaySheet() {
     body = (
       <>
         {resume ? <ResumeCard draft={resume} onContinue={() => (setDraft(resume), setResume(null))} onFresh={() => (setResume(null), void deleteDraft(draftId))} /> : null}
-        {stepId === 'hotel' ? <HotelStep choice={draft.hotel} onPick={pickHotel} onClear={() => update({ hotel: null })} autoHere={here && !draft.hotel} /> : null}
+        {stepId === 'hotel' ? <HotelStep choice={draft.hotel} onPick={pickHotel} onClear={() => update({ hotel: null })} autoHere={here && !draft.hotel} onManualChange={setHotelManual} /> : null}
         {stepId === 'when' ? <WhenStep d={draft} update={update} problem={problem} /> : null}
         {stepId === 'what' ? <WhatStep d={draft} update={update} /> : null}
         {stepId === 'photos' ? <PhotosStep d={draft} update={update} /> : null}
@@ -266,7 +267,7 @@ export default function AddStaySheet() {
   }
 
   const footer =
-    draft && !missingEdit ? (
+    draft && !missingEdit && !(stepId === 'hotel' && hotelManual) ? (
       <div className={s.footer}>
         {step > 0 ? (
           <Button variant="secondary" icon={<IconBack size={18} />} onClick={() => goTo(step - 1)}>

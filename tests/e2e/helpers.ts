@@ -87,6 +87,12 @@ export async function checkpointTo(page: Page, testInfo: TestInfo, folder: strin
 }
 
 const OPEN_DATA = /^https:\/\/(overpass-api\.de|www\.wikidata\.org|en\.wikipedia\.org|commons\.wikimedia\.org)\//;
+// Settings → Hotel info probes a local Ollama install (src/enrichment/ai.ts) on every desktop
+// mount. With nothing listening on that port, the browser logs a real `net::ERR_CONNECTION_REFUSED`
+// console error (independent of the app's own try/catch, and independent of HTTP status — even a
+// 404 response is logged as a console error by the browser). Answering 200 with an empty model
+// list is the only response that both satisfies detectOllama() and stays console-silent.
+const OLLAMA_PROBE = 'http://localhost:11434/**';
 const routed = new WeakSet<Page>();
 /**
  * Hotel enrichment (w2-enrich) calls open APIs in the background. By default every spec gets empty
@@ -96,4 +102,5 @@ export async function routeOpenData(page: Page): Promise<void> {
   if (routed.has(page)) return;
   routed.add(page);
   await page.route(OPEN_DATA, (route) => route.fulfill({ contentType: 'application/json', body: '{}' }));
+  await page.route(OLLAMA_PROBE, (route) => route.fulfill({ contentType: 'application/json', body: '{"models":[]}' }));
 }

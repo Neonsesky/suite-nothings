@@ -14,8 +14,12 @@ import { setIntroActive } from './state';
 import s from './Intro.module.css';
 
 /** How long we wait for the 3D chunk before drawing the 2D version instead. */
-const LOAD_BUDGET_MS = 450;
+const LOAD_BUDGET_MS = 600;
+/** However the device behaves, the intro must be fully gone within this long of first paint
+ * (SPEC §14). This is the backstop — the budgets above should make it moot in practice. */
+const HARD_CEILING_MS = 2500;
 const DURATION = { full: 2000, short: 400, still: 700 } as const;
+const LEAVE_MS = { full: 260, short: 120 } as const;
 
 type Kind = 'wait' | '3d' | Door2DVariant;
 
@@ -36,6 +40,11 @@ function IntroPlayer({ mode }: { mode: 'full' | 'short' }) {
   const [leaving, setLeaving] = useState(false);
   const [gone, setGone] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // Real elapsed time from first paint (approx: constructor time of this component), so every
+  // budget below is measured against the clock, not against whenever some earlier stage happened
+  // to finish — a main thread busy parsing the 3D chunk, or a slow network, delays stages, and
+  // every delay has to come out of what's left, not add on top.
+  const [mountedAt] = useState(() => performance.now());
 
   // Mark the intro active for its lifetime (the pillow note waits for it).
   useEffect(() => {
@@ -52,15 +61,26 @@ function IntroPlayer({ mode }: { mode: 'full' | 'short' }) {
     setTimeout(() => {
       setGone(true);
       setIntroActive(false);
-      }, mode === 'short' ? 120 : 260);
+      }, mode === 'short' ? LEAVE_MS.short : LEAVE_MS.full);
     };
   });
 
-  // Full intro: race the 3D chunk against the load budget and a frame-time probe.
+  // Hard ceiling: no matter what the stages above are doing, force the intro closed in time to
+  // be fully gone (opacity-0 + unmounted) by HARD_CEILING_MS after first paint.
+  useEffect(() => {
+    if (mode !== 'full') return; // the short replay is already well under budget
+    const remaining = Math.max(0, HARD_CEILING_MS - LEAVE_MS.full - (performance.now() - mountedAt));
+    const t = setTimeout(() => finish.current(), remaining);
+    return () => clearTimeout(t);
+  }, [mode, mountedAt]);
+
+  // Full intro: race the 3D chunk against the load budget and a frame-time probe. The fallback
+  // timer is scheduled for what's *left* of the budget (not a fresh LOAD_BUDGET_MS), so a slow
+  // render of an earlier stage can't push this one out past the real deadline.
   useEffect(() => {
     if (kind !== 'wait') return;
     let cancelled = false;
-    const fallback = setTimeout(() => !cancelled && setKind('full'), LOAD_BUDGET_MS);
+    const fallback = setTimeout(() => !cancelled && setKind('full'), Math.max(0, LOAD_BUDGET_MS - (performance.now() - mountedAt)));
     if (!canRun3D()) {
       clearTimeout(fallback);
       queueMicrotask(() => !cancelled && setKind('full'));
@@ -70,14 +90,17 @@ function IntroPlayer({ mode }: { mode: 'full' | 'short' }) {
       .then(([, frame]) => {
         if (cancelled) return;
         clearTimeout(fallback);
-        setKind((k) => (k === 'wait' ? (frame > 30 ? 'full' : '3d') : k));
+        // The chunk and probe may have taken a while (slow network, busy main thread); if the
+        // budget is already blown by the time they resolve, don't bother starting 3D at all.
+        const overBudget = (performance.now() - mountedAt) > LOAD_BUDGET_MS;
+        setKind((k) => (k === 'wait' ? (overBudget || frame > 30 ? 'full' : '3d') : k));
       })
       .catch(() => !cancelled && setKind('full'));
     return () => {
       cancelled = true;
       clearTimeout(fallback);
     };
-  }, [kind]);
+  }, [kind, mountedAt]);
 
   // Play the chosen version.
   useEffect(() => {
@@ -97,9 +120,20 @@ function IntroPlayer({ mode }: { mode: 'full' | 'short' }) {
     let beeped = false;
     void import('./scene3d').then(({ createIntroScene, INTRO_3D_MS }) => {
       if (disposed || !canvasRef.current) return;
+      const buildStart = performance.now();
       try {
         handle = createIntroScene(canvasRef.current);
       } catch {
+        setKind('full');
+        return;
+      }
+      // Building the scene (shader compiles etc.) is synchronous and can itself be the slow
+      // part under software GL. If it took too long, or the budget is already gone, don't
+      // start a fresh 2 s animation on top of that — fall back to the 2D version instead.
+      const buildMs = performance.now() - buildStart;
+      if (buildMs > LOAD_BUDGET_MS / 2 || (performance.now() - mountedAt) > LOAD_BUDGET_MS) {
+        handle.dispose();
+        handle = null;
         setKind('full');
         return;
       }
@@ -128,7 +162,7 @@ function IntroPlayer({ mode }: { mode: 'full' | 'short' }) {
       cancelAnimationFrame(raf);
       handle?.dispose();
     };
-  }, [kind]);
+  }, [kind, mountedAt]);
 
   // Tap or any key skips.
   useEffect(() => {
