@@ -9,6 +9,9 @@ import { openStay } from '@/features/stays/transition';
 import { formatDate } from '@/lib/dates';
 import s from './StampGrid.module.css';
 
+/** Counting stamps stay honey; the romantic firsts and feats get the ginger kick. */
+const toneFor = (d: MilestoneDef) => (d.id === 'first-stay' || d.id.startsWith('hotels-') ? 'honey' : d.tone);
+
 export function StampGrid({ stays }: { stays: readonly Stay[] }) {
   const { defs, earned } = useMilestoneState(stays);
   const [open, setOpen] = useState<MilestoneDef | null>(null);
@@ -42,7 +45,7 @@ export function StampGrid({ stays }: { stays: readonly Stay[] }) {
                   setOpen(d);
                 }}
               >
-                <Stamp title={d.short} caption={d.caption} tone={m ? d.tone : 'cream'} locked={!m} size={76} className={m ? s.inked : undefined} />
+                <Stamp title={d.short} caption={d.caption} tone={m ? toneFor(d) : 'cream'} locked={!m} size={76} className={m ? s.inked : undefined} />
                 <span className={s.name}>{d.name}</span>
               </button>
             </li>
@@ -52,7 +55,7 @@ export function StampGrid({ stays }: { stays: readonly Stay[] }) {
       <BottomSheet open={!!open} onClose={() => setOpen(null)} title={shown?.name ?? 'Milestone'}>
         {shown ? (
           <div className={s.detail} data-testid="stamp-detail">
-            <Stamp title={shown.short} caption={shown.caption} tone={sel ? shown.tone : 'cream'} locked={!sel} size={128} />
+            <Stamp title={shown.short} caption={shown.caption} tone={sel ? toneFor(shown) : 'cream'} locked={!sel} size={128} />
             {sel ? (
               <>
                 <p className={s.detailLine}>{sel.caption}</p>

@@ -42,7 +42,7 @@ export function SurpriseSheet({ open, wishes, onClose }: { open: boolean; wishes
           {pick ? (
             <SplitFlap
               key={spin}
-              value={text.padEnd(BOARD, ' ')}
+              value={' '.repeat(Math.floor((BOARD - text.length) / 2)) + text.padEnd(BOARD - Math.floor((BOARD - text.length) / 2), ' ')}
               length={BOARD}
               size="var(--board-flap)"
               ariaLabel={pick.name}

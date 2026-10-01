@@ -221,9 +221,6 @@ export default function UsScreen() {
     <div className={`page ${s.screen}`} data-screen="us">
       <header className={s.head}>
         <h1 className={s.title}>Us</h1>
-        <a className={s.gear} href="#/settings" aria-label="Settings">
-          <IconSettings size={22} />
-        </a>
       </header>
       {!sync.online ? (
         <p className={s.offline} role="status">
