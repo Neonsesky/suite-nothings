@@ -1,5 +1,34 @@
 # Changelog
 
+## [qa-final-2] Release QA completion, post-polish (2026-10-01)
+- Full matrix verified clean: typecheck, lint, 561 unit tests, build, size (165.2 KB initial JS
+  gzipped, budget 300 KB), and the full `npm run e2e` (272 passed, 39 skipped
+  checkpoint-evidence specs, 1 pre-existing CPU-contention flake re-confirmed non-reproducing in
+  isolation). The `settings.spec.ts`/`map.spec.ts` failures reported mid-wave-2 no longer
+  reproduce at all.
+- `src/features/intro/Intro.tsx`: the first-launch intro's three.js chunk now loads from
+  `requestIdleCallback` instead of synchronously on mount, so it stops competing with the
+  critical render path for bandwidth/CPU — Lighthouse mobile Performance 56→61 (still below the
+  ≥90 target; root cause and a concrete next step are in
+  `design/checkpoints/qa/lighthouse/summary.md`). Accessibility and Best Practices are both 100.
+- `tests/e2e/pwa.spec.ts`: added the one PWA requirement with no prior coverage — a real
+  "fresh version is ready" update-toast test that bumps the built service worker's bytes on disk
+  and drives the actual workbox-window update path end to end.
+- `src/app/Shell.tsx`: an inert-by-default, e2e-flag-gated `CrashProbe` so the real
+  `ErrorBoundary` fallback can be screenshotted as part of release QA.
+- `tests/e2e/qa-final-2.spec.ts` (new): intro timing against SPEC §14's budget (≤2.5s first
+  launch, ≤400ms+fade repeat), a per-viewport visual contact sheet across every route and state
+  (onboarding, empty/offline/error states, every add-a-stay step, stay detail, price level), the
+  card→detail morph, and the price-level glyph rendering. Evidence in `design/checkpoints/qa/`.
+- Public-repo hygiene re-audited: no Dayuse assets beyond the one qa-final already moved, no real
+  secrets (`git grep` clean), and the private letter — 4 distinctive phrases, zero hits outside
+  `private/` in the working tree and across all of `git log --all -S`.
+- `SETUP.md` confirmed already complete for all 4 required items (personal-Gmail/Workspace
+  warning, "don't pick Shady" note before the phone steps, passphrase-sharing caution,
+  `letter:gs` step) — no changes needed.
+- See `docs/handoff/qa-final.md` and `STATUS.md` for the full verification log, what's still
+  open, and the manual test checklist for real devices.
+
 ## [w2-journey] Journey mode, the "Indiana Jones" replay (2026-10-01)
 - `src/features/journey/camera.ts`: pure camera maths (unit-tested, 22 tests) — great-circle interpolation and `line-progress`, the `z(t)` bell curve, bearing easing across ±180°, per-style leg duration/height, a van-Wijk-style "rise, travel, descend" centre LUT so flights don't crawl along the ground, and `planJourney`/`buildSchedule`/`stopIndexAt` tying legs into one scrubbable timeline (opening → hold → leg → hold → … → finale).
 - `src/features/journey/player.ts`: one paused GSAP timeline drives every leg; each frame reads the active segment's `0–1` progress, computes the camera with `cameraAt()` and calls `map.jumpTo` — never `flyTo` — so play, pause, scrub, next/previous and the 0.5×/1×/2× speeds are all just timeline operations. The route draws as a ginger line with an ink casing (`line-progress`), a faded trail behind the active leg; the traveller (heart/car/plane) rides the tip, rotated to the heading, with bearing damped on hops and flights so the camera doesn't spin on every leg. Stay pins use the shared brand key-tag art and drop in with a bounce; wishlist pins pulse once the finale starts pulling back.
