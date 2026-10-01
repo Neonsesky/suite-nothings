@@ -106,7 +106,7 @@ export function createEnricher(deps: EnricherDeps) {
     }
     queued.delete(id);
     setStatus(id, 'running');
-    let outcome: RunOutcome = 'failed';
+    let outcome: RunOutcome;
     let changes: Partial<Hotel> = {};
     try {
       const ctrl = new AbortController();

@@ -4,7 +4,7 @@ import { createGasEnv, type GasEnv } from '../../tools/gas-harness/index.mjs';
 
 const KEY = 'pillow mint balcony';
 const HEADERS: Record<string, string[]> = {
-  Hotels: ['hotel_id', 'name', 'brand', 'address', 'area', 'city', 'region', 'country', 'country_code', 'lat', 'lng', 'source', 'osm_id', 'wikidata_id', 'website', 'phone', 'stars', 'price_level', 'description', 'description_source', 'amenities_json', 'cover_photo_id', 'enrichment_status', 'enriched_at', 'created_at', 'updated_at', 'deleted', 'server_updated_at'],
+  Hotels: ['hotel_id', 'name', 'brand', 'address', 'area', 'city', 'region', 'country', 'country_code', 'lat', 'lng', 'source', 'osm_id', 'wikidata_id', 'website', 'phone', 'stars', 'price_level', 'description', 'description_source', 'amenities_json', 'cover_photo_id', 'enrichment_status', 'enriched_at', 'created_at', 'updated_at', 'deleted', 'server_updated_at', 'image_url', 'image_credit', 'enriched_fields_json'],
   Visits: ['visit_id', 'hotel_id', 'date', 'check_in', 'check_out', 'nights', 'visit_type', 'booked_via', 'note', 'favourite_moment', 'mood', 'rating_nirsh', 'rating_shady', 'picked_by', 'added_by', 'photo_ids_json', 'created_at', 'updated_at', 'deleted', 'server_updated_at'],
   Photos: ['photo_id', 'visit_id', 'thumb_file_id', 'full_file_id', 'width', 'height', 'taken_at', 'caption', 'created_at', 'deleted', 'updated_at', 'server_updated_at'],
   Wishlist: ['wish_id', 'name', 'lat', 'lng', 'city', 'country', 'note', 'added_by', 'priority', 'fulfilled_visit_id', 'created_at', 'updated_at', 'deleted', 'server_updated_at'],

@@ -21,7 +21,7 @@ const listeners = new Set<() => void>();
 
 export function getPrefs(): EnrichmentPrefs {
   if (cache) return cache;
-  let parsed: Partial<EnrichmentPrefs> = {};
+  let parsed: Partial<EnrichmentPrefs>;
   try {
     parsed = JSON.parse(globalThis.localStorage?.getItem(KEY) ?? '{}') as Partial<EnrichmentPrefs>;
   } catch {
