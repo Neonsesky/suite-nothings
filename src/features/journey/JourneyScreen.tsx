@@ -279,8 +279,8 @@ export default function JourneyScreen() {
       <div className={s.emptyPage}>
         <EmptyState
           art={<IconJourney size={32} />}
-          title="Our journey starts with one stay"
-          body="Add our first stay and we'll plot the route from there, every check-in in order."
+          title="Our first check-in is waiting"
+          body="Once we've got one, the replay starts from there: every check-in, in order."
           action={<ButtonLink href="#/add">Add our first stay</ButtonLink>}
         />
       </div>
@@ -295,6 +295,7 @@ export default function JourneyScreen() {
       data-playing={playing || undefined}
       data-reduced={reduced || undefined}
       data-recording={recording || undefined}
+      data-fallback={fallback || undefined}
       data-testid="journey-screen"
     >
       <h1 className="sr-only">Our journey</h1>
