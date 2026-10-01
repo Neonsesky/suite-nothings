@@ -7,11 +7,11 @@
  * crossfade veil, traveller) goes through refs and MapLibre markers.
  */
 import { gsap } from 'gsap';
+import { pinDataUrl, stayPin, wishlistPin } from '@/components/brand/pins';
 import type { LineHandle, MarkerHandle, SuiteMap } from '@/map/engine';
 import { play } from '@/lib/sound';
 import type { LatLng, LegStyle } from '@/lib/geo';
 import {
-  HOLD_S,
   OPENING_S,
   buildSchedule,
   cameraAt,
@@ -66,6 +66,8 @@ export interface PlayerOptions {
 /** Reduced motion: each move is a quick crossfade instead of a flight. */
 const CROSSFADE_S = 1.2;
 const TRAIL_OPACITY = 0.42;
+const STAY_PIN = pinDataUrl(stayPin());
+const WISH_PIN = pinDataUrl(wishlistPin());
 
 const TRAVELLER_ICON: Record<TravellerKind, string> = {
   heart: '<path d="M12 20s-7.5-4.6-7.5-10.1A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20z" fill="currentColor"/>',
@@ -263,6 +265,7 @@ export class JourneyPlayer {
       const el = document.createElement('div');
       el.className = this.o.classes.pin;
       el.dataset.shown = '0';
+      el.innerHTML = `<img src="${STAY_PIN}" alt="" draggable="false">`;
       el.setAttribute('aria-hidden', 'true');
       const marker = this.track(e.addMarker(el, [s.lng, s.lat], { anchor: 'bottom' }), [s.lng, s.lat]);
       this.pins.set(s.hotelId, { marker, first: i, shown: false });
@@ -300,7 +303,7 @@ export class JourneyPlayer {
     if (kind !== this.travellerKind) {
       this.travellerKind = kind;
       el.dataset.kind = kind;
-      el.innerHTML = `<svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${TRAVELLER_ICON[kind]}</svg>`;
+      el.innerHTML = `<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${TRAVELLER_ICON[kind]}</svg>`;
     }
     el.dataset.hidden = '0';
     t.setLngLat(pos);
@@ -332,6 +335,7 @@ export class JourneyPlayer {
       this.wishMarkers = this.o.wishes.map((w) => {
         const el = document.createElement('div');
         el.className = this.o.classes.wish;
+        el.innerHTML = `<img src="${WISH_PIN}" alt="" draggable="false">`;
         el.setAttribute('aria-hidden', 'true');
         return this.track(this.o.engine.addMarker(el, [w.lng, w.lat], { anchor: 'bottom' }), [w.lng, w.lat]);
       });
@@ -473,4 +477,3 @@ export class JourneyPlayer {
   }
 }
 
-export { HOLD_S };

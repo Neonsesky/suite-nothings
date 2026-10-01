@@ -136,13 +136,19 @@ export default function JourneyScreen() {
     if (!engine || status !== 'ready' || !stays.length) return;
     const stage = stageRef.current;
     engine.map.resize();
+    // Keep each stop in the clear space between the date board and the postcard / dock.
+    const w = stage?.clientWidth || 390;
+    const h = stage?.clientHeight || 844;
+    const desktop = !recording && w >= 1024;
+    const pad = { top: Math.round(h * 0.08), bottom: desktop ? 140 : Math.round(h * (recording ? 0.26 : 0.3)), left: desktop ? 380 : 0, right: 0 };
+    engine.map.setPadding(pad);
     const p = new JourneyPlayer({
       engine,
       stops: stays.map((x) => ({ lat: x.hotel.lat, lng: x.hotel.lng, hotelId: x.hotel.hotel_id })),
       home,
       wishes: wishes.filter((w) => w.lat != null && w.lng != null && !w.fulfilled_visit_id).map((w) => ({ lat: w.lat!, lng: w.lng! })),
       reduced,
-      viewport: { width: stage?.clientWidth || 390, height: stage?.clientHeight || 844 },
+      viewport: { width: w - pad.left - pad.right, height: h - pad.top - pad.bottom },
       veil: veilRef.current,
       baseScale: e2eEnabled() ? 20 : 1,
       classes: { pin: s.pin, pinDrop: s.pinDrop, wish: s.wish, traveller: s.traveller },

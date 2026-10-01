@@ -40,6 +40,8 @@ export const OPENING_S = 2.4;
 export const FINALE_S = 3.2;
 /** Opening camera zoom over home. */
 export const GLOBE_ZOOM = 1.6;
+/** How far each leg style turns the camera toward its heading (1 = all the way). */
+export const BEARING_LEAN: Record<LegStyle, number> = { glide: 1, hop: 0.4, flight: 0.2 };
 
 /** Seconds of the opening flight from home to the first stop (after the flap hold). */
 const OPENING_FLIGHT_S = 4.5;
@@ -329,7 +331,11 @@ export function planJourney(
   const legs: LegPlan[] = [];
   let prevBearing = opening.bearing1;
   for (let i = 0; i + 1 < unwrapped.length; i++) {
-    const leg = planLeg(unwrapped[i], unwrapped[i + 1], { index: i, kind: 'leg', bearing0: prevBearing, vw });
+    let leg = planLeg(unwrapped[i], unwrapped[i + 1], { index: i, kind: 'leg', bearing0: prevBearing, vw });
+    // Glides turn fully into the heading; hops and flights only lean toward it, so north stays
+    // roughly up at country and globe scale.
+    const lean = BEARING_LEAN[leg.style];
+    if (lean < 1 && leg.km > 0) leg = { ...leg, bearing1: lerpAngle(0, leg.heading, lean) };
     legs.push(leg);
     prevBearing = leg.bearing1;
   }

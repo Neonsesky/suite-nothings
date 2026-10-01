@@ -541,56 +541,36 @@
 
 /* ---- map markers (MapLibre positions these; we only style them) ------------------------ */
 .pin {
-  width: 22px;
-  height: 30px;
+  width: 33px;
+  height: 43.5px;
   pointer-events: none;
 }
-.pin::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--color-honey);
-  border: 2px solid var(--color-ink);
-  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-  clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%);
-  border-radius: 11px 11px 4px 4px;
-  box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.08);
-}
-.pin::after {
-  content: '';
-  position: absolute;
-  top: 6px;
-  left: 50%;
-  width: 6px;
-  height: 6px;
-  margin-left: -3px;
-  border-radius: 50%;
-  background: var(--color-ink);
+.pin img,
+.wish img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 92%;
 }
 .pin[data-shown='0'] {
   visibility: hidden;
 }
-.pinDrop::before,
-.pinDrop::after {
+.pinDrop img {
   animation: pinDrop 640ms cubic-bezier(0.3, 1.5, 0.5, 1) both;
 }
 .wish {
-  width: 18px;
-  height: 18px;
+  width: 30px;
+  height: 39.5px;
   pointer-events: none;
-}
-.wish::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 2px dashed var(--color-ginger-ink);
-  border-radius: 50%;
-  background: rgb(255 255 255 / 0.85);
 }
 .wish::after {
   content: '';
   position: absolute;
-  inset: -6px;
+  left: 50%;
+  bottom: -9px;
+  width: 30px;
+  height: 18px;
+  margin-left: -15px;
   border-radius: 50%;
   border: 2px solid var(--color-ginger);
   animation: pulse 1.8s ease-out infinite;
@@ -598,12 +578,12 @@
 .traveller {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: var(--color-paper);
   color: var(--color-ginger);
-  box-shadow: 0 0 0 2px var(--color-ink), 0 6px 14px rgb(41 41 53 / 0.3);
+  box-shadow: 0 0 0 2.5px var(--color-ink), 0 0 0 6px rgb(252 94 87 / 0.25), 0 6px 14px rgb(41 41 53 / 0.3);
   pointer-events: none;
 }
 .traveller[data-hidden='1'] {
@@ -668,8 +648,7 @@
   .finaleTitle {
     animation: fadeIn 200ms linear both;
   }
-  .pinDrop::before,
-  .pinDrop::after,
+  .pinDrop img,
   .wish::after {
     animation: none;
   }
