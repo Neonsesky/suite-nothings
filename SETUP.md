@@ -313,6 +313,51 @@ Photos live in the **Suite Nothings photos** folder in Drive. Leave that folder 
 
 ---
 
+## 10a. Optional: smarter hotel info (AI and Google Places)
+
+Skip this whole section if you like. Without it, hotel info still comes from OpenStreetMap,
+Wikidata, Wikipedia and Wikimedia Commons, for free. Both extras are **off** until you turn them
+on in the app under **Settings → Hotel info**, and they're saved per phone or computer.
+
+### AI descriptions through our Sheet
+
+The AI only rewrites facts the app already fetched into 2–3 warm sentences, and the app labels the
+result "Written by AI from public info". The key stays in Apps Script; it never reaches the app.
+
+1. Get a key: a free Gemini key from Google AI Studio, or a Claude API key from the Anthropic
+   Console (paid per use; a description costs a fraction of a cent).
+2. In Apps Script, open **Project Settings → Script Properties** and add:
+   - `AI_API_KEY`: the key.
+   - `AI_PROVIDER`: `gemini` or `claude`.
+   - `AI_MODEL` (optional): a model name if you want something other than the default
+     (`gemini-2.0-flash` or `claude-haiku-4-5-20251001`).
+3. Deploy a new version (section 9) so the web app picks up the `aiDescribe` action.
+4. In the app: **Settings → Hotel info → AI descriptions → Through our Sheet**, then tap
+   **Refresh info** on a hotel without a Wikipedia summary.
+
+No key? The script answers `not_configured` and the app quietly carries on without AI.
+
+### AI with Ollama on a computer
+
+If Ollama runs on the same computer (`http://localhost:11434`), Settings shows **Ollama on this
+computer** and lets you pick a model. Nothing leaves the computer. Because the app is served from
+GitHub Pages, start Ollama with that origin allowed, for example
+`OLLAMA_ORIGINS=https://<your-user>.github.io ollama serve`.
+
+### Google Places (costs money)
+
+> **Cost warning:** Google Places needs a Google Cloud project with **billing enabled**. Each
+> lookup is a billable request. Google's free monthly credit usually covers a couple of people
+> adding a few hotels, but a bug, a leaked key or a lot of "Refresh info" taps can run up a real
+> bill. Set a budget alert and restrict the key to the Places API before you turn this on.
+
+1. In Google Cloud, create a project, enable billing and the **Places API (New)**, and create an
+   API key restricted to that API.
+2. In Script Properties, add `PLACES_API_KEY` with that key, and deploy a new version.
+3. In the app: **Settings → Hotel info → Google Places → On**.
+
+It only fills empty fields (website, phone, address, price level). It never replaces what we typed.
+
 ## 11. Troubleshooting
 
 | What we see | Why | What to do |
