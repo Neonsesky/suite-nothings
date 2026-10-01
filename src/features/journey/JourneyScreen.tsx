@@ -468,6 +468,7 @@ export default function JourneyScreen() {
         stays={stays}
         stats={stats}
         wishes={wishes}
+        home={home}
         engine={engine}
         player={player}
         onRecording={setRecording}

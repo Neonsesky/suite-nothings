@@ -3,10 +3,10 @@
  * and the way into Letters, Next check-ins, Journey and Settings. Desktop is two columns.
  */
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { ButtonLink } from '@/components/Button';
+import { Button, ButtonLink } from '@/components/Button';
 import { Skeleton } from '@/components/Skeleton';
 import { SplitFlap } from '@/components/SplitFlap';
-import { IconBed, IconChevron, IconClock, IconGlobe, IconHeart, IconJourney, IconKey, IconMail, IconPin, IconPlus, IconSettings, IconSparkle } from '@/components/icons';
+import { IconBed, IconChevron, IconClock, IconGlobe, IconHeart, IconJourney, IconKey, IconMail, IconPin, IconPlus, IconSettings, IconShare, IconSparkle } from '@/components/icons';
 import { COUPLE } from '@/config/couple';
 import { useSettings, useStays, useStoreReady, useSyncState, useWishes } from '@/data/store';
 import { useLetterViews } from '@/features/letters/access';
@@ -78,11 +78,26 @@ function Stats({ stays }: { stays: ReturnType<typeof useStays> }) {
   const { home_base: home, units } = useSettings();
   const tiles = useMemo(() => statTiles(stays, home, units), [stays, home, units]);
   const hl = useMemo(() => highlights(stays, home, units), [stays, home, units]);
+  const [sharing, setSharing] = useState(false);
+  const share = async () => {
+    setSharing(true);
+    try {
+      const { shareStats } = await import('@/features/share');
+      await shareStats();
+    } finally {
+      setSharing(false);
+    }
+  };
   return (
     <section className={s.card} aria-labelledby="us-stats" data-section="stats">
-      <h2 id="us-stats" className={s.h2}>
-        Us, in numbers
-      </h2>
+      <div className={s.cardHead}>
+        <h2 id="us-stats" className={s.h2}>
+          Us, in numbers
+        </h2>
+        <Button variant="ghost" size="sm" icon={<IconShare size={16} />} busy={sharing} onClick={() => void share()}>
+          Share
+        </Button>
+      </div>
       <ul className={s.tiles} role="list">
         {tiles.map((t) => (
           <li key={t.key} className={s.tile} data-stat={t.key}>

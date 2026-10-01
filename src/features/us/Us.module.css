@@ -144,6 +144,12 @@
   font-weight: var(--weight-extrabold);
   letter-spacing: var(--tracking-tight);
 }
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
 
 /* ── Stats ──────────────────────────────────────────────────────────────── */
 .tiles {

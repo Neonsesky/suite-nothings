@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { BottomSheet } from '@/components/BottomSheet';
 import { Button } from '@/components/Button';
 import { IconDownload, IconPlay, IconShare } from '@/components/icons';
-import type { Stay, Wish } from '@/data/types';
+import type { HomeBase, Stay, Wish } from '@/data/types';
 import type { SuiteMap } from '@/map/engine';
 import { formatDate, today } from '@/lib/dates';
 import { formatKm } from '@/lib/geo';
@@ -23,13 +23,14 @@ interface Props {
   stays: readonly Stay[];
   stats: FinaleStats;
   wishes: readonly Wish[];
+  home: HomeBase;
   engine: SuiteMap | null;
   player: JourneyPlayer | null;
   /** Switches the screen to its 9:16 recording stage (and back). */
   onRecording(on: boolean): void;
 }
 
-type Busy = null | 'image' | 'video';
+type Busy = null | 'image' | 'card' | 'video';
 
 function canRecord(): boolean {
   try {
@@ -39,7 +40,7 @@ function canRecord(): boolean {
   }
 }
 
-export function ShareJourney({ open, onClose, stays, stats, wishes, engine, player, onRecording }: Props) {
+export function ShareJourney({ open, onClose, stays, stats, wishes, home, engine, player, onRecording }: Props) {
   const [busy, setBusy] = useState<Busy>(null);
   const [videoOk, setVideoOk] = useState(false);
   const cancelRef = useRef<(() => void) | null>(null);
@@ -74,6 +75,19 @@ export function ShareJourney({ open, onClose, stays, stats, wishes, engine, play
       if (out !== 'cancelled') onClose();
     } catch {
       toast.show({ message: "Couldn't make the image. Try again.", tone: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function shareCard() {
+    setBusy('card');
+    try {
+      const { shareRoute } = await import('@/features/share');
+      const out = await shareRoute({ stays: [...stays], home, title: 'Our journey so far' });
+      if (out !== 'cancelled') onClose();
+    } catch {
+      toast.show({ message: "Couldn't make the card. Try again.", tone: 'error' });
     } finally {
       setBusy(null);
     }
@@ -152,6 +166,9 @@ export function ShareJourney({ open, onClose, stays, stats, wishes, engine, play
           <p className={s.lead}>{caption}.</p>
           <Button block icon={<IconShare size={18} />} onClick={() => void saveImage()} busy={busy === 'image'} disabled={busy !== null}>
             Share our story image
+          </Button>
+          <Button block variant="secondary" icon={<IconShare size={18} />} onClick={() => void shareCard()} busy={busy === 'card'} disabled={busy !== null}>
+            Share our route card
           </Button>
           {videoOk ? (
             <Button block variant="secondary" icon={<IconPlay size={18} />} onClick={() => void recordVideo()} disabled={busy !== null}>
