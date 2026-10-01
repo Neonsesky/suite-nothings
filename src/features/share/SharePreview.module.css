@@ -1,0 +1,73 @@
+.sheet {
+  max-width: 32rem;
+}
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-2) var(--space-4) var(--space-4);
+}
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: min(56dvh, 30rem);
+}
+.hint {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+.figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  width: 100%;
+}
+.card {
+  display: block;
+  height: min(56dvh, 34rem);
+  width: auto;
+  max-width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: contain;
+  border: 0.125rem solid var(--color-ink);
+  border-radius: var(--radius-lg);
+  box-shadow: 0.375rem 0.375rem 0 var(--color-honey);
+  background: var(--color-cream);
+  animation: rise var(--dur-slow) var(--ease-emphasized) both;
+}
+.caption {
+  max-width: 22rem;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+.actions {
+  display: flex;
+  gap: var(--space-3);
+}
+.actions > * {
+  flex: 1 1 0;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    animation: none;
+  }
+}
+:global(html[data-reduced-motion='true']) .card {
+  animation: none;
+}

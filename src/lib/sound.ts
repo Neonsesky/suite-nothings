@@ -4,7 +4,7 @@
  */
 import { getDevice, setDevice } from '@/data/device';
 
-export type SoundName = 'beep' | 'whoosh' | 'flap';
+export type SoundName = 'beep' | 'whoosh' | 'flap' | 'stamp';
 
 let ctx: AudioContext | null = null;
 let lastFlap = 0;
@@ -85,6 +85,32 @@ function flap(a: AudioContext, t: number) {
   src.start(t);
 }
 
+function stamp(a: AudioContext, t: number) {
+  // Rubber stamp on paper: a soft low thud, then a tiny paper tick.
+  const o = a.createOscillator();
+  const g = a.createGain();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(150, t);
+  o.frequency.exponentialRampToValueAtTime(55, t + 0.14);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.22, t + 0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+  o.connect(g).connect(a.destination);
+  o.start(t);
+  o.stop(t + 0.2);
+  const src = a.createBufferSource();
+  src.buffer = noiseBuffer(a, 0.04);
+  const f = a.createBiquadFilter();
+  f.type = 'bandpass';
+  f.frequency.value = 3200;
+  f.Q.value = 1.2;
+  const n = a.createGain();
+  n.gain.setValueAtTime(0.05, t + 0.03);
+  n.gain.exponentialRampToValueAtTime(0.0001, t + 0.065);
+  src.connect(f).connect(n).connect(a.destination);
+  src.start(t + 0.03);
+}
+
 /** Play a sound unless muted. Flap clicks are rate-limited so a board of flaps stays soft. */
 export function play(name: SoundName): void {
   if (isMuted()) return;
@@ -99,6 +125,7 @@ export function play(name: SoundName): void {
   try {
     if (name === 'beep') beep(a, t);
     else if (name === 'whoosh') whoosh(a, t);
+    else if (name === 'stamp') stamp(a, t);
     else flap(a, t);
   } catch {
     // audio is decoration: never throw

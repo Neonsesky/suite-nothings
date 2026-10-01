@@ -9,6 +9,34 @@
 - Map engine seam: `src/map/style.json`'s `boundary-state` filter is now null-safe (`coalesce(admin_level, 0)`), which silenced a MapLibre runtime warning the journey's globe camera triggered over certain OpenMapTiles boundary features.
 - Tests: 55 unit tests across `camera.test.ts`, the `export/` module and `tests/unit/journey-data.test.ts`; `tests/e2e/map-journey.spec.ts` (15 e2e tests across the three WebGL projects) — plays start to finish at 20× through the `sn:e2e` hook, scrubbing, pause/play, opening a stay from a postcard, the home-city filter, and reduced motion — plus `tests/e2e/map-journey-checkpoint.spec.ts` for the committed cp3 evidence.
 - Fixed along the way: `stopIndexAt`/`segmentAt` now tolerate a small epsilon, because GSAP's `timeline.time()` getter rounds its return value and a seek to an exact stop/segment boundary could read back a hair short and misreport the stop or phase.
+## [w2-delight] Us, milestones, wishlist, moments, share cards (2026-10-01)
+- **Milestones** (`src/features/milestones/`): `checkMilestones` implements every SPEC §12 rule
+  (first stay; 5/10/25/50/100 hotels; first stay outside the home city; first country abroad;
+  three stays in a month; a stay on the 19th; a 5-star stay; a hotel visited three times),
+  deterministic and idempotent, persisted per namespace through new `readMeta`/`writeMeta` store
+  helpers. `showMilestoneUnlock` is a satisfying ink-stamp slam with honey/ginger confetti, a
+  haptic and a new synthesized "stamp" sound, queued for several unlocks, with a calm fade under
+  reduced motion. A newly unlocked letter now toasts "A new note is waiting in Letters".
+- **Us** (`#/us`): a full stats dashboard (hotels, visits, hours together, cities, countries, km,
+  longest stay, farthest from home, "Our regular"), a live together-since counter on a split-flap
+  board, "whose picks rate higher", an earned/locked milestone stamp grid with a detail sheet, and
+  links to Letters (unread dot), Next check-ins, Journey and Settings. Designed empty and loading
+  states; two columns from 1024px.
+- **Wishlist** (`#/wishlist`, "Next check-ins"): add a wish by Photon search or by hand, dashed-pin
+  cards, soft delete with undo, "Surprise me" (a weighted random pick revealed on a split-flap
+  departures board) and one-tap conversion to a stay (`?wish=<id>` in add-stay prefills the hotel
+  and fulfils the wish on save).
+- **Moments** (`src/features/moments/`): "on this day" (same day-of-month in earlier months or
+  years) and the monthly anniversary on the 19th, replacing the stays screen's `MomentsSlot`.
+- **Share cards** (`src/features/share/`): `renderShareCard('stay'|'stats'|'route', data)` draws
+  1080×1920 ink-outlined postcards on canvas (brand fonts, StayArt/photo cover-fit, the key-tag
+  mark); `shareStay`/`shareStats`/`shareRoute` open a preview sheet with Web Share (files) or a
+  download fallback. The renderer is a lazy chunk, so the initial bundle is untouched.
+- Fixed a pre-existing layering bug where the Shell's fixed Demo badge covered stay-detail's
+  round share/back buttons on mobile (`StayDetail.module.css`).
+- Evidence in `design/checkpoints/cp3/delight/`. Decisions in `DECISIONS.md`; cross-feature notes
+  in `docs/handoff/w2-delight.md`; the share-card and milestone APIs are documented in
+  `docs/contracts.md`.
 
 ## [int-1] Integration wave 1 (2026-10-01)
 - Merged w1-backend, w1-map, w1-stays, w1-add-stay and w1-shell into `main` (`--no-ff`, in that order). There were no textual conflicts, and the overlapping BottomSheet fixes from w1-stays and w1-add-stay are both kept.
