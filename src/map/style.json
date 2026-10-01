@@ -1258,8 +1258,8 @@
       "minzoom": 4,
       "filter": [
         "all",
-        [">=",["get","admin_level"],3],
-        ["<=",["get","admin_level"],4],
+        [">=",["coalesce",["get","admin_level"],0],3],
+        ["<=",["coalesce",["get","admin_level"],0],4],
         ["!=",["get","maritime"],1],
         ["!=",["get","disputed"],1],
         ["!",["has","claimed_by"]]
