@@ -26,3 +26,10 @@ Notes for QA:
 - The map's dashed wish pins already skip fulfilled and deleted wishes (`map/pins.ts`).
 - Year in review isn't built (stretch goal).
 - Run e2e with `--output .tmp/<name>`. Parallel runs wipe the shared `test-results/`, which shows up as false ENOENT failures.
+
+## Share cards (share agent)
+- `src/features/share/{index,types,layout,render,art,host,SharePreview}.{ts,tsx}`: full implementation of `renderShareCard`, `shareStay`/`shareStats`/`shareRoute`, a preview sheet (own React root, no Shell edit) with loading/error/ready states, Web Share (files) with a download fallback. API documented in `docs/contracts.md` → "Share cards".
+- **For the journey agent:** call `renderShareCard('route', { stays, home, title? })` — the same card used by Us/stay-detail's share. The API is stable; see contracts.md.
+- Edits outside `src/features/share/`: `src/features/stay-detail/StayDetail.module.css` — `.headerBar` z-index raised one above `--z-header` so the mobile share/back buttons aren't covered by the Shell's fixed Demo badge (pre-existing cross-feature layering bug that blocked tapping Share on mobile; see DECISIONS.md).
+- Evidence: `design/checkpoints/cp3/delight/share-{stay,stats,route,route-local,stay-photo,stay-long-name,preview-sheet-desktop-1440}.png`. All opened and reviewed as a designer would — typography, contrast and composition read as a finished, shippable postcard.
+- Added the missing `tests/unit/share.test.ts` for `layout.ts`'s pure helpers (captions, text fit/wrap/balance, cover-fit, route projection/clustering, css-var resolution) — 20 tests, all passing.

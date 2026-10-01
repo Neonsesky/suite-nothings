@@ -398,9 +398,9 @@ These were stubs in wave 0. Wave 1 built them for real; the signatures below are
 | `src/features/connection/ConnectionForm.tsx` | `ConnectionForm({ onConnected?(), compact?, initialUrl?, initialKey?, as? })` | w1-backend |
 | `src/features/connection/ConnectionSection.tsx` | `ConnectionSection()` (the Settings section, including Demo ↔ Live) | w1-backend |
 | `src/features/connection/JoinRoute.tsx` | `#/join?…`: sets `me`, connects, then goes to `#/welcome` (onboarding starts at Home base) or `#/` | w1-backend |
-| `src/features/share/index.ts` | `shareStay(visitId)`: Web Share, then clipboard, then a toast. The share-cards wave replaces the body and keeps the export. | w1-stays |
+| `src/features/share/index.ts` | **Fully implemented (w2-delight).** `renderShareCard(kind: 'stay'\|'stats'\|'route', data): Promise<Blob>` (1080×1920 PNG, lazy chunk). `shareStay(visitId)`, `shareStats()`, `shareRoute(data?)` → `Promise<'shared'\|'copied'\|'cancelled'\|'unavailable'>`; each opens a preview sheet (Web Share API with files, else a PNG download). See "Share cards" below. | w2-delight |
 | `src/features/stays/transition.ts` | `openStay(id)` and `closeStay(id)`: card ↔ detail View Transition | w1-stays |
-| `src/features/milestones/engine.ts` | `checkMilestones(stays: readonly Stay[], prev: readonly Milestone[]): Milestone[]` (the stub returns `[]`); `Milestone { id: MilestoneId; title; caption; visitId; achievedOn }`. `milestones/index.ts` `showMilestoneUnlock()` is a no-op. | later wave |
+| `src/features/milestones/index.ts` | **Fully implemented (w2-delight).** `checkMilestones(stays, prev, opts?)`, `allMilestones`, `milestoneDefs(opts?)` / `MILESTONE_DEFS`, `milestoneToast(m)`, `useMilestoneState(stays) → { defs, earned }`, `showMilestoneUnlock(ms)` (the ink-stamp unlock overlay), `notifyNewLetters(before, after)`. `Milestone { id: MilestoneId; title; caption; visitId; achievedOn; detail? }`. | w2-delight |
 | `src/features/letters/unlock.ts` | `parseUnlockRule(raw)`, `isUnlocked(letter, { visits, hotels, countriesAbroad }, today): boolean`, `unlockHint(rule)`. **Fully implemented and tested.** | w1-shell |
 | `src/enrichment/index.ts` | `requestEnrichment(hotelId, { force? }?): Promise<void>` (a no-op; marks the hotel `skipped`), `useEnrichmentStatus(hotelId): 'idle'\|'running'\|'done'\|'failed'\|'skipped'`, `EnrichmentProvider { id; canEnrich(hotel); enrich(hotel, signal): Promise<EnrichmentPatch> }` | later wave |
 
@@ -414,6 +414,36 @@ transparent until the page has scrolled 80% of the hero's height.
 `sync.opEntity()` handle every action.
 
 Feature stubs share `src/features/stubs.module.css`. Once no stub imports it, delete it.
+
+---
+
+## Share cards (`src/features/share/`, w2-delight)
+
+1080×1920 PNGs in the Dayuse ink-outline style (canvas, no DOM/CSS at render time — waits on
+`document.fonts.ready`). The renderer (`render.ts`, ~70 KB gzip) and the preview sheet are lazy
+chunks; `index.ts` itself stays tiny on the initial path.
+
+```ts
+// index.ts — stable API; the journey screen also calls renderShareCard('route', …)
+type ShareCardKind = 'stay' | 'stats' | 'route';
+type ShareOutcome = 'shared' | 'copied' | 'cancelled' | 'unavailable';
+renderShareCard<K extends ShareCardKind>(kind: K, data: ShareCardDataMap[K]): Promise<Blob>  // 1080×1920 PNG
+interface StayCardData { stay: Stay; total: number; photo?: Blob | null }      // total = live stays in all
+interface StatsCardData { stays: Stay[]; home?: HomeBase }
+interface RouteCardData { stays: Stay[]; home?: HomeBase; title?: string }
+shareStay(visitId): Promise<ShareOutcome>
+shareStats(): Promise<ShareOutcome>
+shareRoute(data?: RouteCardData): Promise<ShareOutcome>   // defaults to every live stay from the store
+downloadBlob(blob, fileName): void
+stayCaption(i, n, hotelName, date) / statsCaption(summary) / routeCaption(km, hotels)  // design/copy.md §12
+CARD_W = 1080; CARD_H = 1920
+```
+
+Each `share*` call opens a preview sheet (own React root, `SharePreview.tsx` via `host.tsx`,
+no Shell edit) with a loading/error/ready state, then the Web Share API with files when
+`navigator.canShare({ files })`, else a "Save image" download. `layout.ts` holds the pure,
+unit-tested maths (text fit/wrap/balance, cover-fit crop, the route's equirectangular projection
+and pin clustering) used by `render.ts`'s canvas drawing and by `art.ts`'s rasterised StayArt.
 
 ---
 
