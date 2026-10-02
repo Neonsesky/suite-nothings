@@ -1,0 +1,19 @@
+.btn {
+  display: grid;
+  place-items: center;
+  width: var(--space-11);
+  height: var(--space-11);
+  border-radius: var(--radius-pill);
+  background: var(--color-paper);
+  border: 0.0625rem solid var(--color-line);
+  box-shadow: var(--shadow-card);
+  color: var(--color-ink);
+  text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease-standard), background-color var(--dur-base) var(--ease-standard);
+}
+.btn:hover {
+  background: var(--color-surface);
+}
+.btn:active {
+  transform: scale(0.94);
+}

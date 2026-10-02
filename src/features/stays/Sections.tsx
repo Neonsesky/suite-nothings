@@ -8,7 +8,8 @@ import { IconArrowRight, IconBed, IconChevron, IconClock, IconGlobe, IconKey, Ic
 import { SplitFlap } from '@/components/SplitFlap';
 import { StayArt } from '@/components/StayArt';
 import { COUPLE } from '@/config/couple';
-import { usePhotoUrl, useSettings, useWishes } from '@/data/store';
+import { setDevice } from '@/data/device';
+import { useDevicePref, usePhotoUrl, useSettings, useWishes } from '@/data/store';
 import type { Stay } from '@/data/types';
 import { formatDate, togetherDuration } from '@/lib/dates';
 import { favouriteStay, firstStay, latestStay, summary } from '@/lib/stats';
@@ -129,27 +130,17 @@ export function StoryThree({ stays }: { stays: Stay[] }) {
 
 /* ── Put us on your home screen ─────────────────────────────────────────────── */
 
-const DISMISS_KEY = 'sn:stays:install-dismissed';
-
 export function InstallBanner() {
   const { canInstall, isIOS, isStandalone, promptInstall } = useInstallPrompt();
-  const [dismissed, setDismissed] = useState(() => {
-    try {
-      return localStorage.getItem(DISMISS_KEY) === '1';
-    } catch {
-      return false;
-    }
-  });
+  const dismissed = useDevicePref('installDismissed');
   const [help, setHelp] = useState(false);
+  const dismiss = () => setDevice('installDismissed', true);
+  // Once this device is actually running standalone, the ask is moot for good: persist the
+  // dismissal so it stays hidden even if she opens the link in a browser tab again later.
+  useEffect(() => {
+    if (isStandalone && !dismissed) dismiss();
+  }, [isStandalone, dismissed]);
   if (isStandalone || dismissed) return null;
-  const dismiss = () => {
-    setDismissed(true);
-    try {
-      localStorage.setItem(DISMISS_KEY, '1');
-    } catch {
-      /* private mode: dismissal lasts for this visit */
-    }
-  };
   const install = async () => {
     // iOS gets the shell's illustrated Add to Home Screen sheet; ours is the fallback elsewhere.
     if (isIOS) return openIOSInstallSheet();
@@ -172,6 +163,9 @@ export function InstallBanner() {
           </Button>
           <Button variant="ghost" onClick={dismiss}>
             Not now
+          </Button>
+          <Button variant="ghost" onClick={dismiss}>
+            Already done
           </Button>
         </div>
       </div>

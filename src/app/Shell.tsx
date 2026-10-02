@@ -16,6 +16,7 @@ import { useReducedMotionAttribute } from '@/lib/motion';
 import { toast } from '@/lib/toast';
 import { PwaHost } from '@/pwa/PwaHost';
 import { Intro } from '@/features/intro/Intro';
+import { LetterButton } from '@/features/letters/LetterButton';
 import { PillowHost } from '@/features/letters/PillowHost';
 import { ErrorBoundary } from './ErrorBoundary';
 import { getLastScreen, LocationProvider, matchRoute, navigate, useRoute, type RouteDef } from './router';
@@ -99,6 +100,7 @@ function Header({ active }: { active?: Tab }) {
           <a href="#/add" className={s.headerAdd}>
             <IconPlus size={18} /> Add a stay
           </a>
+          <LetterButton className={s.headerLetter} />
         </nav>
       </div>
     </header>
@@ -147,6 +149,7 @@ function MobileTopBar() {
   return (
     <div className={s.mobileTop}>
       <DemoBadge />
+      <LetterButton className={s.mobileLetter} />
     </div>
   );
 }

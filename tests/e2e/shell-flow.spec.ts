@@ -40,6 +40,39 @@ test('later launches get the short intro and never block taps', async ({ page })
   await expect(page.getByTestId('intro')).toBeHidden({ timeout: 1500 });
 });
 
+test('return visit skips every first-time gate and lands on home fast, including after a bfcache-style resume', async ({ page }) => {
+  const errors = watchConsole(page);
+  await resetApp(page, { me: 'nirsh' });
+  // No onboarding, no intro replay, no "welcome back" modal: straight to the stays home screen.
+  await expect(page.getByRole('heading', { name: 'Our stays' })).toBeVisible({ timeout: 1000 });
+  await expect(page.getByTestId('intro')).toBeHidden();
+  await expect(page.getByRole('heading', { name: "Who's checking in?" })).toHaveCount(0);
+
+  // iOS Safari's "back from background" case restores the page from bfcache (no reload, no
+  // remount) rather than tearing it down, so a 'pageshow' with persisted:true must not reopen
+  // the intro or any first-launch step.
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));
+  await expect(page.getByRole('heading', { name: 'Our stays' })).toBeVisible();
+  await expect(page.getByTestId('intro')).toBeHidden();
+  expect(errors).toEqual([]);
+});
+
+test('the letter button opens the letter from every main screen', async ({ page }, info) => {
+  await resetApp(page, { me: 'nirsh' });
+  for (const hash of ['#/', '#/map', '#/journey', '#/us']) {
+    await page.goto(`./${hash}`);
+    const btn = page.getByRole('link', { name: 'Read our letter' }).locator('visible=true');
+    await expect(btn).toBeVisible();
+    // The button's target depends on letters loaded from IndexedDB; wait for the real deep
+    // link (not the "#/letters" list fallback it renders with before that data arrives).
+    await expect(btn).toHaveAttribute('href', /#\/letters\//, { timeout: 5000 });
+    if (hash === '#/') await shot(page, info, 'docs/review/w3-b', 'letter-button-stays');
+    await btn.click();
+    await expect(page).toHaveURL(/#\/letters\//);
+    await expect(page.getByText('Written in Dubai,')).toBeVisible();
+  }
+});
+
 test("Shady's first launch shows the pillow note, and reading it sets read_at", async ({ page }, info) => {
   test.skip(!existsSync('private/letter.md'), 'private letter not present');
   const errors = watchConsole(page);

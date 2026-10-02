@@ -36,6 +36,22 @@ export function useLetterViews(): LetterView[] {
   return useMemo(() => viewLetters(letters, me, stats, today()), [letters, me, stats]);
 }
 
+/**
+ * Where the persistent "read our letter" button should go: straight to the most relevant
+ * readable letter addressed to this device's person (oldest first, so the original pillow
+ * letter wins over later milestone ones), falling back to one they wrote, then to the full
+ * list — which is never empty of *something* to show (sealed notes included).
+ */
+export function usePrimaryLetterHref(): string {
+  const views = useLetterViews();
+  const readable = views.filter((v) => v.unlocked || v.mine);
+  const toMe = readable.filter((v) => !v.mine);
+  const pool = toMe.length ? toMe : readable;
+  if (pool.length === 0) return '#/letters';
+  const first = [...pool].sort((a, b) => a.letter.created_at.localeCompare(b.letter.created_at))[0];
+  return `#/letters/${first.letter.letter_id}`;
+}
+
 /** "September 2026" from an ISO timestamp or YYYY-MM-DD. */
 export function writtenMonth(writtenAt: string): string {
   const m = /^(\d{4})-(\d{2})/.exec(writtenAt);

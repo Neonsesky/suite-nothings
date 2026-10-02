@@ -19,6 +19,8 @@ export interface DevicePrefs {
   pillowShown: string[];
   /** Letter ids whose "… read your note" receipt was already shown to the author here. */
   readReceiptsSeen: string[];
+  /** "Add to home screen" banner dismissed on this device (declined, or already installed). */
+  installDismissed: boolean;
 }
 
 export const DEVICE_DEFAULTS: DevicePrefs = {
@@ -30,6 +32,7 @@ export const DEVICE_DEFAULTS: DevicePrefs = {
   introSeen: false,
   pillowShown: [],
   readReceiptsSeen: [],
+  installDismissed: false,
 };
 
 const PREFIX = 'sn:device:';

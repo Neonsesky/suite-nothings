@@ -1,7 +1,13 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { expect, test } from '@playwright/test';
-import { checkpointTo, resetApp, waitForStays, watchConsole } from './helpers';
+import { expect, test, type Page, type TestInfo } from '@playwright/test';
+import { checkpointTo, resetApp, waitForStays, watchConsole, WRITE_CHECKPOINTS } from './helpers';
+
+async function reviewShot(page: Page, info: TestInfo, name: string) {
+  if (!WRITE_CHECKPOINTS) return void (await info.attach(name, { body: await page.screenshot(), contentType: 'image/png' }));
+  mkdirSync('docs/review/w3-b', { recursive: true });
+  await page.screenshot({ path: `docs/review/w3-b/${name}-${info.project.name}.png` });
+}
 
 // generateSW emits a fixed `sw.js` filename; bumping its bytes on disk is how we simulate a
 // deployed update without a second build, so the real workbox-window "waiting" → onNeedRefresh
@@ -147,8 +153,27 @@ test.describe('iOS install sheet', () => {
     await expect(page.getByText('Open Our Suites')).toBeVisible();
     await expect(page.getByText('Look for the square with an arrow, at the bottom of Safari.')).toBeVisible();
     await checkpointTo(page, testInfo, 'w1-shell/pwa', 'ios-install-sheet');
-    await page.getByRole('button', { name: 'Done' }).click();
+    await page.getByRole('button', { name: 'Done', exact: true }).click();
     await expect(page.getByRole('dialog', { name: 'Add us to your home screen' })).toBeHidden();
+  });
+});
+
+test.describe('"Add to home screen" banner', () => {
+  test('"Already done" permanently hides it, even across a reload', async ({ page }, testInfo) => {
+    await resetApp(page);
+    await waitForStays(page);
+    await expect(page.getByTestId('intro')).toBeHidden();
+    const heading = page.getByRole('heading', { name: 'Put us on your home screen' });
+    await heading.scrollIntoViewIfNeeded();
+    await expect(heading).toBeVisible();
+    await reviewShot(page, testInfo, 'a2hs-banner-shown');
+    await page.getByRole('button', { name: 'Already done' }).click();
+    await expect(heading).toBeHidden();
+    await reviewShot(page, testInfo, 'a2hs-banner-hidden');
+    expect(await page.evaluate(() => localStorage.getItem('sn:device:installDismissed'))).toBe('true');
+    await page.reload();
+    await waitForStays(page);
+    await expect(heading).toBeHidden();
   });
 });
 

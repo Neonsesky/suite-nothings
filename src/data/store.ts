@@ -835,7 +835,7 @@ export function useDemoMode(): boolean {
   return useStore((s) => s.ns === 'demo');
 }
 
-function useDevice<K extends 'me' | 'muted' | 'connection' | 'introSeen' | 'reducedMotion' | 'pillowShown' | 'mode' | 'readReceiptsSeen'>(key: K) {
+function useDevice<K extends 'me' | 'muted' | 'connection' | 'introSeen' | 'reducedMotion' | 'pillowShown' | 'mode' | 'readReceiptsSeen' | 'installDismissed'>(key: K) {
   return useSyncExternalStore(
     (cb) => onDeviceChange((k) => k === key && cb()),
     () => deviceSnapshot(key),
@@ -858,7 +858,7 @@ export function useMe(): PersonId | null {
 }
 
 /** Any device pref, reactive. */
-export function useDevicePref<K extends 'me' | 'muted' | 'connection' | 'introSeen' | 'reducedMotion' | 'pillowShown' | 'mode' | 'readReceiptsSeen'>(key: K) {
+export function useDevicePref<K extends 'me' | 'muted' | 'connection' | 'introSeen' | 'reducedMotion' | 'pillowShown' | 'mode' | 'readReceiptsSeen' | 'installDismissed'>(key: K) {
   return useDevice(key);
 }
 
