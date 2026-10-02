@@ -50,13 +50,18 @@ var TABS = {
     columns: ['wish_id', 'name', 'lat', 'lng', 'city', 'country', 'note', 'added_by', 'priority',
       'fulfilled_visit_id', 'created_at', 'updated_at', 'deleted', 'server_updated_at'],
   },
+  Places: {
+    id: 'place_id', key: 'places',
+    columns: ['place_id', 'title', 'note', 'icon', 'tint', 'lat', 'lng', 'added_by',
+      'created_at', 'updated_at', 'deleted', 'server_updated_at'],
+  },
   Letters: {
     id: 'letter_id', key: 'letters',
     columns: ['letter_id', 'title', 'body_md', 'from', 'to', 'unlock_rule', 'written_at', 'read_at',
       'created_at', 'updated_at', 'server_updated_at'],
   },
 };
-var DATA_TABS = ['Hotels', 'Visits', 'Photos', 'Wishlist', 'Letters'];
+var DATA_TABS = ['Hotels', 'Visits', 'Photos', 'Wishlist', 'Places', 'Letters'];
 var SETTINGS_TAB = 'Settings';
 var SETTINGS_COLUMNS = ['key', 'value'];
 var LOG_TAB = 'Log';
@@ -85,6 +90,8 @@ var ENUMS = {
   source: ['photon', 'manual', 'seed', 'wishlist'],
   enrichment_status: ['none', 'pending', 'done', 'failed', 'skipped'],
   price_level: ['1', '2', '3', '4'],
+  icon: ['home', 'heart', 'restaurant', 'beach', 'mosque', 'gym', 'park', 'car', 'plane', 'star', 'coffee', 'other'],
+  tint: ['honey', 'ginger', 'ink'],
 };
 
 var DEFAULT_SETTINGS = {
@@ -152,6 +159,7 @@ var POST_HANDLERS = {
   deleteVisit: function (p) { return apiDeleteVisit_(p); },
   uploadPhoto: function (p) { return apiUploadPhoto_(p); },
   upsertWish: function (p) { return apiUpsert_('Wishlist', p, ['wish_id', 'updated_at']); },
+  upsertPlace: function (p) { return apiUpsert_('Places', p, ['place_id', 'updated_at']); },
   upsertLetter: function (p) { return apiUpsert_('Letters', p, ['letter_id', 'updated_at']); },
   markLetterRead: function (p) { return apiMarkLetterRead_(p); },
   updateSettings: function (p) { return apiUpdateSettings_(p); },

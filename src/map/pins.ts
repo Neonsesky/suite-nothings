@@ -5,8 +5,8 @@
  */
 import type { FeatureCollection, LineString, Point } from 'geojson';
 import type { Map as MlMap } from 'maplibre-gl';
-import { clusterPin, homePin, pinDataUrl, stayPin, wishlistPin, type PinArt } from '@/components/brand/pins';
-import type { HomeBase, Stay, Wish } from '@/data/types';
+import { clusterPin, homePin, pinDataUrl, placePin, stayPin, wishlistPin, type PinArt } from '@/components/brand/pins';
+import type { HomeBase, Place, Stay, Wish } from '@/data/types';
 import { averageRating } from '@/data/stays';
 import { greatCircle } from '@/lib/geo';
 
@@ -37,6 +37,7 @@ export interface PinAggregates {
   cities: FeatureCollection<Point, BubbleProps>;
   countries: FeatureCollection<Point, BubbleProps>;
   wishes: FeatureCollection<Point, { wishId: string; name: string; icon: string }>;
+  places: FeatureCollection<Point, { placeId: string; title: string; icon: string }>;
   arcs: FeatureCollection<LineString, { order: number }>;
   home: FeatureCollection<Point, { icon: string; label: string }>;
 }
@@ -71,7 +72,9 @@ function centroid(pts: readonly { lat: number; lng: number }[]): [number, number
 }
 
 /** Aggregate live (non-deleted) stays into the map's sources. Stays may be in any order. */
-export function aggregate(stays: readonly Stay[], wishes: readonly Wish[] = [], home?: HomeBase | null): PinAggregates {
+export const placeIconId = (icon: string, tint: string | null) => `sn-place-${icon}${tint ? `-${tint}` : ''}`;
+
+export function aggregate(stays: readonly Stay[], wishes: readonly Wish[] = [], home?: HomeBase | null, places: readonly Place[] = []): PinAggregates {
   const live = stays.filter((s) => !s.visit.deleted && Number.isFinite(s.hotel.lat) && Number.isFinite(s.hotel.lng));
   const byHotel = new Map<string, Stay[]>();
   for (const s of live) {
@@ -143,6 +146,12 @@ export function aggregate(stays: readonly Stay[], wishes: readonly Wish[] = [], 
         .filter((w) => !w.deleted && !w.fulfilled_visit_id && Number.isFinite(w.lat) && Number.isFinite(w.lng))
         .map((w) => point(w.lng as number, w.lat as number, { wishId: w.wish_id, name: w.name, icon: WISH_ICON })),
     },
+    places: {
+      type: 'FeatureCollection',
+      features: places
+        .filter((p) => !p.deleted && Number.isFinite(p.lat) && Number.isFinite(p.lng))
+        .map((p) => point(p.lng, p.lat, { placeId: p.place_id, title: p.title, icon: placeIconId(p.icon, p.tint) })),
+    },
     arcs: { type: 'FeatureCollection', features: arcs },
     home: {
       type: 'FeatureCollection',
@@ -163,6 +172,11 @@ export function requiredImages(agg: PinAggregates): Map<string, PinArt> {
   }
   out.set(WISH_ICON, wishlistPin());
   out.set(HOME_ICON, homePin());
+  for (const f of agg.places.features) {
+    if (out.has(f.properties.icon)) continue;
+    const [, icon, tint] = /^sn-place-([a-z]+)(?:-([a-z]+))?$/.exec(f.properties.icon) ?? [];
+    out.set(f.properties.icon, placePin(icon ?? 'other', tint ?? null));
+  }
   return out;
 }
 

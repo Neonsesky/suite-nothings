@@ -544,6 +544,75 @@ export function IconBookmark(p: IconProps) {
   );
 }
 
+/** Custom-place mark: a fork and spoon. */
+export function IconRestaurant(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M7 3v8a1.6 1.6 0 0 0 3.2 0V3M7 3v4.5M9.6 3v4.5M8.6 11v10" />
+      <path d="M16 3c-1.4 0-2.5 2-2.5 5s1.1 5 2.5 5v8" />
+    </Svg>
+  );
+}
+
+/** Custom-place mark: an umbrella on the beach. */
+export function IconBeach(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M12 3a8 8 0 0 1 8 8H4a8 8 0 0 1 8-8z" />
+      <path d="M12 3v2.2M12 11v8a2 2 0 0 1-2 2" />
+    </Svg>
+  );
+}
+
+/** Custom-place mark: a dome and crescent. */
+export function IconMosque(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M4 20V13a8 8 0 0 1 16 0v7" />
+      <path d="M4 20h16M12 13V9" />
+      <path d="M13.8 5.3a2.4 2.4 0 1 1-2.3-3.1 3 3 0 1 0 2.3 3.1z" />
+    </Svg>
+  );
+}
+
+/** Custom-place mark: a dumbbell. */
+export function IconGym(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M3 10v4M6 8v8M18 8v8M21 10v4M6.5 12h11" strokeWidth={2.2} />
+    </Svg>
+  );
+}
+
+/** Custom-place mark: a tree. */
+export function IconPark(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M12 3 7 11h3l-4 6h5v4h2v-4h5l-4-6h3z" />
+    </Svg>
+  );
+}
+
+/** Custom-place mark: a coffee cup. */
+export function IconCoffee(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M5 8h11v6a4.5 4.5 0 0 1-4.5 4.5h-2A4.5 4.5 0 0 1 5 14z" />
+      <path d="M16 9.5h1.5a2.3 2.3 0 0 1 0 4.6H16M8 4.5c-.6.8-.6 1.3 0 2M11.5 4.5c-.6.8-.6 1.3 0 2" />
+    </Svg>
+  );
+}
+
+/** Custom-place mark: a simple dot pin for "other". */
+export function IconOther(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="12" cy="12" r="8.5" />
+      <circle cx="12" cy="12" r="2.3" fill="currentColor" stroke="none" />
+    </Svg>
+  );
+}
+
 /** Name → component, for pickers, docs and tests. */
 export const icons = {
   IconStays,
@@ -601,6 +670,13 @@ export const icons = {
   IconMore,
   IconMinus,
   IconBookmark,
+  IconRestaurant,
+  IconBeach,
+  IconMosque,
+  IconGym,
+  IconPark,
+  IconCoffee,
+  IconOther,
 } satisfies Record<string, IconComponent>;
 
 export type IconName = keyof typeof icons;

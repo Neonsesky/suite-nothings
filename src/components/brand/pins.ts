@@ -100,6 +100,40 @@ export function clusterPin(count: number): PinArt {
   return { svg: wrap(w, h, body), width: w, height: h, anchor: 'center', tip: [w / 2, h / 2] };
 }
 
+/** Minimal line-art glyphs for each place icon, drawn centred in a 16×16 box. */
+const PLACE_GLYPHS: Record<string, string> = {
+  home: 'M3 8.5 8 4.5l5 4V13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z',
+  heart: 'M8 13.3S3.2 10.3 3.2 6.9a2.6 2.6 0 0 1 4.8-1.4 2.6 2.6 0 0 1 4.8 1.4c0 3.4-4.8 6.4-4.8 6.4z',
+  restaurant: 'M5 2.5v5a1 1 0 0 0 2 0v-5M5 2.5v2.6M6.4 2.5v2.6M5.8 7.5v6M11 2.5c-.9 0-1.6 1.3-1.6 3s.7 3 1.6 3v4.5',
+  beach: 'M2 8a6 6 0 0 1 12 0H2zM8 2v1.3M8 8v5a1.3 1.3 0 0 1-1.3 1.3',
+  mosque: 'M2.5 13V8.5a5.5 5.5 0 0 1 11 0V13M2.5 13h11M8 8.5V6M9.1 3.6a1.6 1.6 0 1 1-1.5-2.1 2 2 0 1 0 1.5 2.1z',
+  gym: 'M1.5 6.5v3M3.5 5v6M12.5 5v6M14.5 6.5v3M4 8h8',
+  park: 'M8 1.5 4.7 7h2L4 11.5h3.2V15h1.6v-3.5H12L9.3 7h2z',
+  car: 'M3 10.5v-2l1.3-3.2a1.5 1.5 0 0 1 1.4-1h4.6a1.5 1.5 0 0 1 1.4 1L13 8.5v2M3 10.5h10v1.5a.8.8 0 0 1-.8.8H12a.8.8 0 0 1-.8-.8v-.5h-6.4v.5a.8.8 0 0 1-.8.8h-.2a.8.8 0 0 1-.8-.8z',
+  plane: 'M8 1.5v10M8 1.5 3.5 6M8 1.5l4.5 4.5M4 10l-1.8 2.8M12 10l1.8 2.8M8 11.5l-1.3 3h2.6z',
+  star: 'm8 2 1.8 3.8 4.2.5-3.1 2.9.8 4.1L8 11.3l-3.7 2 .8-4.1-3.1-2.9 4.2-.5z',
+  coffee: 'M3 5.5h8v4.5a3.5 3.5 0 0 1-3.5 3.5h-1A3.5 3.5 0 0 1 3 10zM11 6.5h1.2a1.8 1.8 0 0 1 0 3.6H11',
+  other: 'M8 12.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9z',
+};
+
+/** Tint colours for custom place pins (null = ink on paper). */
+const PLACE_TINT_COLORS: Record<string, string> = { honey: c.honey, ginger: c.ginger, ink: c.ink };
+
+/** A custom place pin (36 × 48): a rounded badge with the chosen icon, optionally tinted. */
+export function placePin(icon: string, tint: string | null = null): PinArt {
+  const w = 36;
+  const h = 48;
+  const fill = tint ? (PLACE_TINT_COLORS[tint] ?? c.paper) : c.paper;
+  const glyphColor = tint ? c.paper : c.ink;
+  const glyph = PLACE_GLYPHS[icon] ?? PLACE_GLYPHS.other;
+  const body = `
+<path d="M18 44C16.4 42 4 29.4 4 18a14 14 0 0 1 28 0c0 11.4-12.4 24-14 26z" fill="${fill}" stroke="${c.ink}" stroke-width="2.4" stroke-linejoin="round"/>
+<g transform="translate(10 10)" fill="none" stroke="${glyphColor}" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+<path d="${glyph}" fill="${icon === 'other' ? glyphColor : 'none'}"/>
+</g>`;
+  return { svg: wrap(w, h, body), width: w, height: h, anchor: 'bottom', tip: [18, 45] };
+}
+
 /** Encode pin art as a data URL for an <img> or `new Image()`. */
 export function pinDataUrl(art: PinArt): string {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(art.svg)}`;

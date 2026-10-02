@@ -16,7 +16,7 @@ import type {
   StyleSpecification,
 } from 'maplibre-gl';
 import type { Feature, LineString } from 'geojson';
-import type { HomeBase, Stay, Wish } from '@/data/types';
+import type { HomeBase, Place, Stay, Wish } from '@/data/types';
 import { BASE_URL } from '@/config/env';
 import { pinDataUrl, stayPin } from '@/components/brand/pins';
 import baseStyle from './style.json';
@@ -66,6 +66,7 @@ export function supportsWebGL(): boolean {
 export interface MapData {
   stays: readonly Stay[];
   wishes?: readonly Wish[];
+  places?: readonly Place[];
   home?: HomeBase | null;
 }
 
@@ -158,6 +159,7 @@ const SOURCES = {
   cities: 'sn-cities',
   countries: 'sn-countries',
   wishes: 'sn-wishes',
+  places: 'sn-places',
   arcs: 'sn-arcs',
   home: 'sn-home',
 } as const;
@@ -207,6 +209,12 @@ function overlayLayers(bp: Breakpoints): LayerSpecification[] {
       source: SOURCES.wishes,
       layout: { ...common, 'icon-image': ['get', 'icon'], 'icon-anchor': 'bottom', 'icon-size': zoomExpr(1, 0.55, bp.city, 0.85, bp.city + 3, 1) },
       paint: { 'icon-opacity': 0.92 },
+    },
+    {
+      id: 'sn-places',
+      type: 'symbol',
+      source: SOURCES.places,
+      layout: { ...common, 'icon-image': ['get', 'icon'], 'icon-anchor': 'bottom', 'icon-size': zoomExpr(1, 0.55, bp.city, 0.85, bp.city + 3, 1) },
     },
     {
       id: 'sn-countries',
@@ -318,8 +326,8 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
     return style;
   };
 
-  let data: MapData = { stays: [], wishes: [], home, ...opts.data };
-  let agg: PinAggregates = aggregate(data.stays, data.wishes ?? [], home);
+  let data: MapData = { stays: [], wishes: [], places: [], home, ...opts.data };
+  let agg: PinAggregates = aggregate(data.stays, data.wishes ?? [], home, data.places ?? []);
   /** City framing centres on our home-city stays (not the city's geographic centre). */
   const framing = (c: Chapter): Framing => {
     const f = framingFor(c, home, bp, vp());
@@ -720,7 +728,7 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
     look: () => look,
     async setData(d) {
       data = { ...data, ...d };
-      agg = aggregate(data.stays, data.wishes ?? [], data.home ?? home);
+      agg = aggregate(data.stays, data.wishes ?? [], data.home ?? home, data.places ?? []);
       if (!overlays || !overlaysReady) return;
       await ensurePinImages(map, agg);
       if (destroyed) return;
