@@ -175,6 +175,11 @@ a.row:active {
   letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
 }
+.signatureRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
 .signature::after {
   content: ' ♥';
   color: var(--color-ginger);

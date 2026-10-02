@@ -13,6 +13,7 @@ import { IconBack, IconEdit, IconExternal, IconPhone, IconPin, IconShare, IconSt
 import { Skeleton } from '@/components/Skeleton';
 import { StayArt } from '@/components/StayArt';
 import { KeyTagMark } from '@/components/brand/KeyTagMark';
+import { Avatar } from '@/components/brand/Avatar';
 import { personName, PEOPLE, type PersonId } from '@/config/couple';
 import { parseJsonArray } from '@/data/stays';
 import { softDeleteVisit, undoDeleteVisit, upsertHotel, upsertVisit, useMe, usePhotoUrl, useStay, useStoreReady, useVisitsForHotel } from '@/data/store';
@@ -99,6 +100,7 @@ function Ratings({ stay, me }: { stay: Stay; me: PersonId | null }) {
         const r = p === 'nirsh' ? stay.visit.rating_nirsh : stay.visit.rating_shady;
         return (
           <li key={p}>
+            <Avatar person={p} size={24} />
             <strong>{personName(p)}</strong>
             {r != null ? (
               <Stars value={r} label={`${personName(p)}: ${r} out of 5`} />

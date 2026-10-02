@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/Button';
 import { KeyTagMark } from '@/components/brand/KeyTagMark';
+import { Avatar } from '@/components/brand/Avatar';
 import { IconAlert, IconCheck } from '@/components/icons';
 import { otherPerson, personName, type PersonId } from '@/config/couple';
 import { parseJoinParams, saveConnection, testConnection, type JoinParse, type TestResult } from '@/data/connection';
@@ -79,6 +80,7 @@ export default function JoinRoute() {
     <main className={s.join}>
       <div className={s.joinCard}>
         <KeyTagMark size={56} />
+        <Avatar person={as} size={48} />
         <h1 className={s.joinTitle}>You've been invited</h1>
         <p className={s.joinBody}>This connects you as {name}.</p>
         <p className={[s.result, test ? (test.ok ? s.ok : s.bad) : ''].join(' ')} role="status" aria-live="polite" data-testid="connection-result" data-outcome={test?.outcome}>

@@ -5,6 +5,7 @@
  */
 import { useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { COUPLE, personName } from '@/config/couple';
+import { Avatar } from '@/components/brand/Avatar';
 import type { Letter } from '@/data/types';
 import { IconHeart } from '@/components/icons';
 import { blockText, parseLetter, renderBlock } from './markdown';
@@ -80,7 +81,8 @@ export function LetterPaper({ letter, reveal, instant = false, titleId, onReveal
         ))}
       </div>
       <footer className={s.signoff}>
-        <p ref={(el) => void (refs.current[body.length] = el)} className={`${s.line} ${s.signature}`} style={style(body.length)}>
+        <p ref={(el) => void (refs.current[body.length] = el)} className={`${s.line} ${s.signature} ${s.signatureRow}`} style={style(body.length)}>
+          <Avatar person={letter.from} size={28} />
           {signed ? renderBlock(blocks[blocks.length - 1]) : author}
         </p>
         {month ? (

@@ -5,7 +5,7 @@ import { Button } from '@/components/Button';
 import { ChipGroup } from '@/components/Chip';
 import { ErrorState } from '@/components/ErrorState';
 import { Skeleton } from '@/components/Skeleton';
-import { KeyTagMark } from '@/components/brand/KeyTagMark';
+import { AppLogo } from '@/components/brand/AppLogo';
 import { IconChevron, IconDownload, IconUpload } from '@/components/icons';
 import { COUPLE, PEOPLE, type PersonId } from '@/config/couple';
 import { APP_VERSION, BUILD_DATE } from '@/config/env';
@@ -380,7 +380,7 @@ function AboutSection() {
   return (
     <section className={`${s.card} ${s.about}`} aria-labelledby="about-label">
       <p id="about-label" className={s.label}>About</p>
-      <KeyTagMark size={40} title={COUPLE.appName} />
+      <AppLogo size={40} variant="mark-only" title={COUPLE.appName} />
       <p className={s.aboutName}>{COUPLE.appName}</p>
       <p className={s.aboutTagline}>{COUPLE.tagline}</p>
       <p className={s.aboutMeta}>

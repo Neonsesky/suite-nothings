@@ -4,8 +4,10 @@ export const COUPLE = {
   shortName: 'Our Suites',
   tagline: "Every room we've made ours.",
   people: {
-    nirsh: { id: 'nirsh', name: 'Nirsh' },
-    shady: { id: 'shady', name: 'Shady' },
+    // `avatar`: drop a real photo at public/photos/{id}.jpg (see SETUP.md) and the Avatar
+    // component swaps it in automatically; until then it 404s and falls back to an initial.
+    nirsh: { id: 'nirsh', name: 'Nirsh', avatar: '/photos/nirsh.jpg' },
+    shady: { id: 'shady', name: 'Shady', avatar: '/photos/shady.jpg' },
   },
   togetherSince: '2026-06-19T23:46:00+04:00',
   defaultHomeBase: {

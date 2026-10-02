@@ -188,3 +188,13 @@
   test (`name: 'Done'` now `exact: true`).
 - Screenshots: `docs/review/w3-b/` (letter button on the Stays home hero, A2HS banner shown/hidden;
   390×844 plus 412×915/1440×900).
+
+## w3-a: share assets — avatars, app logo, link previews
+- Added `Avatar` (initials fallback, auto-upgrades to `public/photos/{id}.jpg` when present) and
+  `AppLogo` (mark + wordmark, reusing `KeyTagMark`) in `src/components/brand/`; wired avatars into
+  onboarding's "who's checking in", the stay-detail ratings list, the letter signature and the
+  join screen, and the logo into Settings → About.
+- Added OG/Twitter meta to `index.html` plus a real `public/og-cover.png` (1200×630) and a
+  self-contained `public/share/index.html` for GitHub Pages link previews.
+- Screenshots: `docs/review/w3-a/` (onboarding avatars, About logo, stay-detail ratings; 390×844
+  and 1440×900).

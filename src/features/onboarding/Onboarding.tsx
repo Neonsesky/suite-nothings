@@ -5,6 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/Button';
 import { KeyTagMark } from '@/components/brand/KeyTagMark';
+import { Avatar } from '@/components/brand/Avatar';
 import { IconBack, IconCheck } from '@/components/icons';
 import { navigate } from '@/app/router';
 import { COUPLE, type PersonId } from '@/config/couple';
@@ -110,9 +111,7 @@ function Who({ headingRef, onPick }: { headingRef: HeadingRef; onPick(id: Person
       <div className={s.people}>
         {Object.values(COUPLE.people).map((p) => (
           <button key={p.id} type="button" className={s.person} onClick={() => onPick(p.id)}>
-            <span className={s.initial} aria-hidden="true">
-              {p.name[0]}
-            </span>
+            <Avatar person={p.id} size={64} className={s.initial} />
             <span className={s.personName}>{p.name}</span>
           </button>
         ))}

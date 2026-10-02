@@ -161,3 +161,10 @@
   hides conditionally on it — so opening the app in a stray browser tab later (e.g. a shared link)
   won't re-offer the install banner on a device that's already running it standalone — reverse by
   dropping the `useEffect` if that re-offer is ever wanted back.
+- [w3-a] Avatar always points `<img src>` at `/photos/{id}.jpg` and falls back to an initials SVG
+  on `onError`, rather than a config flag for "has photo" — one less thing to keep in sync; drop a
+  JPEG in and it just works. Reverse by adding an explicit `hasPhoto` boolean to `couple.ts` if the
+  404-then-fallback flash becomes a problem.
+- [w3-a] `AppLogo`'s `mark-only` variant is literally `KeyTagMark` passthrough (no wordmark), kept
+  so existing compact header/About usages didn't need relayout — reverse by inlining `KeyTagMark`
+  again wherever `mark-only` reads oddly.

@@ -267,6 +267,13 @@ In the app: **Us → Settings → Home base → Change**. Both phones pick it up
 
 **You should see:** the new city under **Home base**, and the map opening there.
 
+### Add our profile photos
+Right now the app shows an initial (an ink-outline "N" or "S") wherever a face belongs. To swap
+in real photos: drop square-ish images at `public/photos/nirsh.jpg` and `public/photos/shady.jpg`
+in the repo (any size works; the app crops them to a circle), commit, and redeploy the site. No
+code change needed — each `<Avatar>` tries that path first and only falls back to the initial if
+the file is missing.
+
 ### Add a future letter
 Letters can stay sealed until a moment arrives. Add one as a new row in the **Letters** tab:
 
