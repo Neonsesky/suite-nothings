@@ -167,3 +167,24 @@
   prior AI description). `tests/e2e/enrichment.spec.ts` covers skeleton → filled → Refresh info →
   offline across all three viewports. A live smoke run against 3 real seed hotels is recorded in
   `design/checkpoints/cp4/enrichment.md`.
+
+## [w3-b] Seamless return, the letter always one tap away, "Already done" for A2HS
+- Audited the first-launch flow (SPEC §8.1): return visits already skipped the intro replay
+  (`sn:device:introSeen`) and onboarding (`sn:device:me`) before this task — verified both persist
+  correctly across reload and a simulated iOS bfcache `pageshow(persisted:true)` resume, with no
+  remaining first-time-only gate. No code changes needed there beyond test coverage.
+- `src/features/letters/LetterButton.tsx` + `access.ts`'s `usePrimaryLetterHref`: a discreet
+  sealed-envelope icon button in the persistent chrome (desktop header, mobile top bar) that opens
+  the most relevant readable letter full-screen from every main screen, independent of the existing
+  pillow-note first-read easter egg (still intact).
+- `src/data/device.ts`: new `installDismissed` device pref. `src/features/stays/Sections.tsx`'s
+  `InstallBanner` now uses it (reactive, shared storage path) instead of an ad-hoc localStorage key,
+  adds an "Already done" button alongside "Not now", and persists the dismissal automatically once
+  the app is actually running standalone.
+- Tests: `tests/e2e/shell-flow.spec.ts` — "return visit skips every first-time gate…" (incl. a
+  bfcache-style `pageshow` resume) and "the letter button opens the letter from every main screen".
+  `tests/e2e/pwa.spec.ts` — '"Already done" permanently hides it, even across a reload'. Fixed a
+  pre-existing strict-mode ambiguity the new "Already done" button exposed in the iOS install sheet
+  test (`name: 'Done'` now `exact: true`).
+- Screenshots: `docs/review/w3-b/` (letter button on the Stays home hero, A2HS banner shown/hidden;
+  390×844 plus 412×915/1440×900).

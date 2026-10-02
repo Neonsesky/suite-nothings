@@ -134,3 +134,30 @@
   fully (size budget, PWA precache, full e2e). Spent polish-2's budget on guaranteed, testable wins
   instead (Dayuse fidelity, motion tuning). Reverse: none needed, nothing changed. Next agent: the
   source-file mapping above is a head start if attempted again.
+- [w3-b] "hasVisited" for the return-visit flow reuses the existing `sn:device:introSeen` +
+  `sn:device:me` device prefs rather than adding a new flag — together they already gate every
+  first-launch-only screen (intro replay, onboarding's who/connect/home/install steps), and the
+  intro already ships a ≤2.5s first-launch / ~400ms-short-replay split with a hard ceiling —
+  reverse by introducing a dedicated `hasVisited` flag in `src/data/device.ts` if the two ever
+  need to diverge.
+- [w3-b] The persistent letter button (`src/features/letters/LetterButton.tsx`) deep-links to the
+  single most relevant *readable* letter for the current device's person (oldest addressed-to-me
+  first, then oldest mine, see `usePrimaryLetterHref` in `access.ts`), falling back to the
+  `#/letters` list only when nothing is readable yet or letters haven't loaded from IndexedDB —
+  reverse by pointing the button straight at `#/letters` if a future multi-letter mailbox makes a
+  single deep link ambiguous.
+- [w3-b] Moved the "Add to home screen" banner's dismissal (`InstallBanner` in
+  `src/features/stays/Sections.tsx`) off its own ad-hoc `localStorage['sn:stays:install-dismissed']`
+  key and onto a new `installDismissed` field in `src/data/device.ts`'s `DevicePrefs`, so it's
+  reactive (`useDevicePref`) and shares the same per-device storage path as every other launch-flow
+  preference — reverse by reading the old key back if anything external depended on it (nothing in
+  this repo did).
+- [w3-b] Added a third "Already done" button to the install banner, distinct from "Not now": both
+  call the same `dismiss()` (the existing "Not now" was already a permanent dismissal via
+  localStorage, not a per-visit snooze) — "Already done" just names the common real case (she
+  already added it manually) without implying "ask me again later" — reverse by removing the
+  second button if the distinction isn't wanted.
+- [w3-b] `InstallBanner` now also persists the dismissal once `isStandalone` is true, not just
+  hides conditionally on it — so opening the app in a stray browser tab later (e.g. a shared link)
+  won't re-offer the install banner on a device that's already running it standalone — reverse by
+  dropping the `useEffect` if that re-offer is ever wanted back.
