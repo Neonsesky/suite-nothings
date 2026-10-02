@@ -60,6 +60,8 @@ export interface PlayerOptions {
   veil?: HTMLElement | null;
   /** Base time scale (the e2e hook passes 20). */
   baseScale?: number;
+  /** Seeds the per-session variation (hold/leg jitter, tag bob, entrance spring). Same seed, same replay. */
+  seed?: number;
   events: PlayerEvents;
 }
 
@@ -74,6 +76,20 @@ const TRAVELLER_ICON: Record<TravellerKind, string> = {
   car: '<path d="M5.5 16.5H4.3a.8.8 0 0 1-.8-.8v-2.9a2 2 0 0 1 1.3-1.9l2.2-.8 1.9-3.2A2 2 0 0 1 10.6 6h4.1a2 2 0 0 1 1.6.8l2.5 3.4 1.2.4a2 2 0 0 1 1.5 1.9v3.2a.8.8 0 0 1-.8.8h-1.2M9.5 16.5h5" fill="none"/><path d="M7 10.5h13" fill="none"/><circle cx="7.5" cy="16.5" r="2" fill="none"/><circle cx="16.5" cy="16.5" r="2" fill="none"/>',
   plane: '<path d="M20.6 3.4c.8.8.3 2.2-.7 3.2l-3.4 3.4 2.2 8.8-1.5 1.5-3.9-7-3.3 3.3.4 2.8-1.2 1.2-1.8-3.5-3.5-1.8 1.2-1.2 2.8.4 3.3-3.3-7-3.9L6 5.8l8.8 2.2 3.4-3.4c1-1 2.4-1.5 3.2-.7z" fill="currentColor"/>',
 };
+
+/** Deterministic PRNG (mulberry32) so a given seed replays identically. */
+function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** Ease variants legs are drawn from, so no two plays accelerate into a stop the same way. */
+const LEG_EASES = ['power2.inOut', 'power3.inOut', 'sine.inOut', 'power1.inOut'];
 
 export function travellerFor(style: LegStyle): TravellerKind {
   return style === 'glide' ? 'heart' : style === 'hop' ? 'car' : 'plane';
@@ -109,9 +125,11 @@ export class JourneyPlayer {
   private scale = 1;
   private destroyed = false;
   private cam: Camera | null = null;
+  private rng: () => number;
 
   constructor(o: PlayerOptions) {
     this.o = o;
+    this.rng = mulberry32(o.seed ?? Math.floor(Math.random() * 2 ** 31));
     const vw = o.viewport.width;
     const vh = o.viewport.height;
     this.plan = planJourney(o.stops, { viewportWidth: vw, viewportHeight: vh, home: o.home });
@@ -119,6 +137,23 @@ export class JourneyPlayer {
       for (const leg of [this.plan.opening, ...this.plan.legs, this.plan.finale]) if (leg) leg.duration = CROSSFADE_S;
     }
     this.schedule = buildSchedule(this.plan);
+    // Seeded jitter so no two plays feel identical: holds breathe a little, legs vary in length.
+    if (!o.reduced) {
+      let drift = 0;
+      for (const seg of this.schedule.segments) {
+        const span = seg.kind === 'hold' ? 0.16 : seg.kind === 'leg' ? 0.08 : 0;
+        const factor = span ? 1 + (this.rng() * 2 - 1) * span : 1;
+        seg.start += drift;
+        const next = seg.duration * factor;
+        drift += next - seg.duration;
+        seg.duration = next;
+      }
+      this.schedule.total += drift;
+      for (let i = 0; i < this.schedule.stopTimes.length; i++) {
+        const hold = this.schedule.segments.find((s) => s.kind === 'hold' && s.stopIndex === i);
+        if (hold) this.schedule.stopTimes[i] = hold.start;
+      }
+    }
     this.scale = o.baseScale ?? 1;
     this.tl = gsap.timeline({
       paused: true,
@@ -132,7 +167,15 @@ export class JourneyPlayer {
     for (const seg of this.schedule.segments) {
       const state = { p: 0 };
       this.progress.push(state);
-      this.tl.to(state, { p: 1, duration: seg.duration, ease: 'none' }, seg.start);
+      const ease =
+        seg.kind === 'leg'
+          ? LEG_EASES[Math.floor(this.rng() * LEG_EASES.length) % LEG_EASES.length]
+          : seg.kind === 'opening'
+            ? 'power2.out'
+            : seg.kind === 'finale'
+              ? 'power1.inOut'
+              : 'none';
+      this.tl.to(state, { p: 1, duration: seg.duration, ease }, seg.start);
     }
     // Pad so an empty schedule still has a (zero) length and `progress()` is defined.
     if (!this.schedule.segments.length) this.tl.set({}, {}, 0);
@@ -267,7 +310,11 @@ export class JourneyPlayer {
       el.dataset.shown = '0';
       el.innerHTML = `<img src="${STAY_PIN}" alt="" draggable="false">`;
       el.setAttribute('aria-hidden', 'true');
-      const marker = this.track(e.addMarker(el, [s.lng, s.lat], { anchor: 'bottom' }), [s.lng, s.lat]);
+      el.style.setProperty('--bob-delay', `${(this.rng() * -4).toFixed(2)}s`);
+      el.style.setProperty('--bob-dur', `${(2.6 + this.rng() * 1.2).toFixed(2)}s`);
+      el.style.setProperty('--bob-amp', `${(4 + this.rng() * 3).toFixed(1)}px`);
+      el.style.setProperty('--spring-ov', `${(1.04 + this.rng() * 0.05).toFixed(3)}`);
+      const marker = this.track(e.addMarker(el, [s.lng, s.lat], { anchor: 'bottom', pitchAlignment: 'viewport' }), [s.lng, s.lat]);
       this.pins.set(s.hotelId, { marker, first: i, shown: false });
     });
     // The traveller rides the tip of the bright line.
@@ -337,7 +384,13 @@ export class JourneyPlayer {
         el.className = this.o.classes.wish;
         el.innerHTML = `<img src="${WISH_PIN}" alt="" draggable="false">`;
         el.setAttribute('aria-hidden', 'true');
-        return this.track(this.o.engine.addMarker(el, [w.lng, w.lat], { anchor: 'bottom' }), [w.lng, w.lat]);
+        el.style.setProperty('--bob-delay', `${(this.rng() * -4).toFixed(2)}s`);
+        el.style.setProperty('--bob-dur', `${(2.6 + this.rng() * 1.2).toFixed(2)}s`);
+        el.style.setProperty('--bob-amp', `${(3 + this.rng() * 2).toFixed(1)}px`);
+        return this.track(
+          this.o.engine.addMarker(el, [w.lng, w.lat], { anchor: 'bottom', pitchAlignment: 'viewport' }),
+          [w.lng, w.lat],
+        );
       });
     } else if (!on && this.wishMarkers.length) {
       for (const m of this.wishMarkers) m.remove();

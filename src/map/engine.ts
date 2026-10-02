@@ -148,7 +148,11 @@ export interface SuiteMap {
   hasTiles(): boolean;
   resetNorth(): void;
   addLine(id: string, coords: readonly [number, number][], style?: LineStyle): LineHandle;
-  addMarker(element: HTMLElement, lngLat: LngLatLike, opts?: { anchor?: 'center' | 'bottom' }): MarkerHandle;
+  addMarker(
+    element: HTMLElement,
+    lngLat: LngLatLike,
+    opts?: { anchor?: 'center' | 'bottom'; pitchAlignment?: 'map' | 'viewport' },
+  ): MarkerHandle;
   project(lngLat: LngLatLike): { x: number; y: number };
   unproject(point: { x: number; y: number }): { lng: number; lat: number };
   destroy(): void;
@@ -801,7 +805,12 @@ export async function createSuiteMap(container: HTMLElement, opts: SuiteMapOptio
       };
     },
     addMarker(element, lngLat, o) {
-      const marker = new lib.Marker({ element, anchor: o?.anchor ?? 'center', rotationAlignment: 'map', pitchAlignment: 'map' })
+      const marker = new lib.Marker({
+        element,
+        anchor: o?.anchor ?? 'center',
+        rotationAlignment: 'map',
+        pitchAlignment: o?.pitchAlignment ?? 'map',
+      })
         .setLngLat(lngLat)
         .addTo(map);
       return {

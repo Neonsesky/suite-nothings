@@ -198,3 +198,14 @@
   self-contained `public/share/index.html` for GitHub Pages link previews.
 - Screenshots: `docs/review/w3-a/` (onboarding avatars, About logo, stay-detail ratings; 390×844
   and 1440×900).
+
+## w3-e: journey replay — faster pacing, floating 3D tags, seeded variation
+- Shortened opening/hold/finale/leg durations ~24% (`camera.ts`) and gave legs/opening/finale
+  distinct eases (was linear `'none'` throughout); hold segments stay a crisp pause.
+- Stay/wishlist pins now billboard (`pitchAlignment: 'viewport'`) and float ~7px above their map
+  anchor with a drop shadow + tether, idle-bobbing on seeded per-pin phase/amplitude; entrance is a
+  springier drop (`pinDrop`/`pinFloat` keyframes in `Journey.module.css`).
+- Added a seeded mulberry32 RNG (`player.ts`) driving hold/leg duration jitter and leg-ease choice
+  so no two plays match; same `seed` option reproduces a replay exactly. Reduced-motion keeps the
+  flat crossfade path and a static elevated pin (no bob/spring).
+- Checkpoint: `design/checkpoints/w3-e/tags-{390,1440}.png` via `tests/e2e/map-w3-e-shot.spec.ts`.

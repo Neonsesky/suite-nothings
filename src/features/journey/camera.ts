@@ -33,18 +33,18 @@ export interface Camera {
 export const STOP_ZOOM = 13;
 export const STOP_PITCH = 58;
 /** Seconds held at each stop. */
-export const HOLD_S = 2.2;
+export const HOLD_S = 1.6;
 /** Seconds of split-flap opening date before the first flight. */
-export const OPENING_S = 2.4;
+export const OPENING_S = 1.8;
 /** Seconds of the closing pull-back to the whole journey. */
-export const FINALE_S = 3.2;
+export const FINALE_S = 2.4;
 /** Opening camera zoom over home. */
 export const GLOBE_ZOOM = 1.6;
 /** How far each leg style turns the camera toward its heading (1 = all the way). */
 export const BEARING_LEAN: Record<LegStyle, number> = { glide: 1, hop: 0.4, flight: 0.2 };
 
 /** Seconds of the opening flight from home to the first stop (after the flap hold). */
-const OPENING_FLIGHT_S = 4.5;
+const OPENING_FLIGHT_S = 3.4;
 const DEFAULT_VW = 390;
 const DEFAULT_VH = 844;
 const PATH_STEPS = 64;
@@ -126,11 +126,11 @@ export function bellZoom(z0: number, z1: number, h: number, t: number): number {
 export function legDuration(style: LegStyle, km: number): number {
   switch (style) {
     case 'glide':
-      return 2.5 + clamp01(km / GLIDE_MAX_KM);
+      return 1.9 + clamp01(km / GLIDE_MAX_KM);
     case 'hop':
-      return 4 + clamp01((km - GLIDE_MAX_KM) / (HOP_MAX_KM - GLIDE_MAX_KM));
+      return 3.1 + clamp01((km - GLIDE_MAX_KM) / (HOP_MAX_KM - GLIDE_MAX_KM));
     case 'flight':
-      return 6 + clamp01(Math.log10(Math.max(km, 1e-9) / HOP_MAX_KM) / Math.log10(20));
+      return 4.6 + clamp01(Math.log10(Math.max(km, 1e-9) / HOP_MAX_KM) / Math.log10(20));
   }
 }
 

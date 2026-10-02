@@ -541,6 +541,7 @@
 
 /* ---- map markers (MapLibre positions these; we only style them) ------------------------ */
 .pin {
+  position: relative;
   width: 33px;
   height: 43.5px;
   pointer-events: none;
@@ -555,8 +556,34 @@
 .pin[data-shown='0'] {
   visibility: hidden;
 }
+.pin::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 1px;
+  height: calc(8px + var(--bob-amp, 5px) * 0.6);
+  background: linear-gradient(to top, rgb(41 41 53 / 0.22), transparent);
+}
+.pin::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -1.5px;
+  width: 16px;
+  height: 6px;
+  margin-left: -8px;
+  border-radius: 50%;
+  background: rgb(41 41 53 / 0.28);
+  filter: blur(2px);
+}
+.pin[data-shown='1'] img {
+  animation: pinFloat var(--bob-dur, 3.2s) ease-in-out var(--bob-delay, 0s) infinite;
+}
 .pinDrop img {
-  animation: pinDrop 640ms cubic-bezier(0.3, 1.5, 0.5, 1) both;
+  animation:
+    pinDrop 680ms cubic-bezier(0.3, 1.5, 0.5, 1) both,
+    pinFloat var(--bob-dur, 3.2s) ease-in-out var(--bob-delay, 0s) infinite;
 }
 .wish {
   width: 30px;
@@ -619,14 +646,24 @@
 @keyframes pinDrop {
   0% {
     opacity: 0;
-    transform: translateY(-36px);
+    transform: translateY(-40px) scale(0.88);
   }
-  60% {
+  55% {
     opacity: 1;
-    transform: translateY(2px);
+    transform: translateY(-3px) scale(var(--spring-ov, 1.06));
   }
   100% {
-    transform: none;
+    opacity: 1;
+    transform: translateY(-7px) scale(1);
+  }
+}
+@keyframes pinFloat {
+  0%,
+  100% {
+    transform: translateY(-7px);
+  }
+  50% {
+    transform: translateY(calc(-7px - var(--bob-amp, 5px)));
   }
 }
 @keyframes pulse {
@@ -651,6 +688,10 @@
   .pinDrop img,
   .wish::after {
     animation: none;
+  }
+  .pin[data-shown='1'] img {
+    animation: none;
+    transform: translateY(-7px);
   }
 }
 .screen[data-reduced] .postcard,

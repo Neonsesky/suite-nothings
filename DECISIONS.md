@@ -168,3 +168,15 @@
 - [w3-a] `AppLogo`'s `mark-only` variant is literally `KeyTagMark` passthrough (no wordmark), kept
   so existing compact header/About usages didn't need relayout — reverse by inlining `KeyTagMark`
   again wherever `mark-only` reads oddly.
+- [w3-e] Stay/wishlist pin markers now pass `pitchAlignment: 'viewport'` to `addMarker` (new opt,
+  default stays `'map'`) so they billboard upright instead of tilting flat into the pitched map
+  plane; the traveller marker keeps `'map'` since its rotation logic depends on map-aligned
+  heading — reverse by dropping the opt back to always-`'map'`.
+- [w3-e] Per-session seeded jitter (mulberry32, `JourneyPlayer`'s `seed` option) nudges hold/leg
+  durations ±8–16% and draws leg easing from a small pool, so replays don't feel identical without
+  losing determinism for a fixed seed (export/video re-render can pass one) — reverse by removing
+  the jitter loop in the constructor and the `LEG_EASES` pick.
+- [w3-e] Floating pins use CSS custom properties (`--bob-*`, `--spring-ov`) set once per pin from
+  the same seeded RNG, driving `pinFloat`/`pinDrop` keyframes, instead of a JS rAF loop — cheaper
+  and composes with `prefers-reduced-motion` via the existing media query — reverse by inlining
+  fixed values if per-pin variation isn't wanted.
