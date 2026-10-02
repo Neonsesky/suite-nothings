@@ -17,7 +17,7 @@ import {
 } from '@/data/sync';
 import type { OutboxOp, Snapshot, Visit } from '@/data/types';
 
-const EMPTY: Snapshot = { hotels: [], visits: [], photos: [], wishes: [], letters: [], settings: {}, serverTime: '2026-09-30T12:00:00.000Z' };
+const EMPTY: Snapshot = { hotels: [], visits: [], photos: [], wishes: [], places: [], letters: [], settings: {}, serverTime: '2026-09-30T12:00:00.000Z' };
 
 function visit(id: string, extra: Partial<Visit> = {}): Visit {
   return {
@@ -50,7 +50,7 @@ function harness(adapter: Partial<DataAdapter>, ops: OutboxOp[] = []) {
     removeOp: async (id) => void outbox.delete(id),
     updateOp: async (o) => void outbox.set(o.op_id, o),
     applyRemote: async (snap, source) => {
-      const change: RemoteChange = { hotels: snap.hotels ?? [], visits: snap.visits ?? [], newVisits: snap.visits ?? [], photos: [], wishes: [], letters: [], settings: null, source };
+      const change: RemoteChange = { hotels: snap.hotels ?? [], visits: snap.visits ?? [], newVisits: snap.visits ?? [], photos: [], wishes: [], places: [], letters: [], settings: null, source };
       applied.push(change);
       return change;
     },

@@ -27,6 +27,11 @@ import {
   type Mood,
   type OutboxOp,
   type Photo,
+  type Place,
+  PLACE_ICONS,
+  type PlaceIcon,
+  PLACE_TINTS,
+  type PlaceTint,
   type PriceLevel,
   type Rating,
   type SettingsMap,
@@ -297,6 +302,30 @@ export function parseWish(row: Raw): Wish | null {
   };
 }
 
+export function parsePlace(row: Raw): Place | null {
+  const place_id = str(field(row, 'place_id'));
+  const title = str(field(row, 'title'));
+  const icon = str(field(row, 'icon'));
+  const lat = num(field(row, 'lat'));
+  const lng = num(field(row, 'lng'));
+  if (!place_id || !title || !icon || lat === null || lng === null) return null;
+  return {
+    place_id,
+    title,
+    icon: (PLACE_ICONS as readonly string[]).includes(icon) ? (icon as PlaceIcon) : 'other',
+    tint: (() => {
+      const t = str(field(row, 'tint'));
+      return t && (PLACE_TINTS as readonly string[]).includes(t) ? (t as PlaceTint) : null;
+    })(),
+    note: str(field(row, 'note')),
+    lat,
+    lng,
+    added_by: person(field(row, 'added_by')),
+    ...stamps(row),
+    deleted: bool(field(row, 'deleted')),
+  };
+}
+
 export function parseLetter(row: Raw): Letter | null {
   const letter_id = str(field(row, 'letter_id'));
   const body = field(row, 'body_md');
@@ -384,6 +413,7 @@ export function parseSnapshot(data: unknown): Snapshot {
     visits: rows(d.visits, parseVisit),
     photos: rows(d.photos, parsePhoto),
     wishes: rows(d.wishes ?? d.wishlist, parseWish),
+    places: rows(d.places, parsePlace),
     letters: rows(d.letters, parseLetter),
     settings: parseSettings(d.settings),
     serverTime: parseTimestamp(d.serverTime) ?? new Date().toISOString(),
@@ -526,6 +556,8 @@ export function createSheetsAdapter(config: ConnectionConfig, opts: SheetsAdapte
         return rowResult(await post('deleteVisit', op.payload), 'visits', parseVisit);
       case 'upsertWish':
         return rowResult(await post('upsertWish', op.payload), 'wishes', parseWish);
+      case 'upsertPlace':
+        return rowResult(await post('upsertPlace', op.payload), 'places', parsePlace);
       case 'markLetterRead':
         return rowResult(await post('markLetterRead', op.payload), 'letters', parseLetter);
       case 'upsertLetter':
@@ -608,7 +640,7 @@ export interface SheetsAdapter extends DataAdapter {
   upsertLetter(letter: Letter): Promise<Letter>;
 }
 
-type RowKey = 'hotels' | 'visits' | 'photos' | 'wishes' | 'letters';
+type RowKey = 'hotels' | 'visits' | 'photos' | 'wishes' | 'places' | 'letters';
 
 function rowResult<K extends RowKey>(data: unknown, key: K, parse: (r: Raw) => Snapshot[K][number] | null): ApplyResult {
   const d = (data ?? {}) as Raw;

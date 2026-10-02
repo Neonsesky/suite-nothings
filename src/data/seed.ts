@@ -197,5 +197,5 @@ export function buildSeed(letterBody: string | null = privateLetterBody): Snapsh
     },
   ];
 
-  return { hotels, visits, photos: [], wishes, letters, settings: defaultSettings(), serverTime: '2026-09-30T20:00:00.000Z' };
+  return { hotels, visits, photos: [], wishes, places: [], letters, settings: defaultSettings(), serverTime: '2026-09-30T20:00:00.000Z' };
 }

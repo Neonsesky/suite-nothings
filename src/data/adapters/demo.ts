@@ -5,15 +5,15 @@
  */
 import { deleteDB, openDB, type DBSchema, type IDBPDatabase } from 'idb';
 import { buildSeed } from '../seed';
-import type { Hotel, Letter, OutboxOp, Photo, SettingsMap, Snapshot, Visit, Wish } from '../types';
+import type { Hotel, Letter, OutboxOp, Photo, Place, SettingsMap, Snapshot, Visit, Wish } from '../types';
 import { AdapterError, type ApplyResult, type DataAdapter } from './types';
 
-type Table = 'hotels' | 'visits' | 'photos' | 'wishes' | 'letters';
+type Table = 'hotels' | 'visits' | 'photos' | 'wishes' | 'places' | 'letters';
 interface Row {
   key: string; // `${table}:${id}`
   table: Table;
   updated_at: string;
-  row: Hotel | Visit | Photo | Wish | Letter;
+  row: Hotel | Visit | Photo | Wish | Place | Letter;
 }
 interface ServerDB extends DBSchema {
   rows: { key: string; value: Row; indexes: { by_table: Table } };
@@ -48,6 +48,8 @@ const idOf = (table: Table, row: Row['row']): string => {
       return (row as Photo).photo_id;
     case 'wishes':
       return (row as Wish).wish_id;
+    case 'places':
+      return (row as Place).place_id;
     case 'letters':
       return (row as Letter).letter_id;
   }
@@ -61,6 +63,7 @@ async function writeSnapshot(snap: Snapshot) {
     ['visits', snap.visits],
     ['photos', snap.photos],
     ['wishes', snap.wishes],
+    ['places', snap.places],
     ['letters', snap.letters],
   ];
   for (const [table, rows] of tables) {
@@ -88,6 +91,7 @@ async function readAll(since?: string): Promise<Snapshot> {
     visits: pick<Visit>('visits'),
     photos: pick<Photo>('photos'),
     wishes: pick<Wish>('wishes'),
+    places: pick<Place>('places'),
     letters: pick<Letter>('letters'),
     settings: includeSettings ? settings : {},
     serverTime: new Date().toISOString(),
@@ -181,6 +185,8 @@ export function createDemoAdapter(opts: DemoAdapterOptions = {}): DataAdapter {
         }
         case 'upsertWish':
           return { ok: true, applied: { wishes: [await upsert('wishes', op.payload)] }, serverTime };
+        case 'upsertPlace':
+          return { ok: true, applied: { places: [await upsert('places', op.payload)] }, serverTime };
         case 'upsertLetter':
           return { ok: true, applied: { letters: [await upsert('letters', op.payload)] }, serverTime };
         case 'markLetterRead': {

@@ -5,7 +5,7 @@
  * Migrations: bump DB_VERSION and append a step to MIGRATIONS; each step runs once, in order.
  */
 import { deleteDB, openDB, type DBSchema, type IDBPDatabase, type IDBPTransaction, type StoreNames } from 'idb';
-import type { Hotel, Letter, Namespace, OutboxOp, Photo, PhotoBlob, SettingsMap, Visit, Wish } from './types';
+import type { Hotel, Letter, Namespace, OutboxOp, Photo, PhotoBlob, Place, SettingsMap, Visit, Wish } from './types';
 
 export interface DraftRecord {
   id: string; // e.g. "add-stay"
@@ -24,6 +24,7 @@ export interface SnDB extends DBSchema {
   photos: { key: string; value: Photo; indexes: { by_visit: string } };
   photoBlobs: { key: string; value: PhotoBlob; indexes: { by_photo: string } };
   wishes: { key: string; value: Wish };
+  places: { key: string; value: Place };
   letters: { key: string; value: Letter };
   /** Single row keyed "settings". */
   settings: { key: string; value: SettingsMap & { key: 'settings' } };
@@ -35,8 +36,8 @@ export interface SnDB extends DBSchema {
 export type SnStore = StoreNames<SnDB>;
 export type SnDatabase = IDBPDatabase<SnDB>;
 
-export const DB_VERSION = 1;
-export const DATA_STORES = ['hotels', 'visits', 'photos', 'photoBlobs', 'wishes', 'letters', 'settings', 'outbox', 'drafts', 'meta'] as const satisfies readonly SnStore[];
+export const DB_VERSION = 2;
+export const DATA_STORES = ['hotels', 'visits', 'photos', 'photoBlobs', 'wishes', 'places', 'letters', 'settings', 'outbox', 'drafts', 'meta'] as const satisfies readonly SnStore[];
 
 type Migration = (db: SnDatabase, tx: IDBPTransaction<SnDB, SnStore[], 'versionchange'>) => void;
 
@@ -58,6 +59,10 @@ const MIGRATIONS: Migration[] = [
     outbox.createIndex('by_created', 'created_at');
     db.createObjectStore('drafts', { keyPath: 'id' });
     db.createObjectStore('meta', { keyPath: 'key' });
+  },
+  // v2: custom places (w3-d)
+  (db) => {
+    db.createObjectStore('places', { keyPath: 'place_id' });
   },
 ];
 

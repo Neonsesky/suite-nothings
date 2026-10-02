@@ -17,7 +17,7 @@
 import { useSyncExternalStore } from 'react';
 import { AdapterError, isAdapterError, type ApplyResult, type DataAdapter } from './adapters/types';
 import { getDevice, setDevice } from './device';
-import type { Hotel, Letter, OutboxOp, Photo, SettingsMap, Snapshot, Visit, Wish } from './types';
+import type { Hotel, Letter, OutboxOp, Photo, Place, SettingsMap, Snapshot, Visit, Wish } from './types';
 
 export type SyncError = 'unreachable' | 'unauthorized' | 'server';
 
@@ -39,6 +39,7 @@ export interface RemoteChange {
   newVisits: Visit[];
   photos: Photo[];
   wishes: Wish[];
+  places: Place[];
   letters: Letter[];
   settings: Partial<SettingsMap> | null;
   /** 'pull' = fetched from the server; 'echo' = server's copy after our own write. */
@@ -94,6 +95,8 @@ export function opEntity(op: OutboxOp): string {
       return `photo:${op.payload.photo.photo_id}`;
     case 'upsertWish':
       return `wish:${op.payload.wish_id}`;
+    case 'upsertPlace':
+      return `place:${op.payload.place_id}`;
     case 'markLetterRead':
     case 'upsertLetter':
       return `letter:${op.payload.letter_id}`;
@@ -169,7 +172,7 @@ export function acknowledgeArrival(visitId: string): void {
 
 function emitRemote(change: RemoteChange) {
   const any =
-    change.hotels.length || change.visits.length || change.photos.length || change.wishes.length || change.letters.length || change.settings;
+    change.hotels.length || change.visits.length || change.photos.length || change.wishes.length || change.places.length || change.letters.length || change.settings;
   if (!any) return;
   remoteListeners.forEach((l) => l(change));
   if (change.source !== 'pull' || !change.newVisits.length) return;

@@ -134,6 +134,42 @@ export interface Wish {
   deleted: boolean;
 }
 
+/** Curated marks for custom places (SPEC: "add your own places"). */
+export const PLACE_ICONS = ['home', 'heart', 'restaurant', 'beach', 'mosque', 'gym', 'park', 'car', 'plane', 'star', 'coffee', 'other'] as const;
+export type PlaceIcon = (typeof PLACE_ICONS)[number];
+export const PLACE_ICON_LABELS: Record<PlaceIcon, string> = {
+  home: 'Home',
+  heart: 'Loved spot',
+  restaurant: 'Restaurant',
+  beach: 'Beach',
+  mosque: 'Mosque',
+  gym: 'Gym',
+  park: 'Park',
+  car: 'Parking',
+  plane: 'Airport',
+  star: 'Favourite',
+  coffee: 'Coffee',
+  other: 'Other',
+};
+/** Optional tints; null keeps the default ink/paper pin. */
+export const PLACE_TINTS = ['honey', 'ginger', 'ink'] as const;
+export type PlaceTint = (typeof PLACE_TINTS)[number];
+
+/** A custom pin the two of us drop ourselves: a house, a favourite restaurant, a POI. */
+export interface Place {
+  place_id: string;
+  title: string;
+  note: string | null;
+  icon: PlaceIcon;
+  tint: PlaceTint | null;
+  lat: number;
+  lng: number;
+  added_by: PersonId | null;
+  created_at: string;
+  updated_at: string;
+  deleted: boolean;
+}
+
 /** `always` | `visits>=N` | `hotels>=N` | `first_abroad` | `date>=YYYY-MM-DD` */
 export type UnlockRule = 'always' | 'first_abroad' | `visits>=${number}` | `hotels>=${number}` | `date>=${string}`;
 
@@ -187,6 +223,7 @@ export interface Snapshot {
   visits: Visit[];
   photos: Photo[];
   wishes: Wish[];
+  places: Place[];
   letters: Letter[];
   settings: Partial<SettingsMap>;
   /** Server clock at the time of the snapshot; pass back as `since` to changes(). */
@@ -200,6 +237,7 @@ export type OutboxOp =
   | { op_id: string; action: 'deleteVisit'; payload: { visit_id: string; updated_at: string; deleted: boolean }; created_at: string; attempts: number; last_error?: string }
   | { op_id: string; action: 'uploadPhoto'; payload: { photo: Photo; thumb_key: string | null; full_key: string | null }; created_at: string; attempts: number; last_error?: string }
   | { op_id: string; action: 'upsertWish'; payload: Wish; created_at: string; attempts: number; last_error?: string }
+  | { op_id: string; action: 'upsertPlace'; payload: Place; created_at: string; attempts: number; last_error?: string }
   | { op_id: string; action: 'markLetterRead'; payload: { letter_id: string; read_at: string }; created_at: string; attempts: number; last_error?: string }
   | { op_id: string; action: 'upsertLetter'; payload: Letter; created_at: string; attempts: number; last_error?: string }
   | { op_id: string; action: 'updateSettings'; payload: Partial<SettingsMap>; created_at: string; attempts: number; last_error?: string };

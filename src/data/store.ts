@@ -18,7 +18,7 @@ import { defaultSettings } from './seed';
 import { buildStays, filterStays, parseJsonArray, type StayFilter } from './stays';
 import * as sync from './sync';
 import type { RemoteChange, SyncState } from './sync';
-import type { ConnectionConfig, Hotel, Letter, Namespace, OutboxOp, OutboxAction, OutboxPayload, Photo, PhotoBlob, SettingsMap, Snapshot, Stay, Visit, Wish } from './types';
+import type { ConnectionConfig, Hotel, Letter, Namespace, OutboxOp, OutboxAction, OutboxPayload, Photo, PhotoBlob, Place, SettingsMap, Snapshot, Stay, Visit, Wish } from './types';
 
 export type { StayFilter } from './stays';
 export type { SyncState } from './sync';
@@ -34,6 +34,7 @@ export interface StoreState {
   visits: ReadonlyMap<string, Visit>;
   photos: ReadonlyMap<string, Photo>;
   wishes: ReadonlyMap<string, Wish>;
+  places: ReadonlyMap<string, Place>;
   letters: ReadonlyMap<string, Letter>;
   settings: SettingsMap;
   sync: SyncState;
@@ -59,6 +60,7 @@ function emptyState(ns: Namespace): StoreState {
     visits: new Map(),
     photos: new Map(),
     wishes: new Map(),
+    places: new Map(),
     letters: new Map(),
     settings: defaultSettings(),
     sync: EMPTY_SYNC,
@@ -172,11 +174,12 @@ export function whenReady(): Promise<void> {
 }
 
 async function loadFromDb(d: SnDatabase) {
-  const [hotels, visits, photos, wishes, letters, settingsRow, pending] = await Promise.all([
+  const [hotels, visits, photos, wishes, places, letters, settingsRow, pending] = await Promise.all([
     d.getAll('hotels'),
     d.getAll('visits'),
     d.getAll('photos'),
     d.getAll('wishes'),
+    d.getAll('places'),
     d.getAll('letters'),
     d.get('settings', 'settings'),
     d.count('outbox'),
@@ -191,6 +194,7 @@ async function loadFromDb(d: SnDatabase) {
     visits: new Map(visits.map((v) => [v.visit_id, v])),
     photos: new Map(photos.map((p) => [p.photo_id, p])),
     wishes: new Map(wishes.map((w) => [w.wish_id, w])),
+    places: new Map(places.map((p) => [p.place_id, p])),
     letters: new Map(letters.map((l) => [l.letter_id, l])),
     settings,
     sync: { ...state.sync, pending },
@@ -226,6 +230,9 @@ async function pendingIds(): Promise<Set<string>> {
       case 'upsertWish':
         ids.add(op.payload.wish_id);
         break;
+      case 'upsertPlace':
+        ids.add(op.payload.place_id);
+        break;
       case 'markLetterRead':
         ids.add(op.payload.letter_id);
         break;
@@ -244,15 +251,16 @@ const newer = (incoming: { updated_at: string }, current?: { updated_at: string 
 export async function applyRemote(snap: Partial<Snapshot>, source: RemoteChange['source'] = 'pull'): Promise<RemoteChange> {
   const d = requireDb();
   const skip = await pendingIds();
-  const change: RemoteChange = { hotels: [], visits: [], newVisits: [], photos: [], wishes: [], letters: [], settings: null, source };
+  const change: RemoteChange = { hotels: [], visits: [], newVisits: [], photos: [], wishes: [], places: [], letters: [], settings: null, source };
   const hotels = new Map(state.hotels);
   const visits = new Map(state.visits);
   const photos = new Map(state.photos);
   const wishes = new Map(state.wishes);
+  const places = new Map(state.places);
   const letters = new Map(state.letters);
   let settings = state.settings;
 
-  const tx = d.transaction(['hotels', 'visits', 'photos', 'wishes', 'letters', 'settings'], 'readwrite');
+  const tx = d.transaction(['hotels', 'visits', 'photos', 'wishes', 'places', 'letters', 'settings'], 'readwrite');
   for (const h of snap.hotels ?? []) {
     if (skip.has(h.hotel_id) || !newer(h, hotels.get(h.hotel_id))) continue;
     hotels.set(h.hotel_id, h);
@@ -280,6 +288,12 @@ export async function applyRemote(snap: Partial<Snapshot>, source: RemoteChange[
     change.wishes.push(w);
     void tx.objectStore('wishes').put(w);
   }
+  for (const p of snap.places ?? []) {
+    if (skip.has(p.place_id) || !newer(p, places.get(p.place_id))) continue;
+    places.set(p.place_id, p);
+    change.places.push(p);
+    void tx.objectStore('places').put(p);
+  }
   for (const l of snap.letters ?? []) {
     const cur = letters.get(l.letter_id);
     if (skip.has(l.letter_id) || !newer(l, cur)) continue;
@@ -294,8 +308,8 @@ export async function applyRemote(snap: Partial<Snapshot>, source: RemoteChange[
     void tx.objectStore('settings').put({ ...settings, key: 'settings' });
   }
   await tx.done;
-  if (change.hotels.length || change.visits.length || change.photos.length || change.wishes.length || change.letters.length || change.settings) {
-    setState({ hotels, visits, photos, wishes, letters, settings });
+  if (change.hotels.length || change.visits.length || change.photos.length || change.wishes.length || change.places.length || change.letters.length || change.settings) {
+    setState({ hotels, visits, photos, wishes, places, letters, settings });
   }
   return change;
 }
@@ -331,7 +345,7 @@ async function onApplied(op: OutboxOp, result: ApplyResult) {
 
 const nowIso = () => new Date().toISOString();
 
-type RowStore = 'hotels' | 'visits' | 'photos' | 'wishes' | 'letters';
+type RowStore = 'hotels' | 'visits' | 'photos' | 'wishes' | 'places' | 'letters';
 
 /** Persist a row and its outbox op atomically, update memory, and nudge the sync engine. */
 async function write<A extends OutboxAction>(storeName: RowStore | null, row: unknown, action: A, payload: OutboxPayload<A>): Promise<void> {
@@ -462,6 +476,40 @@ export async function upsertWish(input: WishInput): Promise<Wish> {
   setState({ wishes: new Map(state.wishes).set(wish.wish_id, wish) });
   await write('wishes', wish, 'upsertWish', wish);
   return wish;
+}
+
+export type PlaceInput = Partial<Place> & Pick<Place, 'title' | 'icon' | 'lat' | 'lng'>;
+
+/** Create or update a custom place (a house, a restaurant, any point of interest we drop). */
+export async function upsertPlace(input: PlaceInput): Promise<Place> {
+  const now = nowIso();
+  const cur = input.place_id ? state.places.get(input.place_id) : undefined;
+  const place: Place = {
+    note: null,
+    tint: null,
+    added_by: getDevice('me'),
+    deleted: false,
+    ...cur,
+    ...input,
+    place_id: input.place_id ?? ulid(),
+    created_at: cur?.created_at ?? now,
+    updated_at: now,
+  };
+  setState({ places: new Map(state.places).set(place.place_id, place) });
+  await write('places', place, 'upsertPlace', place);
+  return place;
+}
+
+/** Soft delete + "Place removed" toast with Undo. */
+export async function deletePlaceWithUndo(placeId: string): Promise<void> {
+  const cur = state.places.get(placeId);
+  if (!cur) return;
+  await upsertPlace({ ...cur, deleted: true });
+  toast.show({
+    id: `undo-place-${placeId}`,
+    message: 'Place removed',
+    action: { label: 'Undo', onClick: () => void upsertPlace({ ...cur, deleted: false }) },
+  });
 }
 
 /** Sets `read_at` once (no-op if already read). */
@@ -710,6 +758,7 @@ export function exportData(): Snapshot {
     visits: [...state.visits.values()],
     photos: [...state.photos.values()],
     wishes: [...state.wishes.values()],
+    places: [...state.places.values()],
     letters: [...state.letters.values()],
     settings: state.settings,
     serverTime: nowIso(),
@@ -732,6 +781,11 @@ export async function importData(snap: Partial<Snapshot>): Promise<number> {
   for (const w of snap.wishes ?? []) {
     if (!newer(w, state.wishes.get(w.wish_id))) continue;
     await upsertWish({ ...w });
+    n++;
+  }
+  for (const p of snap.places ?? []) {
+    if (!newer(p, state.places.get(p.place_id))) continue;
+    await upsertPlace({ ...p });
     n++;
   }
   for (const l of snap.letters ?? []) {
@@ -815,6 +869,18 @@ export function useWishes(): Wish[] {
     () => [...wishes.values()].filter((w) => !w.deleted).sort((a, b) => (a.priority ?? 9) - (b.priority ?? 9) || a.created_at.localeCompare(b.created_at)),
     [wishes],
   );
+}
+
+/** Non-deleted custom places, newest first. */
+export function usePlaces(): Place[] {
+  const places = useStore((s) => s.places);
+  return useMemo(() => [...places.values()].filter((p) => !p.deleted).sort((a, b) => b.created_at.localeCompare(a.created_at)), [places]);
+}
+
+/** One place by id (deleted included, so undo screens can show it). */
+export function usePlace(placeId: string | null | undefined): Place | null {
+  const places = useStore((s) => s.places);
+  return useMemo(() => (placeId ? places.get(placeId) ?? null : null), [places, placeId]);
 }
 
 /** All letters, oldest first. Unlock checks live in features/letters/unlock.ts. */

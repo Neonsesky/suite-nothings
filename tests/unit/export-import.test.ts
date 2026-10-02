@@ -47,6 +47,7 @@ function makeSnapshot(): Snapshot {
     visits: [visit],
     photos: [],
     wishes: [makeWish()],
+    places: [],
     letters: [makeLetter()],
     settings: {
       home_base: { city: 'Dubai', country: 'United Arab Emirates', countryCode: 'AE', lat: 25.2048, lng: 55.2708 },
