@@ -1,5 +1,14 @@
 # Changelog
 
+## [name-canonical] Canonical app name audit (2026-10-02)
+- Audited every occurrence of the app name (working tree + full git history): all user-visible
+  strings are already exactly "Suite Nothings" (`src/config/couple.ts`, `index.html` title,
+  manifest name, splash screens, share/journey wordmarks, footer, About, docs). No spelling fix
+  was needed; this release records the audit.
+- Two surfaces render the name ALL-CAPS as design styling on correct source text (kept):
+  the onboarding eyebrow and the share-card canvas headers. Evidence and how to reverse in
+  `design/checkpoints/name-canonical/` (audit.md + screenshots).
+
 ## [qa-final-2] Release QA completion, post-polish (2026-10-01)
 - Full matrix verified clean: typecheck, lint, 561 unit tests, build, size (165.2 KB initial JS
   gzipped, budget 300 KB), and the full `npm run e2e` (272 passed, 39 skipped
